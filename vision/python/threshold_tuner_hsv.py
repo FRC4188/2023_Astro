@@ -7,11 +7,9 @@ def nothing(x):
 cap = cv2.VideoCapture(0)
 ret, frame = cap.read()
 
-# Create a black image, a window
 img = np.zeros((len(frame),len(frame[0]),3), np.uint8)
 cv2.namedWindow('image')
 
-# create trackbars for color change
 cv2.createTrackbar('Hm','image',0,255,nothing)
 cv2.createTrackbar('Sm','image',0,255,nothing)
 cv2.createTrackbar('Vm','image',0,255,nothing)
@@ -19,7 +17,6 @@ cv2.createTrackbar('HM','image',0,255,nothing)
 cv2.createTrackbar('SM','image',0,255,nothing)
 cv2.createTrackbar('VM','image',0,255,nothing)
 
-# create switch for ON/OFF functionality
 switch = '0 : OFF \n1 : ON'
 cv2.createTrackbar(switch, 'image',0,1,nothing)
 
@@ -29,7 +26,6 @@ while(1):
     if k == 27:
         break
 
-    # get current positions of four trackbars
     hm = cv2.getTrackbarPos('Hm','image')
     sm = cv2.getTrackbarPos('Sm','image')
     vm = cv2.getTrackbarPos('Vm','image')
@@ -42,16 +38,13 @@ while(1):
     hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
     if state == 0:
-        kernel = np.ones((10,10),np.float32)/(10**2)
-        dst = cv2.filter2D(frame,-1,kernel)
-        img = dst
+        img = frame
     else:
         lower_blue = np.array([hm,sm,vm])
         upper_blue = np.array([hM,sM,vM])
-        kernel = np.ones((10,10),np.float32)/(10**2)
-        dst = cv2.filter2D(frame,-1,kernel)
-        mask = cv2.inRange(dst, lower_blue, upper_blue)
-        img = mask
+        mask = cv2.inRange(hsv, lower_blue, upper_blue)
+        frame = cv2.bitwise_and(frame, frame, mask= mask)
+        img = frame
 
 cap.release()
 cv2.destroyAllWindows()
