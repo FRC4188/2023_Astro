@@ -33,6 +33,7 @@ public final class Constants {
 }
 
 public static class drivetrain {
+
     public static final double DRIVE_GEARING = 6.92; // Gear ratio of the drive motor.
     public static final double WHEEL_DIAMETER = Units.inchesToMeters(4); //Diameter of the drive wheels (Meters).
     public static final double WHEEL_CIRCUMFRENCE = Math.PI * WHEEL_DIAMETER; // Circumfrence of the drive wheels (Meters).
@@ -99,5 +100,10 @@ public static class drivetrain {
 
   
   }
-}
+
+    public static class arm 
+    {
+        public static final 
+    }
   
+}
