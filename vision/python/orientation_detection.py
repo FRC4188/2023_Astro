@@ -4,8 +4,8 @@ import math
 
 # Define constants.
 blur_size = 10
-lower_bgr = np.array([69,75,69])
-upper_bgr = np.array([148,255,255])
+lower_bgr = np.array([24,64,84])
+upper_bgr = np.array([161,255,255])
 
 # Create a video capture object to retrieve frames from the camera.
 cap = cv2.VideoCapture(0)
@@ -65,12 +65,21 @@ while(1):
                     dist += math.hypot(tri[i][0][0] - tri[j][0][0], tri[i][0][1] - tri[j][0][1]) / 2
             avg_dists[i] = dist
         
-        # Determine which corner is the top of the cone by how far it is from the average corner.
-        max_dist = 0
-        max_index = 0
+        # Determine the average difference between average distances.
+        avg_diffs = [0, 0, 0]
         for i in range(len(avg_dists)):
-            if avg_dists[i] > max_dist:
-                max_dist = avg_dists[i]
+            diff = 0
+            for j in range(len(avg_dists)):
+                if not i == j:
+                    diff += abs(avg_dists[i]-avg_dists[j])/2
+            avg_diffs[i] = diff
+        
+        # Determine which corner is the top of the cone by how different its avererage distance is from the other corners.
+        max_diff = 0
+        max_index = 0
+        for i in range(len(avg_diffs)):
+            if avg_diffs[i] > max_diff:
+                max_diff = avg_diffs[i]
                 max_index = i
         
         # Isolate the positions of the base corners of the triangle.
