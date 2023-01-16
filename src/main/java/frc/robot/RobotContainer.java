@@ -36,13 +36,7 @@ public class RobotContainer {
   }
 
   private void setDefaultCommands() {
-  drivetrain.setDefaultCommand(new RunCommand(() -> drivetrain.drive(
-      pilot.getLeftY(Scaling.CUBED),
-      pilot.getLeftX(Scaling.CUBED),
-      pilot.getRightX(Scaling.CUBED),
-      pilot.getLeftStickButton()),
-      drivetrain)
-    ); 
+ 
 
   }
 
@@ -67,7 +61,7 @@ public class RobotContainer {
     autoChooser.setDefaultOption("Do nothing", new SequentialCommandGroup());
   
 
-    SmartDashboard.putData("Auto Chooser", autoChooser);
+    SmartDashboard.putData("pAuto Chooser", autoChooser);
   }
 
   /**

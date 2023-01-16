@@ -48,7 +48,8 @@ public static class drivetrain {
     public static final double MAX_ACCEL = 20.0; // Maximum acceleration of the drivetrain in (Meters per Second Squared).
     public static final double MAX_CACCEL = 8.0; // Maximum centripital acceleration of the robot (Meters per Second Squared).
     public static final double MAX_RADIANS = 3.0 * Math.PI; // Maximum rotational velocity (Radians per Second).
-
+    public static final double RAMP_RATE = 0.5;
+    
     public static final double ROTATION_KV = 0.0;
     public static final double ROTATION_KA = 0.0;
 
