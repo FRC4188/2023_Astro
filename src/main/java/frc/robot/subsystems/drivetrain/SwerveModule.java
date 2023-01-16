@@ -27,14 +27,14 @@ public class SwerveModule {
         encoder = new CANCoder(encoderID);
         this.zero = zero;
     
-
+        init();
     }
 
     private void init() {
         speed.init();
         speed.setBrake(true);
         speed.setRampRate(Constants.drivetrain.RAMP_RATE);
-        speed.setPIDF(Constants.drivetrain.speedmotor.kP, Constants.drivetrain.speedmotor.kI,Constants.drivetrain.speedmotor.kD, 0);
+        speed.setPIDF(Constants.drivetrain.speedmotor.kP, Constants.drivetrain.speedmotor.kI, Constants.drivetrain.speedmotor.kD, 0);
 
         angle.init();
         angle.setBrake(true);
