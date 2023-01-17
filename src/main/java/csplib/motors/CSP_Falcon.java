@@ -11,8 +11,7 @@ public class CSP_Falcon extends WPI_TalonFX implements CSP_Motor {
 
     private final double CPR = 2048.0;
 
-    private double posScalar = 1.0;
-    private double velScalar = 1.0;
+    private double scalar = 1.0;
 
     public CSP_Falcon(int id, String canBus) {
         super(id, canBus);
@@ -69,20 +68,16 @@ public class CSP_Falcon extends WPI_TalonFX implements CSP_Motor {
         super.setSelectedSensorPosition(position);
     }
 
-    public void setPositionScalar(double scalar) {
-        this.posScalar = scalar;
-    }
-
-    public void setVelocityScalar(double scalar) {
-        this.velScalar = scalar;
+    public void setScalar(double scalar) {
+        this.scalar = scalar;
     }
  
     public double getPosition() {
-        return (super.getSelectedSensorPosition() / CPR) * posScalar;
+        return (super.getSelectedSensorPosition() * scalar);
     }
 
     public double getVelocity() {
-        return ((super.getSelectedSensorVelocity() / CPR * 10) * 60) * velScalar;
+        return ((super.getSelectedSensorVelocity() * 10) * 60) * scalar;
     }
 
     public double getCurrent() {

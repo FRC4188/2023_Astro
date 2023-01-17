@@ -35,6 +35,7 @@ public class SwerveModule {
         speed.setBrake(true);
         speed.setRampRate(Constants.drivetrain.RAMP_RATE);
         speed.setPIDF(Constants.drivetrain.speedmotor.kP, Constants.drivetrain.speedmotor.kI, Constants.drivetrain.speedmotor.kD, 0);
+        speed.setScalar(Constants.drivetrain.DRIVE_COUNTS_PER_METER);
 
         angle.init();
         angle.setBrake(true);
@@ -51,7 +52,14 @@ public class SwerveModule {
         SwerveModuleState optimized = SwerveModuleState.optimize(desired, Rotation2d.fromDegrees(encoder.getAbsolutePosition()));
         speed.setVelocity(optimized.speedMetersPerSecond);
         angle.setPosition(optimized.angle.getDegrees());
+    }
 
+    public void setSpeedPIDF(double kP, double kI, double kD, double kF) {
+        speed.setPIDF(kP, kI, kD, kF);
+    }
+    
+    public void setAnglePIDF(double kP, double kI, double kD, double kF) {
+        angle.setPIDF(kP, kI, kD, kF);
     }
 
     public SwerveModuleState getModuleState() {
