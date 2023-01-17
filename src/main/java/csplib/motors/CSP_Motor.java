@@ -18,9 +18,7 @@ public interface CSP_Motor {
 
     public void setPIDF(double kP, double kI, double kD, double kF);
 
-    public void setPositionScalar(double scalar);
-
-    public void setVelocityScalar(double scalar);
+    public void setScalar(double scalar);
 
     public void setPosition(double position);
     

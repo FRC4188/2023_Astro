@@ -39,9 +39,6 @@ public class Sensors extends SubsystemBase {
   public void updateDashboard() {
   }
 
-  public void setLED(boolean on) {
-    //limelight.setLEDMode(on ? LedMode.ON : LedMode.OFF);
-  }
 
   public Rotation2d getRotation() {
     return null;

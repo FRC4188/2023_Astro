@@ -22,6 +22,7 @@ public final class Constants {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
   }
+
   public static final class robot {
     public static final double A_LENGTH = 0.59055; // Axel length (Meters).
     public static final double A_WIDTH = 0.48895; // Axel width (Meters).
@@ -30,6 +31,26 @@ public final class Constants {
     public static final double FALCON_ENCODER_TICKS = 2048.0; //Counts per revolution of the Falcon 500 motor.
     public static final double FALCON_MAX_TEMP = 50.0; //Max temperature of Falcon 500 (Celsius).
     public static final double FALCON_MAX_VEL = 6380.0;
+}
+
+public static final class ids {
+    public static final int FR_SPEED = 1;
+    public static final int FR_ANGLE = 2;
+    public static final int FR_ENCODER = 21;
+
+    public static final int FL_SPEED = 3;
+    public static final int FL_ANGLE = 4;
+    public static final int FL_ENCODER = 22;
+
+    public static final int BL_SPEED = 5;
+    public static final int BL_ANGLE = 6;
+    public static final int BL_ENCODER = 23;
+
+    public static final int BR_SPEED = 7;
+    public static final int BR_ANGLE = 8;
+    public static final int BR_ENCODER = 24;
+
+    public static final int PIGEON = 30;
 }
 
 public static class drivetrain {
@@ -53,18 +74,15 @@ public static class drivetrain {
     public static final double ROTATION_KV = 0.0;
     public static final double ROTATION_KA = 0.0;
 
-    // Put together swerve module positions relative to the center of the robot.
-    public static final Translation2d FrontLeftLocation = new Translation2d(-(Constants.robot.A_WIDTH / 2), -(Constants.robot.A_LENGTH / 2));
-    public static final Translation2d FrontRightLocation = new Translation2d(-(Constants.robot.A_WIDTH / 2), (Constants.robot.A_LENGTH / 2));
-    public static final Translation2d BackLeftLocation = new Translation2d((Constants.robot.A_WIDTH / 2), -(Constants.robot.A_LENGTH / 2));
-    public static final Translation2d BackRightLocation = new Translation2d((Constants.robot.A_WIDTH / 2), (Constants.robot.A_LENGTH / 2));
+    public static final Translation2d FL_LOCATION = new Translation2d(-(Constants.robot.A_WIDTH / 2), -(Constants.robot.A_LENGTH / 2));
+    public static final Translation2d FR_LOCATION = new Translation2d(-(Constants.robot.A_WIDTH / 2), (Constants.robot.A_LENGTH / 2));
+    public static final Translation2d BL_LOCATION = new Translation2d((Constants.robot.A_WIDTH / 2), -(Constants.robot.A_LENGTH / 2));
+    public static final Translation2d BR_LOCATION = new Translation2d((Constants.robot.A_WIDTH / 2), (Constants.robot.A_LENGTH / 2));
 
-    public static final class modules {
-        public static final double M1_ZERO = 43.2421875;
-        public static final double M2_ZERO = -121.9921875;
-        public static final double M3_ZERO = -153.6328125;
-        public static final double M4_ZERO = -50.09765625;
-    }
+    public static final double M1_ZERO = 43.2421875;
+    public static final double M2_ZERO = -121.9921875;
+    public static final double M3_ZERO = -153.6328125;
+    public static final double M4_ZERO = -50.09765625;
 
     public static final class anglemotor {
         public static final double kP = -1e-2;
