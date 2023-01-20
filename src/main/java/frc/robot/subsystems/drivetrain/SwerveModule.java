@@ -6,7 +6,7 @@ package frc.robot.subsystems.drivetrain;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.sensors.AbsoluteSensorRange;
-import com.ctre.phoenix.sensors.CANCoder;
+import com.ctre.phoenix.sensors.WPI_CANCoder;
 
 import csplib.motors.CSP_Falcon;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -18,28 +18,34 @@ import frc.robot.Constants;
 public class SwerveModule {
     private CSP_Falcon speed;
     private CSP_Falcon angle; 
-    private CANCoder encoder;
+    private WPI_CANCoder encoder;
     private double zero;
+    private double anglekP;
+    private double anglekI;
+    private double anglekD;
 
-    public SwerveModule(int speedID, int angleID, int encoderID, double zero) {
+    public SwerveModule(int speedID, int angleID, int encoderID, double zero, double anglekP, double anglekI, double anglekD) {
         speed = new CSP_Falcon(speedID);
         angle = new CSP_Falcon(angleID);
-        encoder = new CANCoder(encoderID);
+        encoder = new WPI_CANCoder(encoderID);
         this.zero = zero;
+        this.anglekP = anglekP;
+        this.anglekI = anglekI;
+        this.anglekD = anglekD;
     
         init();
     }
-
     private void init() {
         speed.init();
         speed.setBrake(true);
         speed.setRampRate(Constants.drivetrain.RAMP_RATE);
-        speed.setPIDF(Constants.drivetrain.speedmotor.kP, Constants.drivetrain.speedmotor.kI, Constants.drivetrain.speedmotor.kD, 0);
+        speed.setPIDF(Constants.drivetrain.speed.kP, Constants.drivetrain.speed.kI, Constants.drivetrain.speed.kD, 0);
         speed.setScalar(Constants.drivetrain.DRIVE_COUNTS_PER_METER);
 
         angle.init();
         angle.setBrake(true);
         angle.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute);
+        angle.setPIDF(anglekP, anglekI, anglekD, 0);
 
         encoder.clearStickyFaults();
         encoder.configAbsoluteSensorRange(AbsoluteSensorRange.Signed_PlusMinus180);

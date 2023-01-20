@@ -50,11 +50,19 @@ public class RobotContainer {
 
   private void smartdashboardButtons() {
     SmartDashboard.putData("Set Velocity", new InstantCommand(() -> drivetrain.setVelocity(SmartDashboard.getNumber("Set Drive Velocity", 0)), drivetrain));
+    SmartDashboard.putData("Set Angle", new InstantCommand(() -> drivetrain.setAngle(SmartDashboard.getNumber("Set Drive Angle", 0)), drivetrain));
+
     SmartDashboard.putData("Set Speed PIDs", new InstantCommand(() -> drivetrain.setSpeedPIDs(
-      SmartDashboard.getNumber("Drive kP", 0), 
-      SmartDashboard.getNumber("Drive kI", 0), 
-      SmartDashboard.getNumber("Drive kD", 0), 
-      SmartDashboard.getNumber("Drive kF", 0)), drivetrain));
+      SmartDashboard.getNumber("Speed kP", 0), 
+      SmartDashboard.getNumber("Speed kI", 0), 
+      SmartDashboard.getNumber("Speed kD", 0), 
+      SmartDashboard.getNumber("Speed kF", 0)), drivetrain));
+
+      SmartDashboard.putData("Set Angle PIDs", new InstantCommand(() -> drivetrain.setSpeedPIDs(
+        SmartDashboard.getNumber("Angle kP", 0), 
+        SmartDashboard.getNumber("Angle kI", 0), 
+        SmartDashboard.getNumber("Angle kD", 0), 
+        SmartDashboard.getNumber("Angle kF", 0)), drivetrain));
   };
 
   private void addChooser() {

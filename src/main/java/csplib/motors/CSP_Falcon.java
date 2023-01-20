@@ -5,13 +5,8 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
-import frc.robot.Constants;
-
 public class CSP_Falcon extends WPI_TalonFX implements CSP_Motor {
-
     private final double CPR = 2048.0;
-
-    private double scalar = 1.0;
 
     public CSP_Falcon(int id, String canBus) {
         super(id, canBus);
@@ -69,15 +64,15 @@ public class CSP_Falcon extends WPI_TalonFX implements CSP_Motor {
     }
 
     public void setScalar(double scalar) {
-        this.scalar = scalar;
+        super.configSelectedFeedbackCoefficient(scalar);
     }
  
     public double getPosition() {
-        return (super.getSelectedSensorPosition() * scalar);
+        return (super.getSelectedSensorPosition());
     }
 
     public double getVelocity() {
-        return ((super.getSelectedSensorVelocity() * 10) * 60) * scalar;
+        return ((super.getSelectedSensorVelocity() * 10) * 60);
     }
 
     public double getCurrent() {

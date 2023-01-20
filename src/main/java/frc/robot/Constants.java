@@ -50,7 +50,7 @@ public static final class ids {
     public static final int BR_ANGLE = 8;
     public static final int BR_ENCODER = 24;
 
-    public static final int PIGEON = 30;
+    public static final int PIGEON = 25;
 }
 
 public static class drivetrain {
@@ -84,13 +84,25 @@ public static class drivetrain {
     public static final double M3_ZERO = -153.6328125;
     public static final double M4_ZERO = -50.09765625;
 
-    public static final class anglemotor {
-        public static final double kP = -1e-2;
-        public static final double kI = 0.0;
-        public static final double kD = 0.0;
+    public static final class angle {
+        public static final double M1_kP = -1e-2;
+        public static final double M1_kI = 0.0;
+        public static final double M1_kD = 0.0;
+
+        public static final double M2_kP = -1e-2;
+        public static final double M2_kI = 0.0;
+        public static final double M2_kD = 0.0;
+
+        public static final double M3_kP = -1e-2;
+        public static final double M3_kI = 0.0;
+        public static final double M3_kD = 0.0;
+
+        public static final double M4_kP = -1e-2;
+        public static final double M4_kI = 0.0;
+        public static final double M4_kD = 0.0;
     }
 
-    public static final class speedmotor {
+    public static final class speed {
         public static final double kP = 19e-2;
         public static final double kI = 0.0;
         public static final double kD = 1e-1;
