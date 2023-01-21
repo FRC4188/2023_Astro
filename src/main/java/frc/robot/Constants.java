@@ -7,6 +7,7 @@ package frc.robot;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.util.Units;
 
@@ -99,11 +100,18 @@ public static class drivetrain {
   }
 
   
-  }
+}
 
-    public static class arm 
+    public static class wrist
     {
-        public static final 
+        public static final double kS = 0.0; //idk yet
+        public static final double kG = 0.0; //idk yet
+        public static final double kV = 0.0; //idk yet
+        public static final double kA = 0.0; //idk yet
+        public static final double Kp = 0.0; //idk yet
+        public static final double Ki = 0.0; //idk yet
+        public static final double Kd = 0.0; //idk yet
+        public static final TrapezoidProfile.Constraints constriants = new Constraints(0.0, 0.0); //idk yet
     }
   
 }

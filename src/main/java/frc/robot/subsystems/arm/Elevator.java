@@ -48,7 +48,7 @@ public class Elevator extends SubsystemBase {
   public elevatorMode elevatorMode;
   public elevatorHeight elevatorHeight;
 
-  private CSP_Motor motor = new CSP_SparkMax(0);
+  private CSP_Motor motor = new CSP_SparkMax(0); // no clue what the id is yet
 
   public Elevator() {
 
@@ -62,22 +62,22 @@ public class Elevator extends SubsystemBase {
   }
 
   //Updates ShuffleBoard with information about the elevator
-  private void updateShuffleboard() {
-    SmartDashboard.putNumber("Elevator Height", getElevatorHeight)); //doesn't work for now
-    SmartDashboard.putString("Elevator Mode", getElevatorMode()); //doesn't work for now
-  }
+  // private void updateShuffleboard() {
+  //   SmartDashboard.putNumber("Elevator Height", getElevatorHeight)); //doesn't work for now
+  //   SmartDashboard.putString("Elevator Mode", getElevatorMode()); //doesn't work for now
+  // }
 
   //Returns elevator mode for shuttleboard
-  public elevatorMode getElevatorMode()  
-  {
-    return elevatorMode;
-  }
+  // public elevatorMode getElevatorMode()  
+  // {
+  //   return elevatorMode;
+  // }
 
   //Returns elevator height for shuttleboard
-  public elevatorHeight getElevatorHeight() 
-  {
-    return elevatorHeight;
-  }
+  // public elevatorHeight getElevatorHeight() 
+  // {
+  //   return elevatorHeight;
+  // }
 
 
 
