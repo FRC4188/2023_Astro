@@ -6,6 +6,7 @@ package frc.robot.subsystems.arm;
 
 import csplib.motors.CSP_Motor;
 import csplib.motors.CSP_SparkMax;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -24,8 +25,6 @@ public class Elevator extends SubsystemBase {
     return Elevator;
   }
 
-  private CSP_Motor motor = new CSP_SparkMax(0);
-  
   public enum elevatorHeight {
     GROUND(0),
     MIDDLE(1),
@@ -46,36 +45,44 @@ public class Elevator extends SubsystemBase {
     EXTEND;
   }
 
+  public elevatorMode elevatorMode;
+  public elevatorHeight elevatorHeight;
+
+  private CSP_Motor motor = new CSP_SparkMax(0);
 
   public Elevator() {
 
     CommandScheduler.getInstance().registerSubsystem(this);
-
   }
 
-  /**
-   * Example command factory method.
-   *
-   * @return a command
-   */
-  public CommandBase idklol() {
-    // Inline construction of command goes here.
-    // Subsystem::RunOnce implicitly requires `this` subsystem.
-    return runOnce(
-        () -> {
-          /* one-time action goes here */
-        });
+  //Sets the elevator mode to "retract" 
+  public void resetElevator()
+  {
+    elevatorMode = elevatorMode.RETRACT;
   }
 
-  /**
-   * An example method querying a boolean state of the subsystem (for example, a digital sensor).
-   *
-   * @return value of some boolean subsystem state, such as a digital sensor.
-   */
-  public boolean exampleCondition() {
-    // Query some boolean state, such as a digital sensor.
-    return false;
+  //Updates ShuffleBoard with information about the elevator
+  private void updateShuffleboard() {
+    SmartDashboard.putNumber("Elevator Height", getElevatorHeight)); //doesn't work for now
+    SmartDashboard.putString("Elevator Mode", getElevatorMode()); //doesn't work for now
   }
+
+  //Returns elevator mode for shuttleboard
+  public elevatorMode getElevatorMode()  
+  {
+    return elevatorMode;
+  }
+
+  //Returns elevator height for shuttleboard
+  public elevatorHeight getElevatorHeight() 
+  {
+    return elevatorHeight;
+  }
+
+
+
+
+
 
   @Override
   public void periodic() {
