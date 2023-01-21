@@ -4,11 +4,16 @@
 
 package frc.robot.subsystems.drivetrain;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.RemoteFeedbackDevice;
+import com.ctre.phoenix.motorcontrol.RemoteSensorSource;
 import com.ctre.phoenix.sensors.AbsoluteSensorRange;
+import com.ctre.phoenix.sensors.SensorInitializationStrategy;
 import com.ctre.phoenix.sensors.WPI_CANCoder;
 
 import csplib.motors.CSP_Falcon;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -24,6 +29,8 @@ public class SwerveModule {
     private double anglekI;
     private double anglekD;
 
+    private PIDController anglePID;
+
     public SwerveModule(int speedID, int angleID, int encoderID, double zero, double anglekP, double anglekI, double anglekD) {
         speed = new CSP_Falcon(speedID);
         angle = new CSP_Falcon(angleID);
@@ -32,32 +39,34 @@ public class SwerveModule {
         this.anglekP = anglekP;
         this.anglekI = anglekI;
         this.anglekD = anglekD;
-    
+
+        anglePID = new PIDController(anglekP, anglekI, anglekD);
+
         init();
+    
     }
-    private void init() {
-        speed.init();
+
+    public void init() {
         speed.setBrake(true);
         speed.setRampRate(Constants.drivetrain.RAMP_RATE);
         speed.setPIDF(Constants.drivetrain.speed.kP, Constants.drivetrain.speed.kI, Constants.drivetrain.speed.kD, 0);
         speed.setScalar(Constants.drivetrain.DRIVE_COUNTS_PER_METER);
 
-        angle.init();
         angle.setBrake(true);
-        angle.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute);
-        angle.setPIDF(anglekP, anglekI, anglekD, 0);
+        angle.setEncoder(0.0);
+        anglePID.enableContinuousInput(-180, 180);
 
         encoder.clearStickyFaults();
         encoder.configAbsoluteSensorRange(AbsoluteSensorRange.Signed_PlusMinus180);
         encoder.setPosition(0.0);
         encoder.configSensorDirection(false);
-        encoder.configMagnetOffset(zero);
-    }
+        encoder.configMagnetOffset(-zero);
+        }
 
     public void setModuleState(SwerveModuleState desired) {
         SwerveModuleState optimized = SwerveModuleState.optimize(desired, Rotation2d.fromDegrees(encoder.getAbsolutePosition()));
         speed.setVelocity(optimized.speedMetersPerSecond);
-        angle.setPosition(optimized.angle.getDegrees());
+        angle.set(anglePID.calculate(encoder.getAbsolutePosition(), optimized.angle.getDegrees()));
     }
 
     public void setSpeedPIDF(double kP, double kI, double kD, double kF) {
@@ -65,7 +74,7 @@ public class SwerveModule {
     }
     
     public void setAnglePIDF(double kP, double kI, double kD, double kF) {
-        angle.setPIDF(kP, kI, kD, kF);
+        anglePID.setPID(kP, kI, kD);
     }
 
     public SwerveModuleState getModuleState() {
@@ -74,12 +83,19 @@ public class SwerveModule {
 
     public SwerveModulePosition getModulePosition(){
         return new SwerveModulePosition(speed.getPosition(), Rotation2d.fromDegrees(encoder.getAbsolutePosition()));
-
-         
     }
 
     public double[] getTemperature() {
-        return new double[] {speed.getTemperature(),angle.getTemperature()};
+        return new double[] {speed.getTemperature(), angle.getTemperature()};
+    }
+
+    public void zeroPower() {
+        angle.set(ControlMode.PercentOutput, 0.0);
+        speed.set(ControlMode.PercentOutput, 0.0);
+    }
+
+    public PIDController getPID() {
+        return anglePID;
     }
 }
 

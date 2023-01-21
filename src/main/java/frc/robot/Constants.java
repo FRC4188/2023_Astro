@@ -36,21 +36,21 @@ public final class Constants {
 public static final class ids {
     public static final int FR_SPEED = 1;
     public static final int FR_ANGLE = 2;
-    public static final int FR_ENCODER = 21;
+    public static final int FR_ENCODER = 11;
 
     public static final int FL_SPEED = 3;
     public static final int FL_ANGLE = 4;
-    public static final int FL_ENCODER = 22;
+    public static final int FL_ENCODER = 12;
 
     public static final int BL_SPEED = 5;
     public static final int BL_ANGLE = 6;
-    public static final int BL_ENCODER = 23;
+    public static final int BL_ENCODER = 13;
 
     public static final int BR_SPEED = 7;
     public static final int BR_ANGLE = 8;
-    public static final int BR_ENCODER = 24;
+    public static final int BR_ENCODER = 14;
 
-    public static final int PIGEON = 25;
+    public static final int PIGEON = 15;
 }
 
 public static class drivetrain {
@@ -61,8 +61,10 @@ public static class drivetrain {
     public static final double DRIVE_COUNTS_PER_ROTATION = DRIVE_GEARING * robot.FALCON_ENCODER_TICKS; // Encoder counts per revolution of the drive wheel.
     public static final double DRIVE_COUNTS_PER_METER = DRIVE_ROTATIONS_PER_METER * DRIVE_COUNTS_PER_ROTATION; // Encoder ticks per meter of the drive wheels.
 
-    public static final double ANGLE_GEARING = 11.57;
-    public static final double ANGLE_TICKS_PER_DEGREE = (ANGLE_GEARING * robot.FALCON_ENCODER_TICKS) / 360.0;
+    public static final double ANGLE_GEARING = 10.29; // 10.29 : 1
+    public static final double ANGLE_TICK_PER_ROTATION = robot.FALCON_ENCODER_TICKS * ANGLE_GEARING;
+    public static final double ANGLE_TICKS_PER_DEGREE = ANGLE_TICK_PER_ROTATION / 360;
+
 
     public static final double MAX_VOLTS = 12.0; // Maximum voltage allowed in the drivetrain.
     public static final double MAX_VELOCITY = 10.0; // Maximum velocity allowed in the drivetrain (Meters per Second).
@@ -79,25 +81,25 @@ public static class drivetrain {
     public static final Translation2d BL_LOCATION = new Translation2d((Constants.robot.A_WIDTH / 2), -(Constants.robot.A_LENGTH / 2));
     public static final Translation2d BR_LOCATION = new Translation2d((Constants.robot.A_WIDTH / 2), (Constants.robot.A_LENGTH / 2));
 
-    public static final double M1_ZERO = 43.2421875;
-    public static final double M2_ZERO = -121.9921875;
-    public static final double M3_ZERO = -153.6328125;
-    public static final double M4_ZERO = -50.09765625;
+    public static final double M1_ZERO = -3.076171875;
+    public static final double M2_ZERO = 160.31250000000003;
+    public static final double M3_ZERO = -146.42578125;
+    public static final double M4_ZERO = 7.03125;
 
     public static final class angle {
-        public static final double M1_kP = -1e-2;
+        public static final double M1_kP = 0;
         public static final double M1_kI = 0.0;
         public static final double M1_kD = 0.0;
 
-        public static final double M2_kP = -1e-2;
+        public static final double M2_kP = 1;
         public static final double M2_kI = 0.0;
         public static final double M2_kD = 0.0;
 
-        public static final double M3_kP = -1e-2;
+        public static final double M3_kP = 0;
         public static final double M3_kI = 0.0;
         public static final double M3_kD = 0.0;
 
-        public static final double M4_kP = -1e-2;
+        public static final double M4_kP = 0;
         public static final double M4_kI = 0.0;
         public static final double M4_kD = 0.0;
     }

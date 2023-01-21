@@ -59,8 +59,9 @@ public class Drivetrain extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumberArray("Velocities", new double[] {frontLeft.getModuleState().speedMetersPerSecond, frontRight.getModuleState().speedMetersPerSecond, backLeft.getModuleState().speedMetersPerSecond, backRight.getModuleState().speedMetersPerSecond});
-    SmartDashboard.putNumberArray("Angles", new double[] {frontLeft.getModuleState().angle.getDegrees(), frontRight.getModuleState().angle.getDegrees(), backLeft.getModuleState().angle.getDegrees(), backRight.getModuleState().angle.getDegrees()});
+
+    SmartDashboard.putNumber("M1 Angle", frontRight.getModuleState().angle.getDegrees());
+    SmartDashboard.putString("Angle PID", frontRight.getPID().getP() + ", " + frontRight.getPID().getI() + ", " + frontRight.getPID().getD());
   }
 
   public void putDashboard() {
@@ -86,10 +87,8 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public void setAngle(double angle) {
-    frontLeft.setModuleState(new SwerveModuleState(0, Rotation2d.fromDegrees(angle)));
     frontRight.setModuleState(new SwerveModuleState(0, Rotation2d.fromDegrees(angle)));
-    backLeft.setModuleState(new SwerveModuleState(0, Rotation2d.fromDegrees(angle)));
-    backRight.setModuleState(new SwerveModuleState(0, Rotation2d.fromDegrees(angle)));
+
   }
 
   public void setSpeedPIDs(double kP, double kI, double kD, double kF) {
@@ -100,10 +99,11 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public void setAnglePIDs(double kP, double kI, double kD, double kF) {
-    frontLeft.setAnglePIDF(kP, kI, kD, kF);
     frontRight.setAnglePIDF(kP, kI, kD, kF);
-    backLeft.setAnglePIDF(kP, kI, kD, kF);
-    backRight.setAnglePIDF(kP, kI, kD, kF);
+  }
+
+  public void zeroPower() {
+    frontRight.zeroPower();
   }
 
 }

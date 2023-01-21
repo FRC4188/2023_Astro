@@ -1,6 +1,7 @@
 package frc.robot;
 
 import csplib.inputs.CSPController;
+import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -50,7 +51,9 @@ public class RobotContainer {
 
   private void smartdashboardButtons() {
     SmartDashboard.putData("Set Velocity", new InstantCommand(() -> drivetrain.setVelocity(SmartDashboard.getNumber("Set Drive Velocity", 0)), drivetrain));
-    SmartDashboard.putData("Set Angle", new InstantCommand(() -> drivetrain.setAngle(SmartDashboard.getNumber("Set Drive Angle", 0)), drivetrain));
+    SmartDashboard.putData("Set Angle", new InstantCommand(() -> drivetrain.setAngle(SmartDashboard.getNumber("Set Drive Angle", 0)), drivetrain));  
+    SmartDashboard.putData("Set Zero", new InstantCommand(() -> drivetrain.zeroPower(), drivetrain));
+
 
     SmartDashboard.putData("Set Speed PIDs", new InstantCommand(() -> drivetrain.setSpeedPIDs(
       SmartDashboard.getNumber("Speed kP", 0), 
@@ -58,11 +61,14 @@ public class RobotContainer {
       SmartDashboard.getNumber("Speed kD", 0), 
       SmartDashboard.getNumber("Speed kF", 0)), drivetrain));
 
-      SmartDashboard.putData("Set Angle PIDs", new InstantCommand(() -> drivetrain.setSpeedPIDs(
+      SmartDashboard.putData("Set Angle PIDs", new InstantCommand(() -> drivetrain.setAnglePIDs(
         SmartDashboard.getNumber("Angle kP", 0), 
         SmartDashboard.getNumber("Angle kI", 0), 
         SmartDashboard.getNumber("Angle kD", 0), 
         SmartDashboard.getNumber("Angle kF", 0)), drivetrain));
+
+
+
   };
 
   private void addChooser() {
