@@ -25,9 +25,6 @@ public class SwerveModule {
     private CSP_Falcon angle; 
     private WPI_CANCoder encoder;
     private double zero;
-    private double anglekP;
-    private double anglekI;
-    private double anglekD;
 
     private PIDController anglePID;
 
@@ -36,17 +33,13 @@ public class SwerveModule {
         angle = new CSP_Falcon(angleID);
         encoder = new WPI_CANCoder(encoderID);
         this.zero = zero;
-        this.anglekP = anglekP;
-        this.anglekI = anglekI;
-        this.anglekD = anglekD;
 
         anglePID = new PIDController(anglekP, anglekI, anglekD);
 
         init();
-    
     }
 
-    public void init() {
+    private void init() {
         speed.setBrake(true);
         speed.setRampRate(Constants.drivetrain.RAMP_RATE);
         speed.setPIDF(Constants.drivetrain.speed.kP, Constants.drivetrain.speed.kI, Constants.drivetrain.speed.kD, 0);
@@ -56,6 +49,7 @@ public class SwerveModule {
         angle.setEncoder(0.0);
         anglePID.enableContinuousInput(-180, 180);
 
+        encoder.configFactoryDefault();
         encoder.clearStickyFaults();
         encoder.configAbsoluteSensorRange(AbsoluteSensorRange.Signed_PlusMinus180);
         encoder.setPosition(0.0);
