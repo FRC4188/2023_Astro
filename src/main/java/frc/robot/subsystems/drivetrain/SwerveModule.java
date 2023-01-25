@@ -8,6 +8,7 @@ import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 import com.ctre.phoenix.sensors.WPI_CANCoder;
 import csplib.motors.CSP_Falcon;
 import csplib.utils.Conversions;
+import csplib.utils.TempManager;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -43,6 +44,8 @@ public class SwerveModule {
         this.anglekD = anglekD;
 
         init();
+
+        TempManager.addMotor(speed, angle);
     }
 
     /**

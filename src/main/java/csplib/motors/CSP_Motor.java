@@ -31,4 +31,6 @@ public interface CSP_Motor {
     public double getTemperature();
 
     public double getCurrent();
+
+    public int getID();
 }

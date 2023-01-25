@@ -1,6 +1,6 @@
 package frc.robot;
 
-import csplib.inputs.CSPController;
+import csplib.inputs.CSP_Controller;
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -21,7 +21,7 @@ public class RobotContainer {
 
   private Drivetrain drivetrain = Drivetrain.getInstance();
   
-  private CSPController pilot = new CSPController(0);
+  private CSP_Controller pilot = new CSP_Controller(0);
 
   private SendableChooser<SequentialCommandGroup> autoChooser = new SendableChooser<SequentialCommandGroup>();
 
