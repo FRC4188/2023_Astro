@@ -6,6 +6,7 @@ package frc.robot.subsystems.drivetrain;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.RemoteFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.RemoteSensorSource;
 import com.ctre.phoenix.sensors.AbsoluteSensorRange;
@@ -25,16 +26,18 @@ public class SwerveModule {
     private CSP_Falcon angle; 
     private WPI_CANCoder encoder;
     private double zero;
-
-    private PIDController anglePID;
+    private double anglekP;
+    private double anglekI;
+    private double anglekD;
 
     public SwerveModule(int speedID, int angleID, int encoderID, double zero, double anglekP, double anglekI, double anglekD) {
         speed = new CSP_Falcon(speedID);
         angle = new CSP_Falcon(angleID);
         encoder = new WPI_CANCoder(encoderID);
         this.zero = zero;
-
-        anglePID = new PIDController(anglekP, anglekI, anglekD);
+        this.anglekP = anglekP;
+        this.anglekI = anglekI;
+        this.anglekD = anglekD;
 
         init();
     }
@@ -43,24 +46,25 @@ public class SwerveModule {
         speed.setBrake(true);
         speed.setRampRate(Constants.drivetrain.RAMP_RATE);
         speed.setPIDF(Constants.drivetrain.speed.kP, Constants.drivetrain.speed.kI, Constants.drivetrain.speed.kD, 0);
-        speed.setScalar(Constants.drivetrain.DRIVE_COUNTS_PER_METER);
 
+        angle.configFactoryDefault();
         angle.setBrake(true);
-        angle.setEncoder(0.0);
-        anglePID.enableContinuousInput(-180, 180);
+        angle.setScalar(Constants.drivetrain.ANGLE_DEGREES_PER_TICK);  
+        angle.setEncoder(signedToUnsigned(encoder.getAbsolutePosition() - zero));
+        angle.configFeedbackNotContinuous(true, 0);
+        angle.setPIDF(anglekP, anglekI, anglekD, anglekD);
 
         encoder.configFactoryDefault();
         encoder.clearStickyFaults();
         encoder.configAbsoluteSensorRange(AbsoluteSensorRange.Signed_PlusMinus180);
-        encoder.setPosition(0.0);
         encoder.configSensorDirection(false);
         encoder.configMagnetOffset(-zero);
-        }
+    }
 
     public void setModuleState(SwerveModuleState desired) {
-        SwerveModuleState optimized = SwerveModuleState.optimize(desired, Rotation2d.fromDegrees(encoder.getAbsolutePosition()));
+        SwerveModuleState optimized = SwerveModuleState.optimize(desired, Rotation2d.fromDegrees(getAngle()));
         speed.setVelocity(optimized.speedMetersPerSecond);
-        angle.set(anglePID.calculate(encoder.getAbsolutePosition(), optimized.angle.getDegrees()));
+        angle.setPosition(optimized.angle.getDegrees());
     }
 
     public void setSpeedPIDF(double kP, double kI, double kD, double kF) {
@@ -68,15 +72,32 @@ public class SwerveModule {
     }
     
     public void setAnglePIDF(double kP, double kI, double kD, double kF) {
-        anglePID.setPID(kP, kI, kD);
+        angle.setPIDF(kP, kI, kD, kF);
     }
 
     public SwerveModuleState getModuleState() {
-        return new SwerveModuleState(speed.getVelocity(), Rotation2d.fromDegrees(encoder.getAbsolutePosition()));
+        return new SwerveModuleState(speed.getVelocity(), Rotation2d.fromDegrees(getAngle()));
     }
 
-    public SwerveModulePosition getModulePosition(){
-        return new SwerveModulePosition(speed.getPosition(), Rotation2d.fromDegrees(encoder.getAbsolutePosition()));
+    public SwerveModulePosition getModulePosition() {
+        return new SwerveModulePosition(speed.getPosition(), Rotation2d.fromDegrees(getAngle()));
+    }
+
+    private double getAngle() {
+        double angleAngle = signedToUnsigned(angle.getPosition());
+        if (Math.abs(angleAngle - encoder.getAbsolutePosition()) > 1) {
+            angle.setEncoder(signedToUnsigned(encoder.getAbsolutePosition() - zero));
+        }
+
+        return angleAngle;
+    }
+
+    private double signedToUnsigned(double input) {
+        return (-input + 360.0) % 360.0 - 180.0;
+    }
+
+    public double getAbsolutePosition() {
+        return encoder.getAbsolutePosition();
     }
 
     public double[] getTemperature() {
@@ -84,12 +105,9 @@ public class SwerveModule {
     }
 
     public void zeroPower() {
-        angle.set(ControlMode.PercentOutput, 0.0);
-        speed.set(ControlMode.PercentOutput, 0.0);
+        angle.set(0.0);
+        speed.set(0.0);
     }
 
-    public PIDController getPID() {
-        return anglePID;
-    }
 }
 

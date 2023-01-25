@@ -63,8 +63,8 @@ public static class drivetrain {
 
     public static final double ANGLE_GEARING = 10.29; // 10.29 : 1
     public static final double ANGLE_TICK_PER_ROTATION = robot.FALCON_ENCODER_TICKS * ANGLE_GEARING;
-    public static final double ANGLE_TICKS_PER_DEGREE = ANGLE_TICK_PER_ROTATION / 360;
-
+    public static final double ANGLE_TICKS_PER_DEGREE = ANGLE_TICK_PER_ROTATION / 360.0;
+    public static final double ANGLE_DEGREES_PER_TICK = 1.0 / ANGLE_TICKS_PER_DEGREE;
 
     public static final double MAX_VOLTS = 12.0; // Maximum voltage allowed in the drivetrain.
     public static final double MAX_VELOCITY = 10.0; // Maximum velocity allowed in the drivetrain (Meters per Second).
@@ -81,27 +81,27 @@ public static class drivetrain {
     public static final Translation2d BL_LOCATION = new Translation2d((Constants.robot.A_WIDTH / 2), -(Constants.robot.A_LENGTH / 2));
     public static final Translation2d BR_LOCATION = new Translation2d((Constants.robot.A_WIDTH / 2), (Constants.robot.A_LENGTH / 2));
 
-    public static final double M1_ZERO = -3.076171875;
-    public static final double M2_ZERO = 160.31250000000003;
-    public static final double M3_ZERO = -146.42578125;
-    public static final double M4_ZERO = 7.03125;
+    public static final double M1_ZERO = -2.900390625;
+    public static final double M2_ZERO = 158.466796875;
+    public static final double M3_ZERO = -144.31640625;
+    public static final double M4_ZERO = 6.943359375;
 
     public static final class angle {
-        public static final double M1_kP = 0;
+        public static final double M1_kP = 5;
         public static final double M1_kI = 0.0;
-        public static final double M1_kD = 0.0;
+        public static final double M1_kD = 1;
 
-        public static final double M2_kP = 1;
+        public static final double M2_kP = 5;
         public static final double M2_kI = 0.0;
-        public static final double M2_kD = 0.0;
+        public static final double M2_kD = 0.1;
 
-        public static final double M3_kP = 0;
+        public static final double M3_kP = 5;
         public static final double M3_kI = 0.0;
-        public static final double M3_kD = 0.0;
+        public static final double M3_kD = 0.3;
 
-        public static final double M4_kP = 0;
+        public static final double M4_kP = 5;
         public static final double M4_kI = 0.0;
-        public static final double M4_kD = 0.0;
+        public static final double M4_kD = 0.4;
     }
 
     public static final class speed {
