@@ -53,6 +53,8 @@ public class RobotContainer {
     SmartDashboard.putData("Set Velocity", new InstantCommand(() -> drivetrain.setVelocity(SmartDashboard.getNumber("Set Drive Velocity", 0)), drivetrain));
     SmartDashboard.putData("Set Angle", new InstantCommand(() -> drivetrain.setAngle(SmartDashboard.getNumber("Set Drive Angle", 0)), drivetrain));  
     SmartDashboard.putData("Set Zero", new InstantCommand(() -> drivetrain.zeroPower(), drivetrain));
+    SmartDashboard.putData("Set Selected Module", new InstantCommand(() -> drivetrain.setModuleNum((int) SmartDashboard.getNumber("Set Module", 0)), drivetrain));
+
 
 
     SmartDashboard.putData("Set Speed PIDs", new InstantCommand(() -> drivetrain.setSpeedPIDs(
