@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.subsystems.drivetrain.Drivetrain;
 
 
 /**
@@ -19,8 +18,6 @@ import frc.robot.subsystems.drivetrain.Drivetrain;
  */
 public class RobotContainer {
 
-  private Drivetrain drivetrain = Drivetrain.getInstance();
-  
   private CSP_Controller pilot = new CSP_Controller(0);
 
   private SendableChooser<SequentialCommandGroup> autoChooser = new SendableChooser<SequentialCommandGroup>();
@@ -50,25 +47,6 @@ public class RobotContainer {
   }
 
   private void smartdashboardButtons() {
-    SmartDashboard.putData("Set Velocity", new InstantCommand(() -> drivetrain.setVelocity(SmartDashboard.getNumber("Set Drive Velocity", 0)), drivetrain));
-    SmartDashboard.putData("Set Angle", new InstantCommand(() -> drivetrain.setAngle(SmartDashboard.getNumber("Set Drive Angle", 0)), drivetrain));  
-    SmartDashboard.putData("Set Zero", new InstantCommand(() -> drivetrain.zeroPower(), drivetrain));
-    SmartDashboard.putData("Set Selected Module", new InstantCommand(() -> drivetrain.setModuleNum((int) SmartDashboard.getNumber("Set Module", 0)), drivetrain));
-
-
-
-    SmartDashboard.putData("Set Speed PIDs", new InstantCommand(() -> drivetrain.setSpeedPIDs(
-      SmartDashboard.getNumber("Speed kP", 0), 
-      SmartDashboard.getNumber("Speed kI", 0), 
-      SmartDashboard.getNumber("Speed kD", 0), 
-      SmartDashboard.getNumber("Speed kF", 0)), drivetrain));
-
-      SmartDashboard.putData("Set Angle PIDs", new InstantCommand(() -> drivetrain.setAnglePIDs(
-        SmartDashboard.getNumber("Angle kP", 0), 
-        SmartDashboard.getNumber("Angle kI", 0), 
-        SmartDashboard.getNumber("Angle kD", 0), 
-        SmartDashboard.getNumber("Angle kF", 0)), drivetrain));
-
     
 
   };
