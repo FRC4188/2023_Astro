@@ -8,7 +8,6 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.Constants.drivetrain;
 import frc.robot.subsystems.sensors.Pigeon;
 
 public class Drivetrain extends SubsystemBase {
@@ -37,6 +36,8 @@ public class Drivetrain extends SubsystemBase {
                                                     Constants.drivetrain.angle.M4_kP, Constants.drivetrain.angle.M4_kI, Constants.drivetrain.angle.M4_kD);
 
   private Pigeon pigeon = new Pigeon(Constants.ids.PIGEON);
+
+  private int moduleNum = 0;
 
   private SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
     Constants.drivetrain.FL_LOCATION, 
@@ -84,32 +85,80 @@ public class Drivetrain extends SubsystemBase {
     SmartDashboard.putNumber("Angle kD", 0);
     SmartDashboard.putNumber("Angle kF", 0);
 
+    SmartDashboard.putNumber("Set Module", 0);
+
   }
 
   public void setVelocity(double velocity) {
-    frontLeft.setModuleState(new SwerveModuleState(velocity, new Rotation2d()));
-    frontRight.setModuleState(new SwerveModuleState(velocity, new Rotation2d()));
-    backLeft.setModuleState(new SwerveModuleState(velocity, new Rotation2d()));
-    backRight.setModuleState(new SwerveModuleState(velocity, new Rotation2d()));
+    switch (moduleNum) {
+      case 1:
+        frontRight.setModuleState(new SwerveModuleState(velocity, new Rotation2d()));
+        break;
+      case 2:
+        frontLeft.setModuleState(new SwerveModuleState(velocity, new Rotation2d()));
+        break;
+      case 3:
+        backLeft.setModuleState(new SwerveModuleState(velocity, new Rotation2d()));
+        break;
+      case 4:
+        backRight.setModuleState(new SwerveModuleState(velocity, new Rotation2d()));
+      default:
+        break;
+    }
   }
 
   public void setAngle(double angle) {
-    frontRight.setModuleState(new SwerveModuleState(0, Rotation2d.fromDegrees(angle)));
-    frontLeft.setModuleState(new SwerveModuleState(0, Rotation2d.fromDegrees(angle)));
-    backLeft.setModuleState(new SwerveModuleState(0, Rotation2d.fromDegrees(angle)));
-    backRight.setModuleState(new SwerveModuleState(0, Rotation2d.fromDegrees(angle)));
-
+    switch (moduleNum) {
+      case 1:
+        frontRight.setModuleState(new SwerveModuleState(0, Rotation2d.fromDegrees(angle)));
+        break;
+      case 2:
+        frontLeft.setModuleState(new SwerveModuleState(0, Rotation2d.fromDegrees(angle)));
+        break;
+      case 3:
+        backLeft.setModuleState(new SwerveModuleState(0, Rotation2d.fromDegrees(angle)));
+        break;
+      case 4:
+        backRight.setModuleState(new SwerveModuleState(0, Rotation2d.fromDegrees(angle)));
+      default:
+        break;
+    }
   }
 
   public void setSpeedPIDs(double kP, double kI, double kD, double kF) {
-    frontLeft.setSpeedPIDF(kP, kI, kD, kF);
-    frontRight.setSpeedPIDF(kP, kI, kD, kF);
-    backLeft.setSpeedPIDF(kP, kI, kD, kF);
-    backRight.setSpeedPIDF(kP, kI, kD, kF);
+    switch (moduleNum) {
+      case 1:
+        frontRight.setSpeedPIDF(kP, kI, kD, kF);
+        break;
+      case 2:
+        frontLeft.setSpeedPIDF(kP, kI, kD, kF);
+        break;
+      case 3:
+        backLeft.setSpeedPIDF(kP, kI, kD, kF);
+        break;
+      case 4:
+        backRight.setSpeedPIDF(kP, kI, kD, kF);
+      default:
+        break;
+    }
   }
 
   public void setAnglePIDs(double kP, double kI, double kD, double kF) {
-    backRight.setAnglePIDF(kP, kI, kD, kF);
+    switch (moduleNum) {
+      case 1:
+        frontRight.setAnglePIDF(kP, kI, kD, kF);
+        break;
+      case 2:
+        frontLeft.setAnglePIDF(kP, kI, kD, kF);
+        break;
+      case 3:
+        backLeft.setAnglePIDF(kP, kI, kD, kF);
+        break;
+      case 4:
+        backRight.setAnglePIDF(kP, kI, kD, kF);
+      default:
+        break;
+    }
   }
 
   public void zeroPower() {
@@ -117,5 +166,11 @@ public class Drivetrain extends SubsystemBase {
     frontLeft.zeroPower();
     backLeft.zeroPower();
     backRight.zeroPower();
+  }
+
+  public void setModuleNum(int moduleNum) {
+    if (moduleNum >= 1 && moduleNum <= 4) {
+      this.moduleNum = moduleNum;
+    }
   }
 }

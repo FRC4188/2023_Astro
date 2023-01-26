@@ -57,18 +57,20 @@ public class SwerveModule {
         speed.setPIDF(Constants.drivetrain.speed.kP, Constants.drivetrain.speed.kI, Constants.drivetrain.speed.kD, 0);
         speed.setScalar(Constants.drivetrain.DRIVE_COUNTS_PER_METER);
 
-        angle.configFactoryDefault();
-        angle.setBrake(false);
-        angle.setScalar(Constants.drivetrain.ANGLE_DEGREES_PER_TICK);  
-        angle.setEncoder(Conversions.degreesSignedToUnsigned(encoder.getAbsolutePosition() - zero));
-        angle.configFeedbackNotContinuous(true, 0);
-        angle.setPIDF(anglekP, anglekI, anglekD, anglekD);
-
         encoder.configFactoryDefault();
         encoder.clearStickyFaults();
         encoder.configAbsoluteSensorRange(AbsoluteSensorRange.Signed_PlusMinus180);
+        encoder.setPosition(0.0);
         encoder.configSensorDirection(false);
         encoder.configMagnetOffset(-zero);
+
+        angle.configFactoryDefault();
+        angle.setBrake(false);
+        angle.setScalar(Constants.drivetrain.ANGLE_DEGREES_PER_TICK);  
+        System.out.println(Conversions.degreesSignedToUnsigned(encoder.getAbsolutePosition()));
+        angle.setEncoder(Conversions.degreesSignedToUnsigned(encoder.getAbsolutePosition()));
+        angle.configFeedbackNotContinuous(true, 0);
+        angle.setPIDF(anglekP, anglekI, anglekD, anglekD);
     }
 
     /**
@@ -133,8 +135,8 @@ public class SwerveModule {
      */
     private double getAngle() {
         double motorAngle = Conversions.degreesSignedToUnsigned(angle.getPosition());
-        if (Math.abs(motorAngle - encoder.getAbsolutePosition()) > 1) {
-            angle.setEncoder(Conversions.degreesSignedToUnsigned(encoder.getAbsolutePosition() - zero));
+        if (Math.abs(motorAngle - encoder.getAbsolutePosition()) > 0.1) {
+            angle.setEncoder(Conversions.degreesSignedToUnsigned(encoder.getAbsolutePosition()));
         }
 
         return motorAngle;
