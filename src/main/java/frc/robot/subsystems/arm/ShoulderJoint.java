@@ -15,39 +15,39 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-public class Wrist extends SubsystemBase {
+public class ShoulderJoint extends SubsystemBase {
 
-  private static Wrist Wrist;
-  // private final ArmFeedforward m_feedforward =
-  // new ArmFeedforward(
-  //   Constants.wrist.kS, Constants.wrist.kG, Constants.wrist.kV, Constants.wrist.kA);
-  //   private static ProfiledPIDController pid = new ProfiledPIDController(
-  //       Constants.wrist.Kp, Constants.wrist.Ki, Constants.wrist.Kd, Constants.wrist.constriants, 0.0);
+  private static ShoulderJoint ShoulderJoint;
+  private final ArmFeedforward m_feedforward =
+  new ArmFeedforward(
+    Constants.ShoulderJoint.kS, Constants.ShoulderJoint.kG, Constants.ShoulderJoint.kV, Constants.ShoulderJoint.kA);
+    private static ProfiledPIDController pid = new ProfiledPIDController(
+        Constants.ShoulderJoint.Kp, Constants.ShoulderJoint.Ki, Constants.ShoulderJoint.Kd, Constants.ShoulderJoint.constriants, 0.0);
 
-  public static synchronized Wrist getInstance()
+  public static synchronized ShoulderJoint getInstance()
   {
-    if (Wrist == null)
+    if (ShoulderJoint == null)
     {
-      Wrist = new Wrist();
+      ShoulderJoint = new ShoulderJoint();
     }
-    return Wrist;
+    return ShoulderJoint;
   }
 
   private CSP_Motor motor = new CSP_SparkMax(0); // no clue what the id is yet
 
-  public Wrist() {
+  public ShoulderJoint() {
 
     CommandScheduler.getInstance().registerSubsystem(this);
 
   }
 
-  //Updates ShuffleBoard with information about the Wrist
+  //Updates ShuffleBoard with information about the ShoulderJoint
   private void updateShuffleboard() {
 
     SmartDashboard.putNumber("Temperature", getTemperature());
     SmartDashboard.putNumber("Position", getPosition());
     SmartDashboard.putNumber("Angle", getAngle());
-   
+
   }
 
   public double getTemperature()
@@ -60,9 +60,9 @@ public class Wrist extends SubsystemBase {
     return motor.getPosition();
   }
 
-  public double getAngle() // WIP 
+  public double getAngle() // (we don't have the correct double values yet)
   {
-    return 0.0;
+    return ((getPosition() / 48.0) / 120.0) * 360.0 + 30.0;
   }
 
   public void set(double power)
@@ -70,10 +70,9 @@ public class Wrist extends SubsystemBase {
     motor.set(power);
   }
 
-  public void setAngle(double angle) // WIP
+  public void setAngle(double angle)
   {
-    // set(pid.calculate(getAngle(), angle));
-    set(angle);
+    set(pid.calculate(getAngle(), angle));
   }
 
   @Override

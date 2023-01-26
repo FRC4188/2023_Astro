@@ -102,7 +102,7 @@ public static class drivetrain {
   
 }
 
-    public static class wrist
+    public static class ShoulderJoint
     {
         public static final double kS = 0.0; //idk yet
         public static final double kG = 0.0; //idk yet
