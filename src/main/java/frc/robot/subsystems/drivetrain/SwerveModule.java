@@ -45,7 +45,7 @@ public class SwerveModule {
 
         init();
 
-        // TempManager.addMotor(speed, angle);
+        TempManager.addMotor(speed, angle);
     }
 
     /**
