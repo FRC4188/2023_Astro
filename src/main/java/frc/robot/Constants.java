@@ -130,6 +130,7 @@ public static class drivetrain {
       public static final double kD = -0.05;  
       public static final ProfiledPIDController thetaPID = new ProfiledPIDController(kP, kI, kD, new Constraints(Math.PI * 2.0, Math.PI / 2.0));
   }
+}
 
   public static class ShoulderJoint
     {
@@ -143,8 +144,5 @@ public static class drivetrain {
         public static final TrapezoidProfile.Constraints constriants = new Constraints(0.0, 0.0); //idk yet
     }
 
-  
-  
-}
 }
   
