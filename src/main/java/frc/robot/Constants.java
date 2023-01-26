@@ -29,8 +29,9 @@ public final class Constants {
     public static final double A_CROSSLENGTH = Math.hypot(A_LENGTH, A_WIDTH);
 
     public static final double FALCON_ENCODER_TICKS = 2048.0; //Counts per revolution of the Falcon 500 motor.
-    public static final double FALCON_MAX_TEMP = 50.0; //Max temperature of Falcon 500 (Celsius).
     public static final double FALCON_MAX_VEL = 6380.0;
+
+    public static final double MAX_TEMP = 50.0; 
 }
 
 public static final class ids {

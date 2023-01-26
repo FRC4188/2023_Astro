@@ -1,7 +1,5 @@
 package csplib.utils;
 
-import edu.wpi.first.math.util.Units;
-
 public final class Conversions {
     /**
      * Converts angles with range [-180, 180] to [0, 360]

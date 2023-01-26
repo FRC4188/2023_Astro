@@ -154,4 +154,12 @@ public class CSP_Falcon extends WPI_TalonFX implements CSP_Motor {
     public double getTemperature() {
         return super.getTemperature();
     }
+
+    /**
+     * Returns the CAN ID of the motor
+     * @return motor CAN ID
+     */
+    public int getID() {
+        return super.getDeviceID();
+    }
 }
