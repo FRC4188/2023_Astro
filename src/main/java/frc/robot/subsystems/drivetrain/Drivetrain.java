@@ -1,6 +1,8 @@
 
 package frc.robot.subsystems.drivetrain;
 
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
@@ -10,6 +12,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.sensors.Pigeon;
+import frc.robot.subsystems.sensors.Sensors;
 
 public class Drivetrain extends SubsystemBase {
 
@@ -36,7 +39,9 @@ public class Drivetrain extends SubsystemBase {
                                                     Constants.ids.BR_ENCODER, Constants.drivetrain.M4_ZERO,
                                                     Constants.drivetrain.angle.M4_kP, Constants.drivetrain.angle.M4_kI, Constants.drivetrain.angle.M4_kD);
 
-  private Pigeon pigeon = new Pigeon(Constants.ids.PIGEON);
+  private Sensors sensors = Sensors.getInstance();
+
+  private int moduleNum = 0;
 
   private int moduleNum = 0;
 
@@ -46,14 +51,27 @@ public class Drivetrain extends SubsystemBase {
     Constants.drivetrain.BL_LOCATION, 
     Constants.drivetrain.BR_LOCATION);
 
-  private SwerveDriveOdometry odometry = new SwerveDriveOdometry(
+  // private SwerveDriveOdometry odometry = new SwerveDriveOdometry(
+  //   kinematics, 
+  //   pigeon.getAngle(), 
+  //   new SwerveModulePosition[] {
+  //     frontLeft.getModulePosition(), 
+  //     frontRight.getModulePosition(), 
+  //     backLeft.getModulePosition(), 
+  //     backRight.getModulePosition()});
+
+  private SwerveDrivePoseEstimator odometry = new SwerveDrivePoseEstimator(
     kinematics, 
-    pigeon.getAngle(), 
+    sensors.getPigeonAngle(), 
     new SwerveModulePosition[] {
-      frontLeft.getModulePosition(), 
-      frontRight.getModulePosition(), 
-      backLeft.getModulePosition(), 
-      backRight.getModulePosition()});
+      frontLeft.getModulePosition(),
+      frontRight.getModulePosition(),
+      backLeft.getModulePosition(),
+      backRight.getModulePosition()
+    }, 
+    new Pose2d(), 
+    Constants.drivetrain.STATE_STD_DEVS, 
+    Constants.drivetrain.VISION_STD_DEVS);
 
   private Drivetrain() {
     putDashboard();
@@ -169,8 +187,16 @@ public class Drivetrain extends SubsystemBase {
     backRight.zeroPower();
   }
 
+<<<<<<< HEAD
   public Object setModuleNum(int number) {
     return null;
+=======
+  public void setModuleNum(int moduleNum) {
+    if (moduleNum >= 1 && moduleNum <= 4) {
+      this.moduleNum = moduleNum;
+    }
+    System.out.println(this.moduleNum);
+>>>>>>> 5dad44cdc2ef20642c180dc333b49617a5f57742
   }
 
 }

@@ -4,9 +4,15 @@
 
 package frc.robot;
 
+import java.sql.Driver;
+
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.util.Units;
 
@@ -55,16 +61,16 @@ public static final class ids {
 }
 
 public static class drivetrain {
-    public static final double DRIVE_GEARING = 6.92; // Gear ratio of the drive motor.
+    public static final double DRIVE_GEARING = 6.55; // Gear ratio of the drive motor.
     public static final double WHEEL_DIAMETER = Units.inchesToMeters(4); //Diameter of the drive wheels (Meters).
+    public static final double DRIVE_TICKS_PER_ROTATION = robot.FALCON_ENCODER_TICKS * DRIVE_GEARING;
     public static final double WHEEL_CIRCUMFRENCE = Math.PI * WHEEL_DIAMETER; // Circumfrence of the drive wheels (Meters).
-    public static final double DRIVE_ROTATIONS_PER_METER = 1.0 / WHEEL_CIRCUMFRENCE; // Rotations per meter of the drive wheels.
-    public static final double DRIVE_COUNTS_PER_ROTATION = DRIVE_GEARING * robot.FALCON_ENCODER_TICKS; // Encoder counts per revolution of the drive wheel.
-    public static final double DRIVE_COUNTS_PER_METER = DRIVE_ROTATIONS_PER_METER * DRIVE_COUNTS_PER_ROTATION; // Encoder ticks per meter of the drive wheels.
+    public static final double DRIVE_TICKS_PER_METER = DRIVE_TICKS_PER_ROTATION / WHEEL_CIRCUMFRENCE;
+    public static final double DRIVE_METERS_PER_TICK = 1 / DRIVE_TICKS_PER_METER;
 
     public static final double ANGLE_GEARING = 10.29; // 10.29 : 1
-    public static final double ANGLE_TICK_PER_ROTATION = robot.FALCON_ENCODER_TICKS * ANGLE_GEARING;
-    public static final double ANGLE_TICKS_PER_DEGREE = ANGLE_TICK_PER_ROTATION / 360.0;
+    public static final double ANGLE_TICKS_PER_ROTATION = robot.FALCON_ENCODER_TICKS * ANGLE_GEARING;
+    public static final double ANGLE_TICKS_PER_DEGREE = ANGLE_TICKS_PER_ROTATION / 360.0;
     public static final double ANGLE_DEGREES_PER_TICK = 1.0 / ANGLE_TICKS_PER_DEGREE;
 
     public static final double MAX_VOLTS = 12.0; // Maximum voltage allowed in the drivetrain.
@@ -74,8 +80,8 @@ public static class drivetrain {
     public static final double MAX_RADIANS = 3.0 * Math.PI; // Maximum rotational velocity (Radians per Second).
     public static final double RAMP_RATE = 0.5;
     
-    public static final double ROTATION_KV = 0.0;
-    public static final double ROTATION_KA = 0.0;
+    public static final Matrix<N3, N1> STATE_STD_DEVS = VecBuilder.fill(0.1, 0.1, 0.1); // [x, y, theta]
+    public static final Matrix<N3, N1> VISION_STD_DEVS = VecBuilder.fill(0.9, 0.9, 0.9); // [x, y, theta]
 
     public static final Translation2d FL_LOCATION = new Translation2d(-(Constants.robot.A_WIDTH / 2), -(Constants.robot.A_LENGTH / 2));
     public static final Translation2d FR_LOCATION = new Translation2d(-(Constants.robot.A_WIDTH / 2), (Constants.robot.A_LENGTH / 2));
@@ -84,7 +90,11 @@ public static class drivetrain {
 
     public static final double M1_ZERO = 174.462890625;
     public static final double M2_ZERO = -19.16015625;
+<<<<<<< HEAD
     public static final double M3_ZERO = 32.255859375;
+=======
+    public static final double M3_ZERO = 32.34375;
+>>>>>>> 5dad44cdc2ef20642c180dc333b49617a5f57742
     public static final double M4_ZERO = -177.890625;
 
     public static final class angle {
@@ -130,6 +140,7 @@ public static class drivetrain {
       public static final double kD = -0.05;  
       public static final ProfiledPIDController thetaPID = new ProfiledPIDController(kP, kI, kD, new Constraints(Math.PI * 2.0, Math.PI / 2.0));
   }
+
 
   
   }
