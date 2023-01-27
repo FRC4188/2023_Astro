@@ -1,15 +1,15 @@
+
 package frc.robot.subsystems.drivetrain;
 
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.subsystems.sensors.Sensors;
+import frc.robot.subsystems.sensors.Pigeon;
 
 public class Drivetrain extends SubsystemBase {
 
@@ -19,120 +19,158 @@ public class Drivetrain extends SubsystemBase {
     return instance;
   }
 
-  private Module leftFront = new Module(1, 2, 21, Constants.drivetrain.modules.M1_ZERO);
-  private Module rightFront = new Module(3, 4, 22, Constants.drivetrain.modules.M2_ZERO);
-  private Module leftRear = new Module(5, 6, 23, Constants.drivetrain.modules.M3_ZERO);
-  private Module rightRear = new Module(7, 8, 24, Constants.drivetrain.modules.M4_ZERO);
+  private SwerveModule frontRight = new SwerveModule(Constants.ids.FR_SPEED, Constants.ids.FR_ANGLE, 
+                                                    Constants.ids.FR_ENCODER, Constants.drivetrain.M1_ZERO, 
+                                                    Constants.drivetrain.angle.M1_kP, Constants.drivetrain.angle.M1_kI, 
+                                                    Constants.drivetrain.angle.M1_kD);
 
-  private Sensors sensors = Sensors.getInstance();
+  private SwerveModule frontLeft = new SwerveModule(Constants.ids.FL_SPEED, Constants.ids.FL_ANGLE, 
+                                                    Constants.ids.FL_ENCODER, Constants.drivetrain.M2_ZERO,
+                                                    Constants.drivetrain.angle.M2_kP, Constants.drivetrain.angle.M2_kI, Constants.drivetrain.angle.M2_kD);
 
-  //private Kinematics kinematics = Constants.drive.KINEMATICS;
-  SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
-    Constants.drivetrain.FrontLeftLocation, 
-    Constants.drivetrain.FrontRightLocation, 
-    Constants.drivetrain.BackLeftLocation, 
-    Constants.drivetrain.BackRightLocation);
+  private SwerveModule backLeft = new SwerveModule(Constants.ids.BL_SPEED, Constants.ids.BL_ANGLE, 
+                                                  Constants.ids.BL_ENCODER, Constants.drivetrain.M3_ZERO,
+                                                  Constants.drivetrain.angle.M3_kP, Constants.drivetrain.angle.M3_kI, Constants.drivetrain.angle.M3_kD);
 
-  private PIDController rotationPID = new PIDController(0.2, 0.0, 0.01);
+  private SwerveModule backRight = new SwerveModule(Constants.ids.BR_SPEED, Constants.ids.BR_ANGLE, 
+                                                    Constants.ids.BR_ENCODER, Constants.drivetrain.M4_ZERO,
+                                                    Constants.drivetrain.angle.M4_kP, Constants.drivetrain.angle.M4_kI, Constants.drivetrain.angle.M4_kD);
 
-  //private Odometry odometry = Odometry.getInstance();
-  private Odometry odometry = new Odometry(new Pose2d());
+  private Pigeon pigeon = new Pigeon(Constants.ids.PIGEON);
 
-  private Notifier dashboard = new Notifier(() -> smartDashboard());
+  private int moduleNum = 0;
+
+  private SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
+    Constants.drivetrain.FL_LOCATION, 
+    Constants.drivetrain.FR_LOCATION, 
+    Constants.drivetrain.BL_LOCATION, 
+    Constants.drivetrain.BR_LOCATION);
+
+  private SwerveDriveOdometry odometry = new SwerveDriveOdometry(
+    kinematics, 
+    pigeon.getAngle(), 
+    new SwerveModulePosition[] {
+      frontLeft.getModulePosition(), 
+      frontRight.getModulePosition(), 
+      backLeft.getModulePosition(), 
+      backRight.getModulePosition()});
 
   private Drivetrain() {
-    CommandScheduler.getInstance().registerSubsystem(this);
-    rotationPID.enableContinuousInput(-180, 180);
-    rotationPID.setTolerance(1.0);
-
-    dashboard.startPeriodic(0.1);
+    putDashboard();
   }
 
   @Override
   public void periodic() {
-    odometry.update(getChassisSpeeds(), sensors.getRotation());
+    SmartDashboard.putNumber("M1 Angle", frontRight.getModulePosition().angle.getDegrees());
+    SmartDashboard.putNumber("M2 Angle", frontLeft.getModulePosition().angle.getDegrees());
+    SmartDashboard.putNumber("M3 Angle", backLeft.getModulePosition().angle.getDegrees());
+    SmartDashboard.putNumber("M4 Angle", backRight.getModulePosition().angle.getDegrees());
+
+    SmartDashboard.putNumber("M1 Cancoder", frontRight.getAbsolutePosition());
+    SmartDashboard.putNumber("M2 Cancoder", frontLeft.getAbsolutePosition());
+    SmartDashboard.putNumber("M3 Cancoder", backLeft.getAbsolutePosition());
+    SmartDashboard.putNumber("M4 Cancoder", backRight.getAbsolutePosition());
+
   }
 
-  private void smartDashboard() {
-    SmartDashboard.putNumber("M1 (LF) Angle", leftFront.getAbsoluteAngle());
-    SmartDashboard.putNumber("M2 (RF) Angle", rightFront.getAbsoluteAngle());
-    SmartDashboard.putNumber("M3 (LR) Angle", leftRear.getAbsoluteAngle());
-    SmartDashboard.putNumber("M4 (RR) Angle", rightRear.getAbsoluteAngle());
-    SmartDashboard.putString("Chassis Speeds", getChassisSpeeds().toString());
-    SmartDashboard.putString("Odometry", odometry.getPose().toString());
+  public void putDashboard() {
+    SmartDashboard.putNumber("Set Drive Velocity", 0);
+    SmartDashboard.putNumber("Speed kP", 0);
+    SmartDashboard.putNumber("Speed kI", 0);
+    SmartDashboard.putNumber("Speed kD", 0);
+    SmartDashboard.putNumber("Speed kF", 0);
 
-    SmartDashboard.putNumber("Falcon 1 Temp", leftFront.getAngleTemp());
-    SmartDashboard.putNumber("Falcon 2 Temp", leftFront.getSpeedTemp());
-    SmartDashboard.putNumber("Falcon 3 Temp", rightFront.getAngleTemp());
-    SmartDashboard.putNumber("Falcon 4 Temp", rightFront.getSpeedTemp());
-    SmartDashboard.putNumber("Falcon 5 Temp", leftRear.getAngleTemp());
-    SmartDashboard.putNumber("Falcon 6 Temp", leftRear.getSpeedTemp());
-    SmartDashboard.putNumber("Falcon 7 Temp", rightRear.getAngleTemp());
-    SmartDashboard.putNumber("Falcon 8 Temp", rightRear.getSpeedTemp());
+    SmartDashboard.putNumber("Set Drive Angle", 0);
+    SmartDashboard.putNumber("Angle kP", 0);
+    SmartDashboard.putNumber("Angle kI", 0);
+    SmartDashboard.putNumber("Angle kD", 0);
+    SmartDashboard.putNumber("Angle kF", 0);
+
+    SmartDashboard.putNumber("Set Module", 0);
+
   }
 
-  public void drive(double yInput, double xInput, double rotInput, boolean fieldOriented) {
-    yInput *= Constants.drivetrain.MAX_VELOCITY;
-    xInput *= -Constants.drivetrain.MAX_VELOCITY;
-    rotInput *= 4.0 * Math.PI;
-
-    if (rotInput != 0.0) {
-      setRotSetpoint(-sensors.getRotation().getDegrees());
-    } else {
-      if (yInput != 0 || xInput != 0) {
-        double correction = rotationPID.calculate(-sensors.getRotation().getDegrees());// * dropoff;
-        rotInput = rotationPID.atSetpoint() ? 0.0 : correction;
-      }
+  public void setVelocity(double velocity) {
+    switch (moduleNum) {
+      case 1:
+        frontRight.setModuleState(new SwerveModuleState(velocity, new Rotation2d()));
+        break;
+      case 2:
+        frontLeft.setModuleState(new SwerveModuleState(velocity, new Rotation2d()));
+        break;
+      case 3:
+        backLeft.setModuleState(new SwerveModuleState(velocity, new Rotation2d()));
+        break;
+      case 4:
+        backRight.setModuleState(new SwerveModuleState(velocity, new Rotation2d()));
+      default:
+        break;
     }
-
-    setChassisSpeeds(!fieldOriented ?
-    ChassisSpeeds.fromFieldRelativeSpeeds(yInput, xInput, rotInput, sensors.getRotation()) :
-    new ChassisSpeeds(yInput, xInput, rotInput));
   }
 
-  public void setRotSetpoint(double setpoint) {
-    rotationPID.setSetpoint(setpoint);
+  public void setAngle(double angle) {
+    switch (moduleNum) {
+      case 1:
+        frontRight.setModuleState(new SwerveModuleState(0, Rotation2d.fromDegrees(angle)));
+        break;
+      case 2:
+        frontLeft.setModuleState(new SwerveModuleState(0, Rotation2d.fromDegrees(angle)));
+        break;
+      case 3:
+        backLeft.setModuleState(new SwerveModuleState(0, Rotation2d.fromDegrees(angle)));
+        break;
+      case 4:
+        backRight.setModuleState(new SwerveModuleState(0, Rotation2d.fromDegrees(angle)));
+      default:
+        break;
+    }
   }
 
-  public void setChassisSpeeds(ChassisSpeeds speeds) {
-    ChassisSpeeds newSpeeds = new ChassisSpeeds(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond, speeds.omegaRadiansPerSecond);
-    setModuleStates(kinematics.toSwerveModuleStates(newSpeeds));
+  public void setSpeedPIDs(double kP, double kI, double kD, double kF) {
+    switch (moduleNum) {
+      case 1:
+        frontRight.setSpeedPIDF(kP, kI, kD, kF);
+        break;
+      case 2:
+        frontLeft.setSpeedPIDF(kP, kI, kD, kF);
+        break;
+      case 3:
+        backLeft.setSpeedPIDF(kP, kI, kD, kF);
+        break;
+      case 4:
+        backRight.setSpeedPIDF(kP, kI, kD, kF);
+      default:
+        break;
+    }
   }
 
-  public void setModuleStates(SwerveModuleState[] states) {
-    SwerveDriveKinematics.desaturateWheelSpeeds(states, 4.75);
-    
-    leftFront.setModuleState(new SwerveModuleState(states[0].speedMetersPerSecond, states[0].angle));
-    rightFront.setModuleState(new SwerveModuleState(states[1].speedMetersPerSecond, states[1].angle));
-    leftRear.setModuleState(new SwerveModuleState(states[2].speedMetersPerSecond, states[2].angle));
-    rightRear.setModuleState(new SwerveModuleState(states[3].speedMetersPerSecond, states[3].angle));
+  public void setAnglePIDs(double kP, double kI, double kD, double kF) {
+    switch (moduleNum) {
+      case 1:
+        frontRight.setAnglePIDF(kP, kI, kD, kF);
+        break;
+      case 2:
+        frontLeft.setAnglePIDF(kP, kI, kD, kF);
+        break;
+      case 3:
+        backLeft.setAnglePIDF(kP, kI, kD, kF);
+        break;
+      case 4:
+        backRight.setAnglePIDF(kP, kI, kD, kF);
+      default:
+        break;
+    }
   }
 
-  public ChassisSpeeds getChassisSpeeds() {
-    return kinematics.toChassisSpeeds(getModuleStates());
+  public void zeroPower() {
+    frontRight.zeroPower();
+    frontLeft.zeroPower();
+    backLeft.zeroPower();
+    backRight.zeroPower();
   }
 
-  public SwerveModuleState[] getModuleStates() {
-    return new SwerveModuleState[] {
-      leftFront.getModuleState(),
-      rightFront.getModuleState(),
-      leftRear.getModuleState(),
-      rightRear.getModuleState()
-    };
+  public Object setModuleNum(int number) {
+    return null;
   }
 
-  public void setPose(Pose2d pose) {
-    odometry.setPose(pose);
-  }
-
-  public Pose2d getPose() {
-    return odometry.getPose();
-  }
-
-  public SwerveDriveKinematics getKinematics() {
-    return kinematics;
-  }
-
-  
-  
 }
