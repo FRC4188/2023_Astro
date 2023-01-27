@@ -18,11 +18,11 @@ import frc.robot.Constants;
 public class Wrist extends SubsystemBase {
 
   private static Wrist Wrist;
-  private final ArmFeedforward m_feedforward =
-  new ArmFeedforward(
-    Constants.wrist.kS, Constants.wrist.kG, Constants.wrist.kV, Constants.wrist.kA);
-    private static ProfiledPIDController pid = new ProfiledPIDController(
-        Constants.wrist.Kp, Constants.wrist.Ki, Constants.wrist.Kd, Constants.wrist.constriants, 0.0);
+  // private final ArmFeedforward m_feedforward =
+  // new ArmFeedforward(
+  //   Constants.wrist.kS, Constants.wrist.kG, Constants.wrist.kV, Constants.wrist.kA);
+  //   private static ProfiledPIDController pid = new ProfiledPIDController(
+  //       Constants.wrist.Kp, Constants.wrist.Ki, Constants.wrist.Kd, Constants.wrist.constriants, 0.0);
 
   public static synchronized Wrist getInstance()
   {
@@ -33,7 +33,8 @@ public class Wrist extends SubsystemBase {
     return Wrist;
   }
 
-  private CSP_Motor motor = new CSP_SparkMax(0); // no clue what the id is yet
+  private CSP_Motor armMotor = new CSP_SparkMax(0); // no clue what the id is yet
+  private CSP_Motor wristMotor = new CSP_SparkMax(1); // no clue what the id is yet
 
   public Wrist() {
 
@@ -44,35 +45,51 @@ public class Wrist extends SubsystemBase {
   //Updates ShuffleBoard with information about the Wrist
   private void updateShuffleboard() {
 
-    SmartDashboard.putNumber("Temperature", getTemperature());
-    SmartDashboard.putNumber("Position", getPosition());
-    SmartDashboard.putNumber("Angle", getAngle());
+    SmartDashboard.putNumber("(Wrist) Arm Temperature", getArmTemperature());
+    SmartDashboard.putNumber("(Wrist) Wrist Temperature", getArmTemperature());
+    SmartDashboard.putNumber("(Wrist) Arm Position", getArmPosition());
+    SmartDashboard.putNumber("(Wrist) Wrist Position", getWristPosition());
    
   }
 
-  public double getTemperature()
+  public double getArmTemperature()
   {
-    return motor.getTemperature();
+    return armMotor.getTemperature();
   }
 
-  public double getPosition()
+  public double getWristTemperature()
   {
-    return motor.getPosition();
+    return wristMotor.getTemperature();
   }
 
-  public double getAngle() // WIP (prob doesn't work)
+  public double getArmPosition()
   {
-    return ((getPosition() / 48.0) / 120.0) * 360.0 + 30.0;
+    return armMotor.getPosition();
   }
 
-  public void set(double power)
+  public double getWristPosition()
   {
-    motor.set(power);
+    return wristMotor.getPosition();
   }
 
-  public void setAngle(double angle)
+  public double getAngle(CSP_Motor motor) // WIP 
   {
-    set(pid.calculate(getAngle(), angle));
+    return 0.0;
+  }
+
+  public void set(String motor, double power)
+  {
+    if (motor == "arm")
+    armMotor.set(power);
+    else if (motor == "wrist")
+    wristMotor.set(power);
+    
+  }
+
+  public void setAngle(String motor, double angle) // WIP
+  {
+    // set(pid.calculate(getAngle(), angle));
+    set(motor, angle);
   }
 
   @Override
