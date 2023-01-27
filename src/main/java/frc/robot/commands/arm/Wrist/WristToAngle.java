@@ -8,16 +8,19 @@ import frc.robot.subsystems.arm.Wrist;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /** An example command that uses an example subsystem. */
-public class SpinToAngle extends CommandBase {
-  private static Wrist wrist = Wrist.getInstance();
+public class WristToAngle extends CommandBase {
+  @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
+  private Wrist wrist = Wrist.getInstance();
+
   private double angle;
+
 
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public SpinToAngle(double angle) {
+  public WristToAngle(double angle) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(wrist);
     this.angle = angle;
@@ -25,23 +28,23 @@ public class SpinToAngle extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() { }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    wrist.setAngle("arm", angle);
+    wrist.setAngle("wrist", angle);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    wrist.set("arm", 0.0);
+    wrist.set("wrist", 0.0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() { // idk tolerances yet
-    return false;
+    return false; //WIP
   }
 }

@@ -33,7 +33,8 @@ public class Wrist extends SubsystemBase {
     return Wrist;
   }
 
-  private CSP_Motor motor = new CSP_SparkMax(0); // no clue what the id is yet
+  private CSP_Motor armMotor = new CSP_SparkMax(0); // no clue what the id is yet
+  private CSP_Motor wristMotor = new CSP_SparkMax(1); // no clue what the id is yet
 
   public Wrist() {
 
@@ -44,36 +45,51 @@ public class Wrist extends SubsystemBase {
   //Updates ShuffleBoard with information about the Wrist
   private void updateShuffleboard() {
 
-    SmartDashboard.putNumber("Temperature", getTemperature());
-    SmartDashboard.putNumber("Position", getPosition());
-    SmartDashboard.putNumber("Angle", getAngle());
+    SmartDashboard.putNumber("(Wrist) Arm Temperature", getArmTemperature());
+    SmartDashboard.putNumber("(Wrist) Wrist Temperature", getArmTemperature());
+    SmartDashboard.putNumber("(Wrist) Arm Position", getArmPosition());
+    SmartDashboard.putNumber("(Wrist) Wrist Position", getWristPosition());
    
   }
 
-  public double getTemperature()
+  public double getArmTemperature()
   {
-    return motor.getTemperature();
+    return armMotor.getTemperature();
   }
 
-  public double getPosition()
+  public double getWristTemperature()
   {
-    return motor.getPosition();
+    return wristMotor.getTemperature();
   }
 
-  public double getAngle() // WIP 
+  public double getArmPosition()
+  {
+    return armMotor.getPosition();
+  }
+
+  public double getWristPosition()
+  {
+    return wristMotor.getPosition();
+  }
+
+  public double getAngle(CSP_Motor motor) // WIP 
   {
     return 0.0;
   }
 
-  public void set(double power)
+  public void set(String motor, double power)
   {
-    motor.set(power);
+    if (motor == "arm")
+    armMotor.set(power);
+    else if (motor == "wrist")
+    wristMotor.set(power);
+    
   }
 
-  public void setAngle(double angle) // WIP
+  public void setAngle(String motor, double angle) // WIP
   {
     // set(pid.calculate(getAngle(), angle));
-    set(angle);
+    set(motor, angle);
   }
 
   @Override

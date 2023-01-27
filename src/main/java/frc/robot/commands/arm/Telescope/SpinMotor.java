@@ -2,46 +2,48 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.arm.Wrist;
+package frc.robot.commands.arm.Telescope;
 
-import frc.robot.subsystems.arm.Wrist;
+import frc.robot.subsystems.arm.Telescope;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /** An example command that uses an example subsystem. */
-public class SpinToAngle extends CommandBase {
-  private static Wrist wrist = Wrist.getInstance();
-  private double angle;
+public class SpinMotor extends CommandBase {
+  private Telescope telescope = Telescope.getInstance();
+
 
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public SpinToAngle(double angle) {
+  public SpinMotor() { //idk what goes in the constructor yet
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(wrist);
-    this.angle = angle;
+    addRequirements(telescope);
+
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    wrist.setAngle("arm", angle);
+    
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    wrist.set("arm", 0.0);
+    
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() { // idk tolerances yet
-    return false;
+    return false; //WIP
   }
 }

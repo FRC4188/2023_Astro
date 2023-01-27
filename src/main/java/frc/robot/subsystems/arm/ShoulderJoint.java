@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-public class ShoulderJoint extends SubsystemBase {
+public class ShoulderJoint extends SubsystemBase { //uses two motors
 
   private static ShoulderJoint ShoulderJoint;
   // private final ArmFeedforward m_feedforward =
@@ -34,6 +34,7 @@ public class ShoulderJoint extends SubsystemBase {
   }
 
   private CSP_Motor motor = new CSP_SparkMax(0); // no clue what the id is yet
+  private CSP_Motor motorTwo = new CSP_SparkMax(1); // no clue what the id is yet
 
   public ShoulderJoint() {
 
