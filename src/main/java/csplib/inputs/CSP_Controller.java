@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 
-public class CSPController extends XboxController {
+public class CSP_Controller extends XboxController {
     public enum Scale {
         LINEAR, SQUARED, CUBED
     }
@@ -13,7 +13,7 @@ public class CSPController extends XboxController {
     private static final double DEADBAND = 0.15;
     private static final double TRIGGER_THRESHOLD = 0.6;
 
-    public CSPController(int port) {
+    public CSP_Controller(int port) {
         super(port);
     }
 
