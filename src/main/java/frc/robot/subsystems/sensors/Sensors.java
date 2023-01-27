@@ -23,7 +23,6 @@ public class Sensors extends SubsystemBase {
  
   /** Creates a new Sensors. */
   private Sensors() {
-    CommandScheduler.getInstance().registerSubsystem(this);
     
     alliance.setDefaultOption("FMS", "FMS");
     alliance.addOption("Blue", "Blue");

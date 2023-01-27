@@ -70,6 +70,7 @@ public class SwerveModule {
         angle.setEncoder(Conversions.degreesSignedToUnsigned(encoder.getAbsolutePosition()));
         angle.configFeedbackNotContinuous(true, 0);
         angle.setPIDF(anglekP, anglekI, anglekD, 0);
+        angle.configAllowableClosedloopError(0, 1, 0);
     }
 
     /**

@@ -188,5 +188,6 @@ public class Drivetrain extends SubsystemBase {
     if (moduleNum >= 1 && moduleNum <= 4) {
       this.moduleNum = moduleNum;
     }
+    System.out.println(this.moduleNum);
   }
 }
