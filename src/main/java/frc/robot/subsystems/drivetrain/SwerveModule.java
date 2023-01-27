@@ -55,7 +55,7 @@ public class SwerveModule {
         speed.setBrake(true);
         speed.setRampRate(Constants.drivetrain.RAMP_RATE);
         speed.setPIDF(Constants.drivetrain.speed.kP, Constants.drivetrain.speed.kI, Constants.drivetrain.speed.kD, 0);
-        speed.setScalar(Constants.drivetrain.DRIVE_COUNTS_PER_METER);
+        speed.setScalar(Constants.drivetrain.DRIVE_METERS_PER_TICK);
 
         encoder.configFactoryDefault();
         encoder.clearStickyFaults();
@@ -67,10 +67,10 @@ public class SwerveModule {
         angle.configFactoryDefault();
         angle.setBrake(false);
         angle.setScalar(Constants.drivetrain.ANGLE_DEGREES_PER_TICK);  
-        System.out.println(Conversions.degreesSignedToUnsigned(encoder.getAbsolutePosition()));
         angle.setEncoder(Conversions.degreesSignedToUnsigned(encoder.getAbsolutePosition()));
         angle.configFeedbackNotContinuous(true, 0);
-        angle.setPIDF(anglekP, anglekI, anglekD, anglekD);
+        angle.setPIDF(anglekP, anglekI, anglekD, 0);
+        angle.configAllowableClosedloopError(0, 1, 0);
     }
 
     /**
