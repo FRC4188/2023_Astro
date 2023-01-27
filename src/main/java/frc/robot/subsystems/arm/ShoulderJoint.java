@@ -18,11 +18,11 @@ import frc.robot.Constants;
 public class ShoulderJoint extends SubsystemBase {
 
   private static ShoulderJoint ShoulderJoint;
-  private final ArmFeedforward m_feedforward =
-  new ArmFeedforward(
-    Constants.ShoulderJoint.kS, Constants.ShoulderJoint.kG, Constants.ShoulderJoint.kV, Constants.ShoulderJoint.kA);
-    private static ProfiledPIDController pid = new ProfiledPIDController(
-        Constants.ShoulderJoint.Kp, Constants.ShoulderJoint.Ki, Constants.ShoulderJoint.Kd, Constants.ShoulderJoint.constriants, 0.0);
+  // private final ArmFeedforward m_feedforward =
+  // new ArmFeedforward(
+  //   Constants.ShoulderJoint.kS, Constants.ShoulderJoint.kG, Constants.ShoulderJoint.kV, Constants.ShoulderJoint.kA);
+  //   private static ProfiledPIDController pid = new ProfiledPIDController(
+  //       Constants.ShoulderJoint.Kp, Constants.ShoulderJoint.Ki, Constants.ShoulderJoint.Kd, Constants.ShoulderJoint.constriants, 0.0);
 
   public static synchronized ShoulderJoint getInstance()
   {
@@ -72,7 +72,7 @@ public class ShoulderJoint extends SubsystemBase {
 
   public void setAngle(double angle)
   {
-    set(pid.calculate(getAngle(), angle));
+    // set(pid.calculate(getAngle(), angle));
   }
 
   @Override
