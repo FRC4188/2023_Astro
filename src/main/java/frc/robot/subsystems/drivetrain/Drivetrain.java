@@ -42,6 +42,8 @@ public class Drivetrain extends SubsystemBase {
 
   private int moduleNum = 0;
 
+  private int moduleNum = 0;
+
   private SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
     Constants.drivetrain.FL_LOCATION, 
     Constants.drivetrain.FR_LOCATION, 
