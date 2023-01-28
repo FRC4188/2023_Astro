@@ -1,5 +1,7 @@
 package frc.robot.subsystems.drivetrain;
 
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -7,6 +9,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -23,24 +26,31 @@ public class Drivetrain extends SubsystemBase {
 
   private SwerveModule frontRight = new SwerveModule(Constants.ids.FR_SPEED, Constants.ids.FR_ANGLE, 
                                                     Constants.ids.FR_ENCODER, Constants.drivetrain.M1_ZERO, 
-                                                    Constants.drivetrain.angle.M1_kP, Constants.drivetrain.angle.M1_kI, 
-                                                    Constants.drivetrain.angle.M1_kD);
+                                                    new ProfiledPIDController(Constants.drivetrain.angle.M1_kP, 
+                                                    Constants.drivetrain.angle.M1_kI, Constants.drivetrain.angle.M1_kD,
+                                                    new Constraints(Constants.drivetrain.angle.MAX_OMEGA, Constants.drivetrain.angle.MAX_ALPHA)),
+                                                    new SimpleMotorFeedforward(Constants.drivetrain.angle.M1_kS, Constants.drivetrain.angle.M1_kV));
 
   private SwerveModule frontLeft = new SwerveModule(Constants.ids.FL_SPEED, Constants.ids.FL_ANGLE, 
-                                                    Constants.ids.FL_ENCODER, Constants.drivetrain.M2_ZERO,
-                                                    Constants.drivetrain.angle.M2_kP, Constants.drivetrain.angle.M2_kI, Constants.drivetrain.angle.M2_kD);
+                                                     Constants.ids.FL_ENCODER, Constants.drivetrain.M2_ZERO, 
+                                                     new ProfiledPIDController( Constants.drivetrain.angle.M2_kP, 
+                                                     Constants.drivetrain.angle.M2_kI, Constants.drivetrain.angle.M2_kD,
+                                                     new Constraints(Constants.drivetrain.angle.MAX_OMEGA, Constants.drivetrain.angle.MAX_ALPHA)),
+                                                     new SimpleMotorFeedforward(Constants.drivetrain.angle.M2_kS, Constants.drivetrain.angle.M2_kV));
 
   private SwerveModule backLeft = new SwerveModule(Constants.ids.BL_SPEED, Constants.ids.BL_ANGLE, 
-                                                  Constants.ids.BL_ENCODER, Constants.drivetrain.M3_ZERO,
-                                                  Constants.drivetrain.angle.M3_kP, Constants.drivetrain.angle.M3_kI, Constants.drivetrain.angle.M3_kD);
+                                                     Constants.ids.BL_ENCODER, Constants.drivetrain.M3_ZERO, 
+                                                     new ProfiledPIDController(Constants.drivetrain.angle.M3_kP, 
+                                                     Constants.drivetrain.angle.M3_kI, Constants.drivetrain.angle.M3_kD,
+                                                     new Constraints(Constants.drivetrain.angle.MAX_OMEGA, Constants.drivetrain.angle.MAX_ALPHA)),
+                                                     new SimpleMotorFeedforward(Constants.drivetrain.angle.M2_kS, Constants.drivetrain.angle.M2_kV));
 
-  private SwerveModule backRight = new SwerveModule(Constants.ids.BR_SPEED, Constants.ids.BR_ANGLE, 
-                                                    Constants.ids.BR_ENCODER, Constants.drivetrain.M4_ZERO,
-                                                    Constants.drivetrain.angle.M4_kP, Constants.drivetrain.angle.M4_kI, Constants.drivetrain.angle.M4_kD);
-
-  private Sensors sensors = Sensors.getInstance();
-
-  private int moduleNum = 0;
+  private SwerveModule backRight = new SwerveModule(Constants.ids.BL_SPEED, Constants.ids.BL_ANGLE, 
+                                                    Constants.ids.BR_ENCODER, Constants.drivetrain.M4_ZERO, 
+                                                    new ProfiledPIDController( Constants.drivetrain.angle.M3_kP, 
+                                                    Constants.drivetrain.angle.M3_kI, Constants.drivetrain.angle.M3_kD,
+                                                    new Constraints(Constants.drivetrain.angle.MAX_OMEGA, Constants.drivetrain.angle.MAX_ALPHA)),
+                                                    new SimpleMotorFeedforward(Constants.drivetrain.angle.M3_kS, Constants.drivetrain.angle.M3_kV));
 
   private int moduleNum = 0;
 
@@ -82,12 +92,6 @@ public class Drivetrain extends SubsystemBase {
     SmartDashboard.putNumber("M2 Angle", frontLeft.getModulePosition().angle.getDegrees());
     SmartDashboard.putNumber("M3 Angle", backLeft.getModulePosition().angle.getDegrees());
     SmartDashboard.putNumber("M4 Angle", backRight.getModulePosition().angle.getDegrees());
-
-    SmartDashboard.putNumber("M1 Cancoder", frontRight.getAbsolutePosition());
-    SmartDashboard.putNumber("M2 Cancoder", frontLeft.getAbsolutePosition());
-    SmartDashboard.putNumber("M3 Cancoder", backLeft.getAbsolutePosition());
-    SmartDashboard.putNumber("M4 Cancoder", backRight.getAbsolutePosition());
-
   }
 
   public void putDashboard() {
@@ -164,16 +168,16 @@ public class Drivetrain extends SubsystemBase {
   public void setAnglePIDs(double kP, double kI, double kD, double kF) {
     switch (moduleNum) {
       case 1:
-        frontRight.setAnglePIDF(kP, kI, kD, kF);
+        frontRight.setAnglePID(kP, kI, kD);
         break;
       case 2:
-        frontLeft.setAnglePIDF(kP, kI, kD, kF);
+        frontLeft.setAnglePID(kP, kI, kD);
         break;
       case 3:
-        backLeft.setAnglePIDF(kP, kI, kD, kF);
+        backLeft.setAnglePID(kP, kI, kD);
         break;
       case 4:
-        backRight.setAnglePIDF(kP, kI, kD, kF);
+        backRight.setAnglePID(kP, kI, kD);
       default:
         break;
     }

@@ -9,6 +9,9 @@ import com.ctre.phoenix.sensors.WPI_CANCoder;
 import csplib.motors.CSP_Falcon;
 import csplib.utils.Conversions;
 import csplib.utils.TempManager;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -20,9 +23,8 @@ public class SwerveModule {
     private CSP_Falcon angle; 
     private WPI_CANCoder encoder;
     private double zero;
-    private double anglekP;
-    private double anglekI;
-    private double anglekD;
+    private ProfiledPIDController anglePID;
+    private SimpleMotorFeedforward angleFF;
 
     /**
      * Creates a SwerveModule object
@@ -34,14 +36,13 @@ public class SwerveModule {
      * @param anglekI integral gain for controlling angle
      * @param anglekD derivative gain for controlling angle
      */
-    public SwerveModule(int speedID, int angleID, int encoderID, double zero, double anglekP, double anglekI, double anglekD) {
+    public SwerveModule(int speedID, int angleID, int encoderID, double zero, ProfiledPIDController anglePID, SimpleMotorFeedforward angleFF) {
         speed = new CSP_Falcon(speedID);
         angle = new CSP_Falcon(angleID);
         encoder = new WPI_CANCoder(encoderID);
         this.zero = zero;
-        this.anglekP = anglekP;
-        this.anglekI = anglekI;
-        this.anglekD = anglekD;
+        this.anglePID = anglePID;
+        this.angleFF = angleFF;
 
         init();
 
@@ -68,9 +69,8 @@ public class SwerveModule {
         angle.setBrake(false);
         angle.setScalar(Constants.drivetrain.ANGLE_DEGREES_PER_TICK);  
         angle.setEncoder(Conversions.degreesSignedToUnsigned(encoder.getAbsolutePosition()));
-        angle.configFeedbackNotContinuous(true, 0);
-        angle.setPIDF(anglekP, anglekI, anglekD, 0);
-        angle.configAllowableClosedloopError(0, 1, 0);
+
+        anglePID.enableContinuousInput(-180, 180);
     }
 
     /**
@@ -80,7 +80,8 @@ public class SwerveModule {
     public void setModuleState(SwerveModuleState desired) {
         SwerveModuleState optimized = SwerveModuleState.optimize(desired, Rotation2d.fromDegrees(getAngle()));
         speed.setVelocity(optimized.speedMetersPerSecond);
-        angle.setPosition(optimized.angle.getDegrees());
+        angle.set(anglePID.calculate(getAngle(), optimized.angle.getDegrees()) 
+                    + angleFF.calculate(anglePID.getSetpoint().velocity));
     }
 
     /**
@@ -99,10 +100,9 @@ public class SwerveModule {
      * @param kP proportional gain
      * @param kI integral gain
      * @param kD derivative gain
-     * @param kF feedforward gain
      */
-    public void setAnglePIDF(double kP, double kI, double kD, double kF) {
-        angle.setPIDF(kP, kI, kD, kF);
+    public void setAnglePID(double kP, double kI, double kD) {
+        anglePID.setPID(kP, kI, kD);
     }
 
     /**
@@ -134,28 +134,7 @@ public class SwerveModule {
      * @return the angle with range [0, 360]
      */
     private double getAngle() {
-        double motorAngle = Conversions.degreesSignedToUnsigned(angle.getPosition());
-        if (Math.abs(motorAngle - encoder.getAbsolutePosition()) > 0.1) {
-            angle.setEncoder(Conversions.degreesSignedToUnsigned(encoder.getAbsolutePosition()));
-        }
-
-        return motorAngle;
-    }
-
-    /**
-     * Gives the absolute angle of the module read by the Cancoder 
-     * @return the absolute angle with range [-180, 180]
-     */
-    public double getAbsolutePosition() {
         return encoder.getAbsolutePosition();
-    }
-
-    /**
-     * Gives the temperatures of the speed and angle motors
-     * @return an array containing speed and angle motor temperatures
-     */
-    public double[] getTemperature() {
-        return new double[] {speed.getTemperature(), angle.getTemperature()};
     }
 }
 

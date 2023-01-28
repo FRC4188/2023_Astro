@@ -94,21 +94,32 @@ public static class drivetrain {
     public static final double M4_ZERO = -177.890625;
 
     public static final class angle {
+        public static final double MAX_OMEGA =  360;
+        public static final double MAX_ALPHA = 90;
+
         public static final double M1_kP = 5;
         public static final double M1_kI = 0.0;
         public static final double M1_kD = 1;
+        public static final double M1_kS = 0.0;
+        public static final double M1_kV = 0.0;
 
         public static final double M2_kP = 5;
         public static final double M2_kI = 0.0;
         public static final double M2_kD = 0.1;
+        public static final double M2_kS = 0.0;
+        public static final double M2_kV = 0.0;
 
         public static final double M3_kP = 5;
         public static final double M3_kI = 0.0;
         public static final double M3_kD = 0.3;
+        public static final double M3_kS = 0.0;
+        public static final double M3_kV = 0.0;
 
         public static final double M4_kP = 5;
         public static final double M4_kI = 0.0;
         public static final double M4_kD = 0.4;
+        public static final double M4_kS = 0.0;
+        public static final double M4_kV = 0.0;
     }
 
     public static final class speed {
