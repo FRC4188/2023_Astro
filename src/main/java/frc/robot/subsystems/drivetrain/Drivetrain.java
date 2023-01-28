@@ -51,7 +51,6 @@ public class Drivetrain extends SubsystemBase {
                                                     Constants.drivetrain.angle.M3_kI, Constants.drivetrain.angle.M3_kD,
                                                     new Constraints(Constants.drivetrain.angle.MAX_OMEGA, Constants.drivetrain.angle.MAX_ALPHA)),
                                                     new SimpleMotorFeedforward(Constants.drivetrain.angle.M3_kS, Constants.drivetrain.angle.M3_kV));
-                                                    private Sensors sensors = Sensors.getInstance();
 
   private int moduleNum = 0;
 
