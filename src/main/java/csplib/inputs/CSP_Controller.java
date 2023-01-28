@@ -17,6 +17,7 @@ public class CSP_Controller extends XboxController {
         super(port);
     }
 
+
     private double getOutput(double input, Scale scale) {
         if (Math.abs(input) > DEADBAND) {
             if (scale == Scale.SQUARED) return Math.signum(input) * Math.pow(input, 2);
