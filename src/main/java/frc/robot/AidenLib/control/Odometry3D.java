@@ -5,8 +5,8 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import frc.robot.AidenLib.math.Derivative;
-import frc.robot.AidenLib.math.Integral;
 import frc.robot.AidenLib.math.LinearIntegral;
+import frc.robot.AidenLib.math.Integral;
 
 /** A class which keeps track of position in 3 dimensions which only relies on data from the drivetrain and an IMU. */
 public class Odometry3D {
@@ -48,14 +48,14 @@ public class Odometry3D {
      * @param heading The rotation of the robot as supplied by an IMU.
      * @return The integrated position of the robot in <b>m</b>.
      */
-    public Pose3d update(ChassisSpeeds speeds, Rotation3d heading) {
+    public Pose3d update(Translation3d speeds, Rotation3d heading) {
         yawVal.update(yawRate.getRate(heading.getZ()));
         pitchVal.update(pitchRate.getRate(heading.getY()));
         rollVal.update(rollRate.getRate(heading.getX()));
 
         Rotation3d rot = new Rotation3d(rollVal.get(), pitchVal.get(), yawVal.get());
 
-        Translation3d speedsT = new Translation3d(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond, 0.0).rotateBy(rot);
+        Translation3d speedsT = new Translation3d(speeds.getX(), speeds.getY(), speeds.getZ()).rotateBy(rot);
 
         xVal.update(speedsT.getX());
         yVal.update(speedsT.getY());
@@ -63,6 +63,22 @@ public class Odometry3D {
 
         pose = new Pose3d(xVal.get(), yVal.get(), zVal.get(), rot);
         return pose;
+    }
+
+    /**
+     * This method integrates the velocities of the robot in 3 dimensions to find the position of the robot.
+     * @param speeds Robot relative speeds of the robot in <b>m/s</b>.
+     * @param heading The rotation of the robot as supplied by an IMU.
+     * @return The integrated position of the robot in <b>m</b>.
+     */
+    public Pose3d update(ChassisSpeeds speeds, Rotation3d heading) {
+        return update(new Translation3d(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond, 0.0), heading);
+    }
+
+    public void setPose(Pose3d pose) {
+        xVal.set(pose.getX());
+        yVal.set(pose.getY());
+        zVal.set(pose.getZ());
     }
 
     /**

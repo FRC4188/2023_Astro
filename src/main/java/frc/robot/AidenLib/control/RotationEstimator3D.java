@@ -1,19 +1,18 @@
 package frc.robot.AidenLib.control;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 
 import edu.wpi.first.math.geometry.Rotation3d;
 
 import frc.robot.AidenLib.Timer;
 import frc.robot.AidenLib.math.Derivative;
 import frc.robot.AidenLib.math.Integral;
-import frc.robot.AidenLib.math.ParametricKalmanFilter;
+import frc.robot.AidenLib.math.WeightedFusion;
 import frc.robot.AidenLib.math.Data;
 
 /** A class which estimates the robot rotation in 3D space based on imu data fused with other measurements. */
 public class RotationEstimator3D {
-    private ParametricKalmanFilter filter;
 
     private Rotation3d lastEstimate;
 
@@ -29,7 +28,6 @@ public class RotationEstimator3D {
      */
     public RotationEstimator3D(double imuStDev, Rotation3d initialRot) {
         this.lastEstimate = initialRot;
-        this.filter = new ParametricKalmanFilter(3);
         this.xRate = new Derivative(initialRot.getX());
         this.yRate = new Derivative(initialRot.getY());
         this.zRate = new Derivative(initialRot.getZ());
@@ -56,8 +54,8 @@ public class RotationEstimator3D {
      * @param rollMeasures An array of any length (including 0) representing measurements of the roll rotation by {@link Data} objects in <b>radians</b>.
      * @return The optimal estimate of the robot rotation.
      */
-    public Rotation3d estimate(Rotation3d imuMeasure, Data[] yawMeasures, Data[] pitchMeasures, Data[] rollMeasures) {
-        double[] pVals = {0.0, 0.0, 0.0};
+    public Rotation3d estimate(Rotation3d imuMeasure, LinkedList<Data> xMeasures, LinkedList<Data> yMeasures, LinkedList<Data> zMeasures) {
+        List<Data> pVals = List.of(new Data(), new Data(), new Data());
 
         double dt = timer.getDT();
 
@@ -67,20 +65,16 @@ public class RotationEstimator3D {
             lastEstimate.getZ() + Integral.riemannSum(zRate.getRate(imuMeasure.getZ()), dt)
         );
 
-        ArrayList<Data> xList = new ArrayList<Data>(Arrays.asList(rollMeasures));
-        ArrayList<Data> yList = new ArrayList<Data>(Arrays.asList(pitchMeasures));
-        ArrayList<Data> zList = new ArrayList<Data>(Arrays.asList(yawMeasures));
+        xMeasures.add(new Data(imuMeasure.getX(), imuStdDev));
+        yMeasures.add(new Data(imuMeasure.getY(), imuStdDev));
+        zMeasures.add(new Data(imuMeasure.getZ(), imuStdDev));
 
-        xList.add(new Data(imuMeasure.getX(), imuStdDev));
-        yList.add(new Data(imuMeasure.getY(), imuStdDev));
-        zList.add(new Data(imuMeasure.getZ(), imuStdDev));
+        pVals = WeightedFusion.calculateParameterized(List.of(xMeasures, yMeasures, zMeasures));
 
-        try {
-            pVals = filter.calculate(xList.toArray(Data[]::new), yList.toArray(Data[]::new), zList.toArray(Data[]::new));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        return new Rotation3d(pVals.get(0).value, pVals.get(1).value, pVals.get(2).value);
+    }
 
-        return new Rotation3d(pVals[0], pVals[1], pVals[2]);
+    public void setRotation(Rotation3d rot) {
+        lastEstimate = rot;
     }
 }

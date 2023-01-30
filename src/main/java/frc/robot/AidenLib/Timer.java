@@ -2,22 +2,22 @@ package frc.robot.AidenLib;
 
 /** A class which keeps track of time. */
 public class Timer {
-    private double lastTime, startTime;
+    private long lastTime, startTime;
 
     /**
      * Constructs a {@link Timer} object.
      */
     public Timer() {
-        this.lastTime = System.currentTimeMillis() / 1000.0;
-        this.startTime = System.currentTimeMillis() / 1000.0;
+        this.lastTime = System.currentTimeMillis();
+        this.startTime = System.currentTimeMillis();
     };
 
     /**
      * @return The length of time since the last call of this method.
      */
     public double getDT() {
-        double time = System.currentTimeMillis() / 1000.0;
-        double dt = time - lastTime;
+        long time = System.currentTimeMillis();
+        double dt = (time - lastTime) / 1000.0;
         lastTime = time;
         return dt;
     }
@@ -26,13 +26,13 @@ public class Timer {
      * Starts/restarts a stopwatch.
      */
     public void start() {
-        this.startTime = System.currentTimeMillis() / 1000.0;
+        this.startTime = System.currentTimeMillis();
     }
 
     /**
      * @return The current time into the stopwatch.
      */
     public double getDuration() {
-        return System.currentTimeMillis() / 1000.0 - startTime;
+        return (System.currentTimeMillis() - startTime) / 1000.0;
     }
 }

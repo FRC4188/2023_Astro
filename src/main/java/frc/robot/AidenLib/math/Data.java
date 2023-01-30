@@ -1,18 +1,28 @@
 package frc.robot.AidenLib.math;
 
 /**
- * Class to represent data input to the {@link KalmanFilter}.
+ * Class to represent data input to the {@link WeightedFusion}.
  */
 public class Data {
     public double value, stDev;
 
     /**
-     * Constructs an instance of the {@link Data} class to be used in the {@link KalmanFilter} class.
+     * Constructs an instance of the {@link Data} class to be used in the {@link WeightedFusion} class.
      * @param value The value of the measurement taken.
      * @param stDev The expected standard deviation of the method of measurement.
      */
     public Data(double value, double stDev) {
         this.value = value;
         this.stDev = stDev;
+    }
+
+    public Data() {
+        this.value = 0.0;
+        this.stDev = 0.0;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("Value: %f; SD: %f", value, stDev);
     }
 }

@@ -65,6 +65,10 @@ public class Integral {
         return total;
     }
 
+    public void set(double val) {
+        total = val;
+    }
+
     @Override
     public String toString() {
         return String.format("%f", get());
