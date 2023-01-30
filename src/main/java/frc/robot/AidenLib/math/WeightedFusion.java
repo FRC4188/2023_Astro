@@ -19,8 +19,8 @@ public class WeightedFusion {
         double denominator = 0.0;
 
         for (Data est : estimates) {
-            xnumerator += Math.pow(est.stDev, -1.0) * est.value;
-            denominator += Math.pow(est.stDev, -1.0);
+            xnumerator += Math.pow(est.stDev, -2.0) * est.value;
+            denominator += Math.pow(est.stDev, -2.0);
         }
 
         return new Data(xnumerator / denominator, Math.sqrt(denominator) / denominator);
