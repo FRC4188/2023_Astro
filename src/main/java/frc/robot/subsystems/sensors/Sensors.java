@@ -6,10 +6,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-<<<<<<< HEAD
-=======
 import frc.robot.Constants;
->>>>>>> 00e51d0956192522bddea2404088c98a2720d7cf
 
 public class Sensors extends SubsystemBase {
 
@@ -20,24 +17,12 @@ public class Sensors extends SubsystemBase {
     return instance;
   }
 
-<<<<<<< HEAD
-  
-
-  private SendableChooser<String> alliance = new SendableChooser<>();
-
-
- 
-  /** Creates a new Sensors. */
-  private Sensors() {
-    CommandScheduler.getInstance().registerSubsystem(this);
-=======
   private SendableChooser<String> alliance = new SendableChooser<>();
 
   private Pigeon pigeon = new Pigeon(Constants.ids.PIGEON);
  
   /** Creates a new Sensors. */
   private Sensors() {
->>>>>>> 00e51d0956192522bddea2404088c98a2720d7cf
     
     alliance.setDefaultOption("FMS", "FMS");
     alliance.addOption("Blue", "Blue");
@@ -52,18 +37,9 @@ public class Sensors extends SubsystemBase {
   public void updateDashboard() {
   }
 
-<<<<<<< HEAD
-  public void setLED(boolean on) {
-    //limelight.setLEDMode(on ? LedMode.ON : LedMode.OFF);
-  }
-
-  public Rotation2d getRotation() {
-    return null;
-=======
 
   public Rotation2d getPigeonAngle() {
     return pigeon.getAngle();
->>>>>>> 00e51d0956192522bddea2404088c98a2720d7cf
   }
 
 

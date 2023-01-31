@@ -1,15 +1,5 @@
 package frc.robot;
 
-<<<<<<< HEAD
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.subsystems.drivetrain.Drivetrain;
-import frc.robot.utils.CSPController;
-import frc.robot.utils.CSPController.Scaling;
-=======
 import csplib.inputs.CSP_Controller;
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -20,7 +10,6 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.drivetrain.Drivetrain;
 
->>>>>>> 00e51d0956192522bddea2404088c98a2720d7cf
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -32,11 +21,7 @@ public class RobotContainer {
 
   private Drivetrain drivetrain = Drivetrain.getInstance();
   
-<<<<<<< HEAD
-  private CSPController pilot = new CSPController(0);
-=======
   private CSP_Controller pilot = new CSP_Controller(0);
->>>>>>> 00e51d0956192522bddea2404088c98a2720d7cf
 
   private SendableChooser<SequentialCommandGroup> autoChooser = new SendableChooser<SequentialCommandGroup>();
 
@@ -53,17 +38,7 @@ public class RobotContainer {
   }
 
   private void setDefaultCommands() {
-<<<<<<< HEAD
-  drivetrain.setDefaultCommand(new RunCommand(() -> drivetrain.drive(
-      pilot.getLeftY(Scaling.CUBED),
-      pilot.getLeftX(Scaling.CUBED),
-      pilot.getRightX(Scaling.CUBED),
-      pilot.getLeftStickButton()),
-      drivetrain)
-    ); 
-=======
  
->>>>>>> 00e51d0956192522bddea2404088c98a2720d7cf
 
   }
 
@@ -71,20 +46,6 @@ public class RobotContainer {
    * Use this method to define your button->command mappings.
    */
   private void configureButtonBindings() {
-<<<<<<< HEAD
- 
-   
-  }
-
-  private void smartdashboardButtons() {
-  };
-
-    
-  
-
-
-  
-=======
 
   }
 
@@ -111,7 +72,6 @@ public class RobotContainer {
     
 
   };
->>>>>>> 00e51d0956192522bddea2404088c98a2720d7cf
 
   private void addChooser() {
     autoChooser.setDefaultOption("Do nothing", new SequentialCommandGroup());

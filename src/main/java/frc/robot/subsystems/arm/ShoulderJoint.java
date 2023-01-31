@@ -48,7 +48,7 @@ public class ShoulderJoint extends SubsystemBase { //uses two motors
     SmartDashboard.putNumber("Temperature", getTemperature());
     SmartDashboard.putNumber("Position", getPosition());
     SmartDashboard.putNumber("Angle", getAngle());
-
+;\
   }
 
   public double getTemperature()

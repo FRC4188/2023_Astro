@@ -48,7 +48,7 @@ public class Telescope extends SubsystemBase {
   public telescopeMode telescopeMode;
   public telescopeHeight telescopeHeight;
 
-  private CSP_Motor motor = new CSP_SparkMax(0); // no clue what the id is yet
+  private CSP_SparkMax motor = new CSP_SparkMax(0); // no clue what the id is yet
 
   public Telescope() {
 
