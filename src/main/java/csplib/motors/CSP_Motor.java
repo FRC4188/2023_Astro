@@ -18,9 +18,13 @@ public interface CSP_Motor {
 
     public void setPIDF(double kP, double kI, double kD, double kF);
 
+<<<<<<< HEAD
     public void setPositionScalar(double scalar);
 
     public void setVelocityScalar(double scalar);
+=======
+    public void setScalar(double scalar);
+>>>>>>> 00e51d0956192522bddea2404088c98a2720d7cf
 
     public void setPosition(double position);
     
@@ -33,4 +37,9 @@ public interface CSP_Motor {
     public double getTemperature();
 
     public double getCurrent();
+<<<<<<< HEAD
+=======
+
+    public int getID();
+>>>>>>> 00e51d0956192522bddea2404088c98a2720d7cf
 }

@@ -60,12 +60,19 @@ public class CSP_SparkMax extends CANSparkMax implements CSP_Motor {
         encoder.setPosition(position);
     }
 
+<<<<<<< HEAD
     public void setPositionScalar(double scalar) {
         encoder.setPositionConversionFactor(scalar);
     }
 
     public void setVelocityScalar(double scalar) {
         encoder.setVelocityConversionFactor(scalar);
+=======
+    public void setScalar(double scalar) {
+        encoder.setPositionConversionFactor(scalar);
+        encoder.setVelocityConversionFactor(scalar);
+
+>>>>>>> 00e51d0956192522bddea2404088c98a2720d7cf
     }
 
     public double getVelocity() {
@@ -84,4 +91,11 @@ public class CSP_SparkMax extends CANSparkMax implements CSP_Motor {
         return super.getOutputCurrent();
     }
 
+<<<<<<< HEAD
+=======
+    public int getID() {
+        return super.getDeviceId();
+    }
+
+>>>>>>> 00e51d0956192522bddea2404088c98a2720d7cf
 }
