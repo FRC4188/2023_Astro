@@ -5,6 +5,7 @@
 package frc.robot;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -23,6 +24,8 @@ import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.util.Units;
 
+=======
+>>>>>>> 56c362aebdce62bca6010cd79440815143a53295
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -35,6 +38,7 @@ public final class Constants {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
   }
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
 
@@ -227,3 +231,6 @@ public static class drivetrain {
 }
   
 >>>>>>> 00e51d0956192522bddea2404088c98a2720d7cf
+=======
+}
+>>>>>>> 56c362aebdce62bca6010cd79440815143a53295

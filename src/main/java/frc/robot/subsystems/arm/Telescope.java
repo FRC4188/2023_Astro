@@ -12,26 +12,26 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-public class Elevator extends SubsystemBase {
+public class Telescope extends SubsystemBase {
   /** Creates a new ExampleSubsystem. */
-  private static Elevator Elevator;
+  private static Telescope telescope;
 
-  public static synchronized Elevator getInstance()
+  public static synchronized Telescope getInstance()
   {
-    if (Elevator == null)
+    if (telescope == null)
     {
-      Elevator = new Elevator();
+      telescope = new Telescope();
     }
-    return Elevator;
+    return telescope;
   }
 
-  public enum elevatorHeight {
+  public enum telescopeHeight {
     GROUND(0),
     MIDDLE(1),
     TOP(2);
 
     private int height;
-    private elevatorHeight(int height) {
+    private telescopeHeight(int height) {
       this.height = height;
     }
 
@@ -40,43 +40,43 @@ public class Elevator extends SubsystemBase {
     }
   }
 
-  public enum elevatorMode {
+  public enum telescopeMode {
     RETRACT,
     EXTEND;
   }
 
-  public elevatorMode elevatorMode;
-  public elevatorHeight elevatorHeight;
+  public telescopeMode telescopeMode;
+  public telescopeHeight telescopeHeight;
 
   private CSP_Motor motor = new CSP_SparkMax(0); // no clue what the id is yet
 
-  public Elevator() {
+  public Telescope() {
 
     CommandScheduler.getInstance().registerSubsystem(this);
   }
 
-  //Sets the elevator mode to "retract" 
-  public void resetElevator()
+  //Sets the telescope mode to "retract" 
+  public void resetTelescope()
   {
-    elevatorMode = elevatorMode.RETRACT;
+    telescopeMode = telescopeMode.RETRACT;
   }
 
-  //Updates ShuffleBoard with information about the elevator
+  //Updates ShuffleBoard with information about the telescope
   // private void updateShuffleboard() {
-  //   SmartDashboard.putNumber("Elevator Height", getElevatorHeight)); //doesn't work for now
-  //   SmartDashboard.putString("Elevator Mode", getElevatorMode()); //doesn't work for now
+  //   SmartDashboard.putNumber("telescope Height", gettelescopeHeight)); //doesn't work for now
+  //   SmartDashboard.putString("telescope Mode", gettelescopeMode()); //doesn't work for now
   // }
 
-  //Returns elevator mode for shuttleboard
-  // public elevatorMode getElevatorMode()  
+  //Returns telescope mode for shuttleboard
+  // public telescopeMode gettelescopeMode()  
   // {
-  //   return elevatorMode;
+  //   return telescopeMode;
   // }
 
-  //Returns elevator height for shuttleboard
-  // public elevatorHeight getElevatorHeight() 
+  //Returns telescope height for shuttleboard
+  // public telescopeHeight gettelescopeHeight() 
   // {
-  //   return elevatorHeight;
+  //   return telescopeHeight;
   // }
 
 
