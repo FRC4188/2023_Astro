@@ -23,8 +23,7 @@ public class SwerveModule {
     private CSP_Falcon angle; 
     private WPI_CANCoder encoder;
     private double zero;
-    private ProfiledPIDController anglePID;
-    private SimpleMotorFeedforward angleFF;
+    private PIDController anglePID;
 
     /**
      * Creates a SwerveModule object
@@ -36,13 +35,12 @@ public class SwerveModule {
      * @param anglekI integral gain for controlling angle
      * @param anglekD derivative gain for controlling angle
      */
-    public SwerveModule(int speedID, int angleID, int encoderID, double zero, ProfiledPIDController anglePID, SimpleMotorFeedforward angleFF) {
+    public SwerveModule(int speedID, int angleID, int encoderID, double zero, PIDController anglePID) {
         speed = new CSP_Falcon(speedID);
         angle = new CSP_Falcon(angleID);
         encoder = new WPI_CANCoder(encoderID);
         this.zero = zero;
         this.anglePID = anglePID;
-        this.angleFF = angleFF;
 
         init();
 
@@ -55,7 +53,7 @@ public class SwerveModule {
     private void init() {
         speed.setBrake(true);
         speed.setRampRate(Constants.drivetrain.RAMP_RATE);
-        speed.setPIDF(Constants.drivetrain.speed.kP, Constants.drivetrain.speed.kI, Constants.drivetrain.speed.kD, 0);
+        speed.setPIDF(Constants.drivetrain.speed.kP, Constants.drivetrain.speed.kI, Constants.drivetrain.speed.kD, Constants.drivetrain.speed.kF);
         speed.setScalar(Constants.drivetrain.DRIVE_METERS_PER_TICK);
 
         encoder.configFactoryDefault();
@@ -71,6 +69,7 @@ public class SwerveModule {
         angle.setEncoder(Conversions.degreesSignedToUnsigned(encoder.getAbsolutePosition()));
 
         anglePID.enableContinuousInput(-180, 180);
+        anglePID.setTolerance(5);
     }
 
     /**
@@ -80,8 +79,7 @@ public class SwerveModule {
     public void setModuleState(SwerveModuleState desired) {
         SwerveModuleState optimized = SwerveModuleState.optimize(desired, Rotation2d.fromDegrees(getAngle()));
         speed.setVelocity(optimized.speedMetersPerSecond);
-        angle.set(anglePID.calculate(getAngle(), optimized.angle.getDegrees()) 
-                    + angleFF.calculate(anglePID.getSetpoint().velocity));
+        angle.set(anglePID.calculate(getAngle(), optimized.angle.getDegrees()));
     }
 
     /**

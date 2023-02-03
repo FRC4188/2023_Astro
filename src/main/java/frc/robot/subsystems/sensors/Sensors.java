@@ -34,9 +34,10 @@ public class Sensors extends SubsystemBase {
     //setPower(true);
   }
 
-  public void updateDashboard() {
+  @Override
+  public void periodic() {
+    SmartDashboard.putNumber("Pigeon Angle", getPigeonAngle().getDegrees());
   }
-
 
   public Rotation2d getPigeonAngle() {
     return pigeon.getAngle();

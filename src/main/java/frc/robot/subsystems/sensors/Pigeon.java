@@ -6,6 +6,7 @@ package frc.robot.subsystems.sensors;
 
 import com.ctre.phoenix.sensors.Pigeon2;
 
+import csplib.utils.Conversions;
 import edu.wpi.first.math.geometry.Rotation2d;
 
 /** Add your docs here. */
@@ -31,7 +32,7 @@ public class Pigeon extends Pigeon2 {
     }
 
     public Rotation2d getAngle() {
-        return Rotation2d.fromDegrees((super.getYaw() + 180.0) % 360.0 - 180.0);
+        return Rotation2d.fromDegrees(super.getYaw());
     }
 
 }
