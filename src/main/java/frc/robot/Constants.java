@@ -23,42 +23,42 @@ import edu.wpi.first.math.util.Units;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-  public static class controller {
-    public static final int PILOT_PORT = 0;
-    public static final double DEADBAND = 0.15;
-    public static final double TRIGGER_THRESHOLD = 0.6;
-  }
+    public static class controller {
+        public static final int PILOT_PORT = 0;
+        public static final double DEADBAND = 0.15;
+        public static final double TRIGGER_THRESHOLD = 0.6;
+    }
 
-  public static final class robot {
-    public static final double A_LENGTH = Units.inchesToMeters(33); // Axel length (Meters).
-    public static final double A_WIDTH = Units.inchesToMeters(27.5); // Axel width (Meters).
-    public static final double A_CROSSLENGTH = Math.hypot(A_LENGTH, A_WIDTH);
+    public static final class robot {
+        public static final double A_LENGTH = Units.inchesToMeters(33); // Axel length (Meters).
+        public static final double A_WIDTH = Units.inchesToMeters(27.5); // Axel width (Meters).
+        public static final double A_CROSSLENGTH = Math.hypot(A_LENGTH, A_WIDTH);
 
-    public static final double FALCON_ENCODER_TICKS = 2048.0; //Counts per revolution of the Falcon 500 motor.
-    public static final double FALCON_MAX_VEL = 6380.0;
+        public static final double FALCON_ENCODER_TICKS = 2048.0; //Counts per revolution of the Falcon 500 motor.
+        public static final double FALCON_MAX_VEL = 6380.0;
 
-    public static final double MAX_TEMP = 50.0; 
-}
+        public static final double MAX_TEMP = 50.0; 
+    }
 
-public static final class ids {
-    public static final int FL_SPEED = 1;
-    public static final int FL_ANGLE = 2;
-    public static final int FL_ENCODER = 11;
+    public static final class ids {
+        public static final int FL_SPEED = 1;
+        public static final int FL_ANGLE = 2;
+        public static final int FL_ENCODER = 11;
 
-    public static final int BL_SPEED = 3;
-    public static final int BL_ANGLE = 4;
-    public static final int BL_ENCODER = 12;
+        public static final int BL_SPEED = 3;
+        public static final int BL_ANGLE = 4;
+        public static final int BL_ENCODER = 12;
 
-    public static final int BR_SPEED = 5;
-    public static final int BR_ANGLE = 6;
-    public static final int BR_ENCODER = 13;
+        public static final int BR_SPEED = 5;
+        public static final int BR_ANGLE = 6;
+        public static final int BR_ENCODER = 13;
 
-    public static final int FR_SPEED = 7;
-    public static final int FR_ANGLE = 8;
-    public static final int FR_ENCODER = 14;
+        public static final int FR_SPEED = 7;
+        public static final int FR_ANGLE = 8;
+        public static final int FR_ENCODER = 14;
 
-    public static final int PIGEON = 15;
-}
+        public static final int PIGEON = 15;
+    }
 
 public static class drivetrain {
     public static final double DRIVE_GEARING = 6.55; // Gear ratio of the drive motor.
@@ -94,7 +94,6 @@ public static class drivetrain {
     public static final double FR_ZERO = 177.01171875000003;
 
     public static final class angle {
-
         public static final double FL_kP = -0.008;
         public static final double FL_kI = 0.0;
         public static final double FL_kD = 0.0;
@@ -138,9 +137,6 @@ public static class drivetrain {
       public static final double kD = -0.05;  
       public static final ProfiledPIDController thetaPID = new ProfiledPIDController(kP, kI, kD, new Constraints(Math.PI * 2.0, Math.PI / 2.0));
   }
-
-
-  
   }
 }
   
