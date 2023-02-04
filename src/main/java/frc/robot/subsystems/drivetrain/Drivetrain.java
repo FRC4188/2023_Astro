@@ -145,6 +145,17 @@ public class Drivetrain extends SubsystemBase {
     backRight.setModuleState(new SwerveModuleState(0, Rotation2d.fromDegrees(angle)));
   }
 
+  public ChassisSpeeds getChassisSpeeds() {
+    SwerveModuleState[] states = new SwerveModuleState[] {
+      frontLeft.getModuleState(),
+      frontRight.getModuleState(),
+      backLeft.getModuleState(),
+      backRight.getModuleState()
+    };
+
+    return kinematics.toChassisSpeeds(states);
+  }
+
   public void zeroPower() {
     frontRight.zeroPower();
     frontLeft.zeroPower();
