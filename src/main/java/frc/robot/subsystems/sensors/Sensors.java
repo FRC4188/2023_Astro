@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -30,7 +31,7 @@ public class Sensors extends SubsystemBase {
 
   private Drivetrain drive = Drivetrain.getInstance();
 
-  RotationEstimator3D rotEst = new RotationEstimator3D(Constants.StandardDevs.rotation);
+  RotationEstimator3D rotEst = new RotationEstimator3D(Constants.standarddevs.rotation);
   PoseEstimator3D poseEst = new PoseEstimator3D(() -> drive.getStdDevs());
   Pose3d pose = new Pose3d();
 
@@ -53,24 +54,24 @@ public class Sensors extends SubsystemBase {
     LinkedList<Data> yEstimates = new LinkedList<>();
     LinkedList<Data> zEstimates = new LinkedList<>();
 
-    xEstimates.add(new Data(speeds.vxMetersPerSecond, Constants.StandardDevs.driveTrac));
-    xEstimates.add(new Data(prevVelEst.getX() + Integral.linearSum(prevAccel.getX(), accel.getX(), dt), Constants.StandardDevs.accel));
-    yEstimates.add(new Data(speeds.vyMetersPerSecond, Constants.StandardDevs.driveTrac));
-    yEstimates.add(new Data(prevVelEst.getY() + Integral.linearSum(prevAccel.getY(), accel.getY(), dt), Constants.StandardDevs.accel));
-    zEstimates.add(new Data(0.0, Constants.StandardDevs.driveTrac));
-    zEstimates.add(new Data(prevVelEst.getZ() + Integral.linearSum(prevAccel.getZ(), accel.getZ(), dt), Constants.StandardDevs.accel));
+    xEstimates.add(new Data(speeds.vxMetersPerSecond, Constants.standarddevs.driveTrac));
+    xEstimates.add(new Data(prevVelEst.getX() + Integral.linearSum(prevAccel.getX(), accel.getX(), dt), Constants.standarddevs.accel));
+    yEstimates.add(new Data(speeds.vyMetersPerSecond, Constants.standarddevs.driveTrac));
+    yEstimates.add(new Data(prevVelEst.getY() + Integral.linearSum(prevAccel.getY(), accel.getY(), dt), Constants.standarddevs.accel));
+    zEstimates.add(new Data(0.0, Constants.standarddevs.driveTrac));
+    zEstimates.add(new Data(prevVelEst.getZ() + Integral.linearSum(prevAccel.getZ(), accel.getZ(), dt), Constants.standarddevs.accel));
 
     ArrayList<Data> velEstimate = WeightedFusion.calculateParameterized(List.of(xEstimates, yEstimates, zEstimates));
 
     prevAccel = accel;
     prevVelEst = new Translation3d(velEstimate.get(0).value, velEstimate.get(1).value, velEstimate.get(2).value);
     
-    Rotation3d rot = rotEst.estimate(getRotation(), vision.get("r"), vision.get("p"), vision.get("y"));
+    Rotation3d rot = rotEst.estimate(getRotation3d(), vision.get("r"), vision.get("p"), vision.get("y"));
     pose = poseEst.estimate(prevVelEst, rot, vision.get("X"), vision.get("Y"), vision.get("Z"));
   }
 
   public void updateDashboard() {
-    Rotation3d rot = getRotation();
+    Rotation3d rot = getRotation3d();
     SmartDashboard.putString("Rotation", String.format("Y: %f; P: %f; R: %f;",rot.getZ(), rot.getY(), rot.getX()));
     SmartDashboard.putString("Accel", getAccel().toString());
   }
@@ -87,8 +88,12 @@ public class Sensors extends SubsystemBase {
     pigeon.set(angle);
   }
 
-  public Rotation3d getRotation() {
+  public Rotation3d getRotation3d() {
     return pigeon.get();
+  }
+
+  public Rotation2d getRotation2d() {
+    return pigeon.get().toRotation2d();
   }
 
   public Translation3d getAccel() {

@@ -1,38 +1,57 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.subsystems.sensors;
 
 import com.ctre.phoenix.sensors.Pigeon2;
-
-import csplib.utils.Conversions;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Translation3d;
 
-/** Add your docs here. */
 public class Pigeon extends Pigeon2 {
-    public Pigeon(int id, String can) {
-        super(id, can);
-        init();
-    }
 
-    public Pigeon(int id) {
-        super(id);
-        init();
-    }
+  private double[] offsets = {0.0, 0.0, 0.0};
 
-    private void init() {
-        super.configFactoryDefault();
-        super.clearStickyFaults();
-        reset();
-    }
+  private Translation3d gravity = new Translation3d();
 
-    public void reset() {
-        super.setYaw(0.0);
-    }
+  public Pigeon(int canID) {
+    super(canID);
 
-    public Rotation2d getAngle() {
-        return Rotation2d.fromDegrees(super.getYaw());
-    }
+    super.configFactoryDefault();
+    set(new Rotation3d());
 
+    super.clearStickyFaults();
+  }
+
+  public Rotation3d getOmegaRadians() {
+    double[] dps = {0.0, 0.0, 0.0};
+    super.getRawGyro(dps);
+
+    return new Rotation3d(Math.toRadians(dps[1]), Math.toRadians(dps[0]), Math.toRadians(dps[2]));
+  }
+
+  public Rotation3d get() {
+    return new Rotation3d(Math.toRadians(super.getRoll()) + offsets[0], Math.toRadians(super.getPitch()) + offsets[1], Math.toRadians(super.getYaw()) + offsets[2]);
+  }
+
+  public Rotation2d getCompass() {
+    return Rotation2d.fromDegrees((super.getCompassHeading() + 180.0) % 360.0 - 180.0);
+  }
+
+  public void set(Rotation3d angle) {
+    Rotation3d current = get();
+    offsets[0] += angle.getY() - current.getY();
+    offsets[1] += angle.getX() - current.getX();
+    offsets[2] += angle.getZ() - current.getZ();
+  }
+
+  public Translation3d getAccel() {
+    double[] xyz = {0.0, 0.0, 0.0};
+    super.getGravityVector(xyz);
+    Rotation3d rot = get();
+    return new Translation3d(xyz[0], xyz[1], xyz[2]).rotateBy(rot.times(-1.0)).minus(gravity).rotateBy(rot).times(9.8);
+  }
+
+  public void setG() {
+    double[] xyz = {0.0, 0.0, 0.0};
+    super.getGravityVector(xyz);
+    gravity = new Translation3d(xyz[0], xyz[1], xyz[2]).rotateBy(get().times(-1.0));
+  }
 }

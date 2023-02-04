@@ -56,18 +56,9 @@ public class Drivetrain extends SubsystemBase {
     Constants.drivetrain.BL_LOCATION, 
     Constants.drivetrain.BR_LOCATION);
 
-  // private SwerveDriveOdometry odometry = new SwerveDriveOdometry(
-  //   kinematics, 
-  //   pigeon.getAngle(), 
-  //   new SwerveModulePosition[] {
-  //     frontLeft.getModulePosition(), 
-  //     frontRight.getModulePosition(), 
-  //     backLeft.getModulePosition(), 
-  //     backRight.getModulePosition()});
-
   private SwerveDrivePoseEstimator odometry = new SwerveDrivePoseEstimator(
     kinematics, 
-    sensors.getPigeonAngle(), 
+    sensors.getRotation2d(), 
     new SwerveModulePosition[] {
       frontLeft.getModulePosition(),
       frontRight.getModulePosition(),
@@ -105,7 +96,7 @@ public class Drivetrain extends SubsystemBase {
 
 
     SwerveModuleState[] states = kinematics.toSwerveModuleStates(
-      fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rotSpeed, sensors.getPigeonAngle()) : new ChassisSpeeds(xSpeed, ySpeed, rotSpeed)
+      fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rotSpeed, sensors.getRotation2d()) : new ChassisSpeeds(xSpeed, ySpeed, rotSpeed)
     );
     SwerveDriveKinematics.desaturateWheelSpeeds(states, Constants.drivetrain.MAX_VELOCITY);
 
@@ -121,8 +112,10 @@ public class Drivetrain extends SubsystemBase {
 
   }
 
+  
+
   public void updateOdometry() {
-    odometry.update(sensors.getPigeonAngle(), 
+    odometry.update(sensors.getRotation2d(), 
     new SwerveModulePosition[] {
       frontLeft.getModulePosition(),
       frontRight.getModulePosition(),
@@ -154,6 +147,12 @@ public class Drivetrain extends SubsystemBase {
     };
 
     return kinematics.toChassisSpeeds(states);
+  }
+
+  public double getStdDevs() {
+    double zAccel = sensors.getAccel().rotateBy(sensors.getRotation3d().times(-1.0)).getZ();
+    if (zAccel > -8.0) return Constants.standarddevs.driveTrac;
+    else return 5.0;
   }
 
   public void zeroPower() {

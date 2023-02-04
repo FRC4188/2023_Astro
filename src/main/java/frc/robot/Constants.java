@@ -135,10 +135,14 @@ public static class drivetrain {
       public static final double kI = 0.0;
       public static final double kD = -0.05;  
       public static final ProfiledPIDController thetaPID = new ProfiledPIDController(kP, kI, kD, new Constraints(Math.PI * 2.0, Math.PI / 2.0));
+  }  
   }
 
-
-  
+  public static class standarddevs {
+    public static final double accel = 0.009065;
+    public static final double rotation = Math.toRadians(0.4) / (60.0 * 50.0);
+    public static final double driveTrac = 1.0;
   }
+
 }
   
