@@ -52,6 +52,7 @@ public class SwerveModule {
      */
     private void init() {
         speed.setBrake(true);
+        speed.setInverted(true);
         speed.setRampRate(Constants.drivetrain.RAMP_RATE);
         speed.setPIDF(Constants.drivetrain.speed.kP, Constants.drivetrain.speed.kI, Constants.drivetrain.speed.kD, Constants.drivetrain.speed.kF);
         speed.setScalar(Constants.drivetrain.DRIVE_METERS_PER_TICK);
@@ -66,7 +67,7 @@ public class SwerveModule {
         angle.configFactoryDefault();
         angle.setBrake(false);
         angle.setScalar(Constants.drivetrain.ANGLE_DEGREES_PER_TICK);  
-        angle.setEncoder(Conversions.degreesSignedToUnsigned(encoder.getAbsolutePosition()));
+        angle.setEncoder(Conversions.degreesSignedToUnsigned(getAngle()));
 
         anglePID.enableContinuousInput(-180, 180);
         anglePID.setTolerance(5);

@@ -82,14 +82,14 @@ public static class drivetrain {
     public static final Matrix<N3, N1> VISION_STD_DEVS = VecBuilder.fill(0.9, 0.9, 0.9); // [x, y, theta]
 
     public static final Translation2d FL_LOCATION = new Translation2d((Constants.robot.A_WIDTH / 2), (Constants.robot.A_LENGTH / 2));
-    public static final Translation2d FR_LOCATION = new Translation2d(-(Constants.robot.A_WIDTH / 2), -(Constants.robot.A_LENGTH / 2));
-    public static final Translation2d BL_LOCATION = new Translation2d((Constants.robot.A_WIDTH / 2), -(Constants.robot.A_LENGTH / 2));
+    public static final Translation2d FR_LOCATION = new Translation2d((Constants.robot.A_WIDTH / 2), -(Constants.robot.A_LENGTH / 2));
+    public static final Translation2d BL_LOCATION = new Translation2d(-(Constants.robot.A_WIDTH / 2), (Constants.robot.A_LENGTH / 2));
     public static final Translation2d BR_LOCATION = new Translation2d(-(Constants.robot.A_WIDTH / 2), -(Constants.robot.A_LENGTH / 2));
 
-    public static final double FL_ZERO = 175.693359375;
-    public static final double BL_ZERO = -21.005859375000004;
-    public static final double BR_ZERO = 27.685546875;
-    public static final double FR_ZERO = 177.01171875000003;
+    public static final double FL_ZERO = -17.314453125;
+    public static final double BL_ZERO = 29.970703125000004;
+    public static final double BR_ZERO = 174.990234375;
+    public static final double FR_ZERO = 175.341796875;
 
     public static final class angle {
 
@@ -137,12 +137,5 @@ public static class drivetrain {
       public static final ProfiledPIDController thetaPID = new ProfiledPIDController(kP, kI, kD, new Constraints(Math.PI * 2.0, Math.PI / 2.0));
   }  
   }
-
-  public static class standarddevs {
-    public static final double accel = 0.009065;
-    public static final double rotation = Math.toRadians(0.4) / (60.0 * 50.0);
-    public static final double driveTrac = 1.0;
-  }
-
 }
   

@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.drivetrain.Drivetrain;
+import frc.robot.subsystems.sensors.Sensors;
 
 
 /**
@@ -21,6 +22,7 @@ import frc.robot.subsystems.drivetrain.Drivetrain;
 public class RobotContainer {
 
   private Drivetrain drivetrain = Drivetrain.getInstance();
+  private Sensors sensors = Sensors.getInstance();
   
   private CSP_Controller pilot = new CSP_Controller(0);
 
@@ -51,7 +53,7 @@ public class RobotContainer {
    * Use this method to define your button->command mappings.
    */
   private void configureButtonBindings() {
-
+    pilot.getAButtonObj().whileTrue(new InstantCommand(() -> sensors.resetPigeon(), sensors));
   }
 
   private void smartdashboardButtons() {

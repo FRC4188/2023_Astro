@@ -8,14 +8,12 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.subsystems.sensors.Pigeon;
 import frc.robot.subsystems.sensors.Sensors;
 
 public class Drivetrain extends SubsystemBase {
@@ -104,12 +102,6 @@ public class Drivetrain extends SubsystemBase {
     frontRight.setModuleState(states[1]);
     backLeft.setModuleState(states[2]);
     backRight.setModuleState(states[3]);
-
-    System.out.println("0" + states[0].angle.getDegrees());
-    System.out.println("1" + states[1].angle.getDegrees());
-    System.out.println("2" + states[2].angle.getDegrees());
-    System.out.println("3" + states[3].angle.getDegrees());
-
   }
 
   
@@ -147,12 +139,6 @@ public class Drivetrain extends SubsystemBase {
     };
 
     return kinematics.toChassisSpeeds(states);
-  }
-
-  public double getStdDevs() {
-    double zAccel = sensors.getAccel().rotateBy(sensors.getRotation3d().times(-1.0)).getZ();
-    if (zAccel > -8.0) return Constants.standarddevs.driveTrac;
-    else return 5.0;
   }
 
   public void zeroPower() {
