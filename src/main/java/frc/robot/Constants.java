@@ -72,7 +72,7 @@ public static class drivetrain {
     public static final double ANGLE_DEGREES_PER_TICK = 1.0 / ANGLE_TICKS_PER_DEGREE;
 
     public static final double MAX_VOLTS = 12.0; // Maximum voltage allowed in the drivetrain.
-    public static final double MAX_VELOCITY = 1.0; // Maximum velocity allowed in the drivetrain (Meters per Second).
+    public static final double MAX_VELOCITY = 5.0; // Maximum velocity allowed in the drivetrain (Meters per Second).
     public static final double MAX_ACCEL = 20.0; // Maximum acceleration of the drivetrain in (Meters per Second Squared).
     public static final double MAX_CACCEL = 8.0; // Maximum centripital acceleration of the robot (Meters per Second Squared).
     public static final double MAX_RADIANS = 3.0 * Math.PI; // Maximum rotational velocity (Radians per Second).

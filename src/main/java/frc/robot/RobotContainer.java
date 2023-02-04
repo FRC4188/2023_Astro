@@ -45,8 +45,7 @@ public class RobotContainer {
     drivetrain.setDefaultCommand(new RunCommand(() -> drivetrain.drive(
       pilot.getLeftY(Scale.SQUARED), 
       pilot.getLeftX(Scale.SQUARED), 
-      pilot.getRightX(Scale.SQUARED), 
-      true), drivetrain));
+      pilot.getRightX(Scale.SQUARED)), drivetrain));
   }
 
   /**

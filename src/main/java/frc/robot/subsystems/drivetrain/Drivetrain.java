@@ -87,15 +87,20 @@ public class Drivetrain extends SubsystemBase {
     SmartDashboard.putNumber("Set Drive Angle", 0);
   }
 
-  public void drive(double x, double y, double rot, boolean fieldRelative) {
-    double xSpeed = -x * Constants.drivetrain.MAX_VELOCITY;
-    double ySpeed = -y * Constants.drivetrain.MAX_VELOCITY;
+  public void drive(double x, double y, double rot) {
+    double xSpeed = x * Constants.drivetrain.MAX_VELOCITY;
+    double ySpeed = y * Constants.drivetrain.MAX_VELOCITY;
     double rotSpeed = -rot * Constants.drivetrain.MAX_RADIANS;
 
+    boolean noInput = xSpeed == 0 && ySpeed == 0 && rotSpeed == 0;
+    SwerveModuleState[] states = noInput ? 
+      new SwerveModuleState[] {
+        new SwerveModuleState(0, Rotation2d.fromDegrees(45)),
+        new SwerveModuleState(0, Rotation2d.fromDegrees(-45)),
+        new SwerveModuleState(0, Rotation2d.fromDegrees(-45)),
+        new SwerveModuleState(0, Rotation2d.fromDegrees(45))
+      } : kinematics.toSwerveModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rotSpeed, sensors.getRotation2d()));
 
-    SwerveModuleState[] states = kinematics.toSwerveModuleStates(
-      fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rotSpeed, sensors.getRotation2d()) : new ChassisSpeeds(xSpeed, ySpeed, rotSpeed)
-    );
     SwerveDriveKinematics.desaturateWheelSpeeds(states, Constants.drivetrain.MAX_VELOCITY);
 
     frontLeft.setModuleState(states[0]);
