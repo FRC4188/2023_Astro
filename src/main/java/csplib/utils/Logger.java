@@ -1,5 +1,3 @@
 package csplib.utils;
 
-public class Logger {
-    
-}
+public class Logger {}
