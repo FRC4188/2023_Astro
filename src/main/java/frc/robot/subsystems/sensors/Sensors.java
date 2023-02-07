@@ -3,8 +3,6 @@ package frc.robot.subsystems.sensors;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
-
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -20,10 +18,10 @@ public class Sensors extends SubsystemBase {
   private SendableChooser<String> alliance = new SendableChooser<>();
 
   private Pigeon pigeon = new Pigeon(Constants.ids.PIGEON);
- 
+
   /** Creates a new Sensors. */
   private Sensors() {
-    
+
     alliance.setDefaultOption("FMS", "FMS");
     alliance.addOption("Blue", "Blue");
     alliance.addOption("Red", "Red");
@@ -31,16 +29,19 @@ public class Sensors extends SubsystemBase {
 
     SmartDashboard.putData("Alliance Color", alliance);
 
-    //setPower(true);
+    // setPower(true);
   }
 
-  public void updateDashboard() {
+  @Override
+  public void periodic() {
+    SmartDashboard.putNumber("Pigeon Angle", getRotation2d().getDegrees());
   }
 
-
-  public Rotation2d getPigeonAngle() {
-    return pigeon.getAngle();
+  public Rotation2d getRotation2d() {
+    return pigeon.getRotation2d();
   }
 
-
+  public void resetPigeon() {
+    pigeon.reset();
   }
+}
