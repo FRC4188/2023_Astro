@@ -108,7 +108,6 @@ public final class Constants {
     public static final double FR_ZERO = 175.341796875;
 
     public static final class angle {
-
       public static final double FL_kP = -0.008;
       public static final double FL_kI = 0.0;
       public static final double FL_kD = 0.0;
