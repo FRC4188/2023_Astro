@@ -7,6 +7,8 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 public class CSP_Falcon extends WPI_TalonFX implements CSP_Motor {
 
+    private double scalar = 1;
+
     /**
      * Creates a CSP_Falcon object
      * @param id CAN ID of the Falcon 500
@@ -57,7 +59,7 @@ public class CSP_Falcon extends WPI_TalonFX implements CSP_Motor {
      * @param velocity desired velocity
      */
     public void setVelocity(double velocity) {
-        super.set(ControlMode.Velocity, velocity);
+        super.set(ControlMode.Velocity, scaledToNative(velocity) / 10);
     }
 
     /**
@@ -65,7 +67,7 @@ public class CSP_Falcon extends WPI_TalonFX implements CSP_Motor {
      * @param position desired position
      */
     public void setPosition(double position) {
-        super.set(ControlMode.Position, position);
+        super.set(ControlMode.Position, scaledToNative(position));
     }
 
     /**
@@ -120,7 +122,7 @@ public class CSP_Falcon extends WPI_TalonFX implements CSP_Motor {
      * @param scalar value to multiply the encoder value by
      */
     public void setScalar(double scalar) {
-        super.configSelectedFeedbackCoefficient(scalar);
+        this.scalar = scalar;
     }
     
     /**
@@ -128,7 +130,7 @@ public class CSP_Falcon extends WPI_TalonFX implements CSP_Motor {
      * @return position of the motor
      */
     public double getPosition() {
-        return (super.getSelectedSensorPosition());
+        return (nativeToScaled(super.getSelectedSensorPosition()));
     }
 
     /**
@@ -136,7 +138,7 @@ public class CSP_Falcon extends WPI_TalonFX implements CSP_Motor {
      * @return velocity of the motor
      */
     public double getVelocity() {
-        return ((super.getSelectedSensorVelocity() * 10) * 60);
+        return ((nativeToScaled(super.getSelectedSensorVelocity()) * 10));
     }
 
     /**
@@ -161,5 +163,13 @@ public class CSP_Falcon extends WPI_TalonFX implements CSP_Motor {
      */
     public int getID() {
         return super.getDeviceID();
+    }
+
+    private double nativeToScaled(double input) {
+        return input * scalar;
+    }
+
+    private double scaledToNative(double input) {
+        return input / scalar;
     }
 }
