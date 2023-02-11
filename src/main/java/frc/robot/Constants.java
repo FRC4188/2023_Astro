@@ -4,6 +4,16 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import edu.wpi.first.math.util.Units;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -13,7 +23,41 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-  public static class OperatorConstants {
-    public static final int kDriverControllerPort = 0;
-  }
+    public static class controller {
+        public static final int PILOT_PORT = 0;
+        public static final double DEADBAND = 0.15;
+        public static final double TRIGGER_THRESHOLD = 0.6;
+    }
+
+    public static final class robot {
+        public static final double FALCON_ENCODER_TICKS = 2048.0; //Counts per revolution of the Falcon 500 motor.
+        public static final double FALCON_MAX_VEL = 6380.0;
+
+        public static final double NEO_ENCODER_TICKS = 42.0;
+
+        public static final double MAX_TEMP = 50.0; 
+    }
+
+    public static final class ids {
+        public static final int SHOULDER_LEADER = 69;
+        public static final int SHOULDER_FOLLOWER = 68;
+        public static final int SHOULDER_ENCODER = 67;
+    }
+
+    public static final class arm {
+        public static final class shoulder {
+            public static final double ZERO = 0.0;
+            public static final double GEAR_RATIO = 101.1358; //101.1358 to 1
+            public static final double TICKS_PER_ROTATION = robot.NEO_ENCODER_TICKS * GEAR_RATIO;
+            public static final double TICKS_PER_DEGREE = TICKS_PER_ROTATION / 360;
+            public static final double UPPER_LIMIT = 120;
+            public static final double LOWER_LIMIT = -120;
+            public static final double kP = 0.0;
+            public static final double kI = 0.0;
+            public static final double kD = 0.0;
+            public static final double kF = 0.0;
+        }
+
+    }
 }
+  
