@@ -22,7 +22,7 @@ public class Claw extends SubsystemBase {
         return claw;
     }
 
-    private TalonSRX motor = new TalonSRX(0)
+    private TalonSRX motor = new TalonSRX(0);
     public Claw() {
         CommandScheduler.getInstance().registerSubsystem(this);
     }
