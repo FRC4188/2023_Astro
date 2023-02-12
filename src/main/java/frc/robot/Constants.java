@@ -11,7 +11,9 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import edu.wpi.first.math.trajectory.constraint.CentripetalAccelerationConstraint;
 import edu.wpi.first.math.util.Units;
 
 /**
@@ -59,95 +61,97 @@ public final class Constants {
     public static final int PIGEON = 15;
   }
 
-  public static class drivetrain {
+  public static class drive {
     public static final double DRIVE_GEARING = 6.55; // Gear ratio of the drive motor.
+    /** Meters */
     public static final double WHEEL_DIAMETER =
-        Units.inchesToMeters(4); // Diameter of the drive wheels (Meters).
-    public static final double DRIVE_TICKS_PER_ROTATION =
-        robot.FALCON_ENCODER_TICKS * DRIVE_GEARING;
+        Units.inchesToMeters(4); // Diameter of the drive wheels.
+    /** Meters */
     public static final double WHEEL_CIRCUMFRENCE =
-        Math.PI * WHEEL_DIAMETER; // Circumfrence of the drive wheels (Meters).
-    public static final double DRIVE_TICKS_PER_METER =
-        DRIVE_TICKS_PER_ROTATION / WHEEL_CIRCUMFRENCE;
-    public static final double DRIVE_METERS_PER_TICK = 1 / DRIVE_TICKS_PER_METER;
+        Math.PI * WHEEL_DIAMETER; // Circumfrence of the drive wheels.
+    /** Rotations / Meter */
+    public static final double DRIVE_ROTATIONS_PER_METER =
+        1.0 / WHEEL_CIRCUMFRENCE; // Rotations per meter of the drive wheels.
+    /** Counts / Rotation */
+    public static final double DRIVE_COUNTS_PER_ROTATION =
+        DRIVE_GEARING
+            * robot.FALCON_ENCODER_TICKS; // Encoder counts per revolution of the drive wheel.
+    /** Counts / Meter */
+    public static final double DRIVE_COUNTS_PER_METER =
+        DRIVE_ROTATIONS_PER_METER
+            * DRIVE_COUNTS_PER_ROTATION; // Encoder ticks per meter of the drive wheels.
 
-    public static final double ANGLE_GEARING = 10.29; // 10.29 : 1
-    public static final double ANGLE_TICKS_PER_ROTATION =
-        robot.FALCON_ENCODER_TICKS * ANGLE_GEARING;
-    public static final double ANGLE_TICKS_PER_DEGREE = ANGLE_TICKS_PER_ROTATION / 360.0;
-    public static final double ANGLE_DEGREES_PER_TICK = 1.0 / ANGLE_TICKS_PER_DEGREE;
+    public static final double ANGLE_GEARING = 10.29;
+    /** Counts / Degree */
+    public static final double ANGLE_TICKS_PER_DEGREE =
+        (ANGLE_GEARING * robot.FALCON_ENCODER_TICKS) / 360.0;
 
+    /** Volts */
     public static final double MAX_VOLTS = 12.0; // Maximum voltage allowed in the drivetrain.
-    public static final double MAX_VELOCITY =
-        5.0; // Maximum velocity allowed in the drivetrain (Meters per Second).
-    public static final double MAX_ACCEL =
-        20.0; // Maximum acceleration of the drivetrain in (Meters per Second Squared).
-    public static final double MAX_CACCEL =
-        8.0; // Maximum centripital acceleration of the robot (Meters per Second Squared).
-    public static final double MAX_RADIANS =
-        3.0 * Math.PI; // Maximum rotational velocity (Radians per Second).
-    public static final double RAMP_RATE = 0.5;
+    /** Meters / Second */
+    public static final double MAX_VELOCITY = 6.0; // Maximum velocity allowed in the drivetrain.
+    /** Meters / Second^2 */
+    public static final double MAX_ACCEL = 20.0; // Maximum acceleration of the drivetrain.
+    /** Meters / Second^2 */
+    public static final double MAX_CACCEL = 16.0; // Maximum centripital acceleration of the robot.
+    /** Radians / Second */
+    public static final double MAX_RADIANS = 2.0 * Math.PI; // Maximum rotational velocity.
 
-    public static final Matrix<N3, N1> STATE_STD_DEVS =
-        VecBuilder.fill(0.1, 0.1, 0.1); // [x, y, theta]
-    public static final Matrix<N3, N1> VISION_STD_DEVS =
-        VecBuilder.fill(0.9, 0.9, 0.9); // [x, y, theta]
+    // Put together swerve module positions relative to the center of the robot.
+    public static final Translation2d FL_LOCATION = new Translation2d((Constants.robot.A_WIDTH / 2), -(Constants.robot.A_LENGTH / 2));
+    public static final Translation2d FR_LOCATION = new Translation2d(-(Constants.robot.A_WIDTH / 2), -(Constants.robot.A_LENGTH / 2));
+    public static final Translation2d BL_LOCATION = new Translation2d((Constants.robot.A_WIDTH / 2), (Constants.robot.A_LENGTH / 2));
+    public static final Translation2d BR_LOCATION = new Translation2d(-(Constants.robot.A_WIDTH / 2), (Constants.robot.A_LENGTH / 2));
+    public static final double mod1zero = 149.677734375+180.0;
+    public static final double mod2zero = -160.751953125+180.0;
+    public static final double mod3zero = -5.9765625+180.0;
+    public static final double mod4zero = 4.130859375+180.0;
 
-    public static final Translation2d FL_LOCATION =
-        new Translation2d((Constants.robot.A_WIDTH / 2), (Constants.robot.A_LENGTH / 2));
-    public static final Translation2d FR_LOCATION =
-        new Translation2d((Constants.robot.A_WIDTH / 2), -(Constants.robot.A_LENGTH / 2));
-    public static final Translation2d BL_LOCATION =
-        new Translation2d(-(Constants.robot.A_WIDTH / 2), (Constants.robot.A_LENGTH / 2));
-    public static final Translation2d BR_LOCATION =
-        new Translation2d(-(Constants.robot.A_WIDTH / 2), -(Constants.robot.A_LENGTH / 2));
-
-    public static final double FL_ZERO = -17.314453125;
-    public static final double BL_ZERO = 29.970703125000004;
-    public static final double BR_ZERO = 174.990234375;
-    public static final double FR_ZERO = 175.341796875;
-
-    public static final class angle {
-      public static final double FL_kP = -0.008;
-      public static final double FL_kI = 0.0;
-      public static final double FL_kD = 0.0;
-
-      public static final double BL_kP = -0.009;
-      public static final double BL_kI = 0.0;
-      public static final double BL_kD = 0.;
-
-      public static final double BR_kP = -0.009;
-      public static final double BR_kI = 0.0;
-      public static final double BR_kD = 0.0;
-
-      public static final double FR_kP = -0.008;
-      public static final double FR_kI = 0.0;
-      public static final double FR_kD = 0.0;
+    public static final class anglemotor {
+      public static final double kP = -7e-3;
+      public static final double kI = 0.0;
+      public static final double kD = 0.0;
     }
 
-    public static final class speed {
-      public static final double kP = 0.1;
+    public static final class speedmotor {
+      public static final double kP = 17e-2;
       public static final double kI = 0.0;
-      public static final double kD = 0.02;
-      public static final double kF = 0.05;
+      public static final double kD = 0.0;
     }
 
     public static final class xPID {
-      public static final double kP = 5.2; 
+      public static final double kP = 3.0;
       public static final double kI = 0.0;
-      public static final double kD = 0.0;
+      public static final double kD = 0.0; // 0.052;
+      public static final PIDController xPID = new PIDController(kP, kI, kD);
     }
 
     public static final class yPID {
-      public static final double kP = 5.2;
+      public static final double kP = 3.0;
       public static final double kI = 0.0;
-      public static final double kD = 0.0;
+      public static final double kD = 0.0; // 0.052;
+      public static final PIDController yPID = new PIDController(kP, kI, kD);
     }
 
     public static final class thetaPID {
-      public static final double kP = -17.25;
+      public static final double kP = -5.25; // -8.25;
       public static final double kI = 0.0;
-      public static final double kD = -0.05;
+      public static final double kD = 0.0; // -0.25;
+      public static final ProfiledPIDController thetaPID =
+          new ProfiledPIDController(kP, kI, kD, new Constraints(Math.PI * 2.0, Math.PI / 2.0));
     }
-  }
-}
+
+    public static final class auto {
+      /** Meters / Second */
+      public static final double MAX_VELOCITY = 1.0; // Maximum velocity allowed in the drivetrain.
+      /** Meters / Second^2 */
+      public static final double MAX_ACCEL = 1.75; // Maximum acceleration of the drivetrain.
+      /** Meters / Second^2 */
+      public static final double MAX_CACCEL =
+          1.75; // Maximum centripital acceleration of the robot.
+
+      public static final TrajectoryConfig CONFIG =
+          new TrajectoryConfig(MAX_VELOCITY, MAX_ACCEL)
+              .addConstraint(new CentripetalAccelerationConstraint(MAX_CACCEL));
+    }
+  }}
