@@ -4,12 +4,18 @@
 
 package frc.robot.subsystems.arm;
 
+import com.ctre.phoenix.sensors.AbsoluteSensorRange;
+import com.ctre.phoenix.sensors.WPI_CANCoder;
+import com.revrobotics.CANSparkMax.SoftLimitDirection;
+
 import csplib.motors.CSP_SparkMax;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class Elevator extends SubsystemBase {
   /** Creates a new ExampleSubsystem. */
@@ -18,90 +24,56 @@ public class Elevator extends SubsystemBase {
   ProfiledPIDController elevatorPID = new ProfiledPIDController(0, 0, 0, null);
   SimpleMotorFeedforward ff = new SimpleMotorFeedforward(0, 0);
 
+  private WPI_CANCoder encoder = new WPI_CANCoder(Constants.ids.SHOULDER_ENCODER);
 
   public static synchronized Elevator getInstance() {
     if (instance == null) instance = new Elevator();
     return instance;
   }
 
-  public enum elevatorHeight {
-    GROUND(0),
-    MIDDLE(1),
-    TOP(2);
+  private void init() {
+    encoder.configFactoryDefault();
+    encoder.clearStickyFaults();
+    encoder.configAbsoluteSensorRange(AbsoluteSensorRange.Signed_PlusMinus180);
+    encoder.setPosition(0.0);
+    encoder.configSensorDirection(false);
+    encoder.configMagnetOffset(-Constants.arm.shoulder.ZERO);
 
-    private int height;
-    private elevatorHeight(int height) {
-      this.height = height;
-    }
+    motor.setScalar(1 / Constants.arm.shoulder.TICKS_PER_DEGREE);
+    motor.setBrake(true);
+    motor.setPosition(encoder.getAbsolutePosition());
+    motor.enableSoftLimit(SoftLimitDirection.kForward, true);
+    motor.enableSoftLimit(SoftLimitDirection.kReverse, true);
+    motor.setSoftLimit(SoftLimitDirection.kForward, (float) Constants.arm.shoulder.UPPER_LIMIT);
+    motor.setPIDF(Constants.arm.shoulder.kP, Constants.arm.shoulder.kI, Constants.arm.shoulder.kD, Constants.arm.shoulder.kF);
 
-    public int getLevel() {
-      return height;
-    }
-  }
-
-  public enum elevatorMode {
-    RETRACT,
-    EXTEND;
-  }
-
-  public elevatorMode elevatorMode;
-  public elevatorHeight elevatorHeight;
+}
 
   private CSP_SparkMax motor = new CSP_SparkMax(0); // no clue what the id is yet
+
+  DigitalInput limitSwitch = new DigitalInput(0);
+
+  
   
 
   public Elevator() {
-
-
     CommandScheduler.getInstance().registerSubsystem(this);
+    init();
 
     SmartDashboard.putNumber("Elevator Set Voltage", 0.0);
-  //  setBrake(true);
-  }
-
-  //Sets the elevator mode to "retract" 
-  public void resetElevator(){
-    elevatorMode = elevatorMode.RETRACT;
-  }
-
-
+    }
 
   public void setAngleWithFF(double goal){
-    motor.setVoltage(elevatorPID.calculate(getElevatorPosition(), goal)+ff.calculate(getElevatorPosition()));
+    motor.setVoltage(elevatorPID.calculate(getElevatorPosition(), goal)+ff.calculate(elevatorPID.getSetpoint().velocity, 0.0));
   }
 
-  public void setPosition(double position){
-  
-  }
-  
   public double getElevatorPosition(){
-    return motor.getPosition();
+    return motor.getPosition()*Constants.arm.elevator.TICKS_PER_METER;
   }
 
-  //Updates ShuffleBoard with information about the elevator
   private void updateShuffleboard() {
-    // SmartDashboard.putNumber("Elevator Height", getElevatorHeight)); //doesn't work for now
-    // SmartDashboard.putString("Elevator Mode", getElevatorMode()); //doen't work for now
     SmartDashboard.putNumber("Elevator Position", getElevatorPosition());
-
   }
-
-  //Returns elevator mode for shuttleboard
-  // public elevatorMode getElevatorMode()  
-  // {
-  //   return elevatorMode;
-  // }
-
-  //Returns elevator height for shuttleboard
-  // public elevatorHeight getElevatorHeight() 
-  // {
-  //   return elevatorHeight;
-  // }
-
-
-
-
-
 
   @Override
   public void periodic() {
