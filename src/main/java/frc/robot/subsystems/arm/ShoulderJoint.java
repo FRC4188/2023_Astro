@@ -23,12 +23,11 @@ import frc.robot.Constants.controller;
 public class ShoulderJoint {
 
     private CSP_SparkMax leader = new CSP_SparkMax(Constants.ids.SHOULDER_LEADER);
-
+    private CSP_SparkMax follower = new CSP_SparkMax(Constants.ids.SHOULDER_LEADER);
     private WPI_CANCoder encoder = new WPI_CANCoder(Constants.ids.SHOULDER_ENCODER);
     
-    private ProfiledPIDController pidder = new ProfiledPIDController(0, 0, 0, null);
-
-    private ArmFeedforward ff = new ArmFeedforward(0, 0, 0);
+    private ProfiledPIDController pid = new ProfiledPIDController(Constants.arm.shoulder.kP, Constants.arm.shoulder.kI, Constants.arm.shoulder.kD, Constants.arm.shoulder.constriants);
+    private ArmFeedforward ff = new ArmFeedforward(Constants.arm.shoulder.kS, Constants.arm.shoulder.kG, Constants.arm.shoulder.kV);
 
     public ShoulderJoint() {
         init();
@@ -41,7 +40,7 @@ public class ShoulderJoint {
         encoder.setPosition(0.0);
         encoder.configSensorDirection(false);
         encoder.configMagnetOffset(-Constants.arm.shoulder.ZERO);
-
+        
         leader.setScalar(1 / Constants.arm.shoulder.TICKS_PER_DEGREE);
         leader.setBrake(true);
         leader.setPosition(encoder.getAbsolutePosition());
@@ -51,25 +50,21 @@ public class ShoulderJoint {
         leader.setSoftLimit(SoftLimitDirection.kReverse, (float) Constants.arm.shoulder.LOWER_LIMIT);
         leader.setPIDF(Constants.arm.shoulder.kP, Constants.arm.shoulder.kI, Constants.arm.shoulder.kD, Constants.arm.shoulder.kF);
 
+        follower.follow(leader);
+
     }
 
-    public void setPosition(double position) {
-        leader.setPosition(position);
+    public void setAngle(double goal){
+        leader.setVoltage(pid.calculate(getAngle(), goal) + ff.calculate(Math.toRadians(getAngle() + Math.PI / 2), pid.getSetpoint().velocity));
+    }
+
+    public void setPID(double kP, double kI, double kD){
+        pid.setPID(kP, kI, kD);
     }
 
     public double getAngle(){
-        return(leader.getPosition()*Constants.arm.shoulder.TICKS_PER_DEGREE);
+        return encoder.getAbsolutePosition();
     }
     
-    
-
-    public void setAngleWithPID(double goal){
-        leader.setVoltage(pidder.calculate(getAngle(), goal)+ff.calculate(pidder.getSetpoint().velocity, 0));
-    }
-
-
-    
-      
-
 
 }
