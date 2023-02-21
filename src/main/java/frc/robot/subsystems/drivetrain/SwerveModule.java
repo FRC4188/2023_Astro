@@ -36,9 +36,9 @@ public class SwerveModule {
    */
   public SwerveModule(
       int speedID, int angleID, int encoderID, double zero, PIDController anglePID) {
-    speed = new CSP_Falcon(speedID);
-    angle = new CSP_Falcon(angleID);
-    encoder = new WPI_CANCoder(encoderID);
+    speed = new CSP_Falcon(speedID, "canivore");
+    angle = new CSP_Falcon(angleID, "canivore");
+    encoder = new WPI_CANCoder(encoderID, "canivore");
     this.zero = zero;
     this.anglePID = anglePID;
 
@@ -50,7 +50,6 @@ public class SwerveModule {
   /** Configures devices for usage */
   private void init() {
     speed.setBrake(true);
-    speed.setInverted(true);
     speed.setRampRate(Constants.drivetrain.RAMP_RATE);
     speed.setPIDF(
         Constants.drivetrain.speed.kP,

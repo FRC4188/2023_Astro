@@ -5,7 +5,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 
 public class Pigeon extends Pigeon2 {
   public Pigeon(int canID) {
-    super(canID);
+    super(canID, "canivore");
 
     super.configFactoryDefault();
 

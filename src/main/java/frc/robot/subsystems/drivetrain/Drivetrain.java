@@ -1,14 +1,18 @@
 package frc.robot.subsystems.drivetrain;
 
+import com.pathplanner.lib.auto.PIDConstants;
+
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -85,17 +89,21 @@ public class Drivetrain extends SubsystemBase {
             backLeft.getModulePosition(),
             backRight.getModulePosition()
           },
-          new Pose2d(),
-          Constants.drivetrain.STATE_STD_DEVS,
-          Constants.drivetrain.VISION_STD_DEVS);
+          new Pose2d());
 
+  private Notifier notifier = new Notifier(() -> recalibrate());
+    
   private Drivetrain() {
     putDashboard();
+    notifier.startPeriodic(1.0);
   }
+
 
   @Override
   public void periodic() {
     updateOdometry();
+    SmartDashboard.putString("Position", getPose2d().toString());
+
 
     // SmartDashboard.putNumber("FL Angle", frontLeft.getModulePosition().angle.getDegrees());
     // SmartDashboard.putNumber("BL Angle", backLeft.getModulePosition().angle.getDegrees());
@@ -113,7 +121,8 @@ public class Drivetrain extends SubsystemBase {
     double ySpeed = y * Constants.drivetrain.MAX_VELOCITY;
     double rotSpeed = -rot * Constants.drivetrain.MAX_RADIANS;
 
-    boolean noInput = xSpeed == 0 && ySpeed == 0 && rotSpeed == 0;
+    boolean noInput = xSpeed == 0 && ySpeed == 0 && rotSpeed == 0;  
+
     SwerveModuleState[] states =
         noInput
             ? new SwerveModuleState[] {
@@ -125,13 +134,15 @@ public class Drivetrain extends SubsystemBase {
             : kinematics.toSwerveModuleStates(
                 ChassisSpeeds.fromFieldRelativeSpeeds(
                     xSpeed, ySpeed, rotSpeed, sensors.getRotation2d()));
+    
+    setModuleStates(states);
+  }
 
-    SwerveDriveKinematics.desaturateWheelSpeeds(states, Constants.drivetrain.MAX_VELOCITY);
-
-    frontLeft.setModuleState(states[0]);
-    frontRight.setModuleState(states[1]);
-    backLeft.setModuleState(states[2]);
-    backRight.setModuleState(states[3]);
+  public void recalibrate() {
+    if (!sensors.getPose3d().equals(new Pose3d())) {
+      odometry.setVisionMeasurementStdDevs(Constants.drivetrain.VISION_STD_DEVS);
+      resetOdometry(sensors.getPose3d().toPose2d());
+    }
   }
 
   public void updateOdometry() {
@@ -143,6 +154,35 @@ public class Drivetrain extends SubsystemBase {
           backLeft.getModulePosition(),
           backRight.getModulePosition()
         });
+  }
+
+  public void resetOdometry(Pose2d initPose) {
+    odometry.resetPosition(
+      sensors.getRotation2d(), 
+      new SwerveModulePosition[] {
+        frontLeft.getModulePosition(),
+        frontRight.getModulePosition(),
+        backLeft.getModulePosition(),
+        backRight.getModulePosition()
+    }, initPose);
+  }
+
+
+
+  public void setModuleStates(SwerveModuleState[] states) {
+    SwerveDriveKinematics.desaturateWheelSpeeds(states, Constants.drivetrain.MAX_VELOCITY);
+
+    frontLeft.setModuleState(states[0]);
+    frontRight.setModuleState(states[1]);
+    backLeft.setModuleState(states[2]);
+    backRight.setModuleState(states[3]);
+  }
+
+  public void zeroPower() {
+    frontRight.zeroPower();
+    frontLeft.zeroPower();
+    backLeft.zeroPower();
+    backRight.zeroPower();
   }
 
   public void setVelocity(double velocity) {
@@ -171,10 +211,29 @@ public class Drivetrain extends SubsystemBase {
     return kinematics.toChassisSpeeds(states);
   }
 
-  public void zeroPower() {
-    frontRight.zeroPower();
-    frontLeft.zeroPower();
-    backLeft.zeroPower();
-    backRight.zeroPower();
+  public SwerveDriveKinematics getKinematics() {
+    return kinematics;
+  }
+
+  public Pose2d getPose2d() {
+    return odometry.getEstimatedPosition();
+  }
+
+  public PIDConstants getTransValues() {
+    return new PIDConstants(Constants.drivetrain.xyPID.kP, Constants.drivetrain.xyPID.kI, Constants.drivetrain.xyPID.kD);
+  }
+
+  public PIDConstants getRotValues() {
+    return new PIDConstants(Constants.drivetrain.rotPID.kP, Constants.drivetrain.rotPID.kI, Constants.drivetrain.rotPID.kD);
+  }
+
+  public double getSpeed() {
+    ChassisSpeeds speeds = getChassisSpeeds();
+
+    return Math.hypot(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond);
+  }
+
+  public double getAngularVelocity() {
+    return getChassisSpeeds().omegaRadiansPerSecond;
   }
 }

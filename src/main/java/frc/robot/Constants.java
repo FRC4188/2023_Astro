@@ -6,9 +6,8 @@ package frc.robot;
 
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
@@ -60,13 +59,13 @@ public final class Constants {
   }
 
   public static class drivetrain {
-    public static final double DRIVE_GEARING = 6.55; // Gear ratio of the drive motor.
+    public static final double DRIVE_GEARING = 6.55; // 6.55 : 1
     public static final double WHEEL_DIAMETER =
-        Units.inchesToMeters(4); // Diameter of the drive wheels (Meters).
+        Units.inchesToMeters(4); 
     public static final double DRIVE_TICKS_PER_ROTATION =
         robot.FALCON_ENCODER_TICKS * DRIVE_GEARING;
     public static final double WHEEL_CIRCUMFRENCE =
-        Math.PI * WHEEL_DIAMETER; // Circumfrence of the drive wheels (Meters).
+        Math.PI * WHEEL_DIAMETER; 
     public static final double DRIVE_TICKS_PER_METER =
         DRIVE_TICKS_PER_ROTATION / WHEEL_CIRCUMFRENCE;
     public static final double DRIVE_METERS_PER_TICK = 1 / DRIVE_TICKS_PER_METER;
@@ -77,21 +76,17 @@ public final class Constants {
     public static final double ANGLE_TICKS_PER_DEGREE = ANGLE_TICKS_PER_ROTATION / 360.0;
     public static final double ANGLE_DEGREES_PER_TICK = 1.0 / ANGLE_TICKS_PER_DEGREE;
 
-    public static final double MAX_VOLTS = 12.0; // Maximum voltage allowed in the drivetrain.
-    public static final double MAX_VELOCITY =
-        5.0; // Maximum velocity allowed in the drivetrain (Meters per Second).
-    public static final double MAX_ACCEL =
-        20.0; // Maximum acceleration of the drivetrain in (Meters per Second Squared).
-    public static final double MAX_CACCEL =
-        8.0; // Maximum centripital acceleration of the robot (Meters per Second Squared).
-    public static final double MAX_RADIANS =
-        3.0 * Math.PI; // Maximum rotational velocity (Radians per Second).
+    public static final double MAX_VOLTS = 12.0; 
+    public static final double MAX_VELOCITY = 5.0; 
+    public static final double MAX_ACCEL = 12.0; 
+    public static final double MAX_CACCEL = 8.0; 
+    public static final double MAX_RADIANS = 3.0 * Math.PI;
     public static final double RAMP_RATE = 0.5;
 
     public static final Matrix<N3, N1> STATE_STD_DEVS =
         VecBuilder.fill(0.1, 0.1, 0.1); // [x, y, theta]
     public static final Matrix<N3, N1> VISION_STD_DEVS =
-        VecBuilder.fill(0.9, 0.9, 0.9); // [x, y, theta]
+        VecBuilder.fill(0.01, 0.01, 0.01); // [x, y, theta]
 
     public static final Translation2d FL_LOCATION =
         new Translation2d((Constants.robot.A_WIDTH / 2), (Constants.robot.A_LENGTH / 2));
@@ -102,10 +97,10 @@ public final class Constants {
     public static final Translation2d BR_LOCATION =
         new Translation2d(-(Constants.robot.A_WIDTH / 2), -(Constants.robot.A_LENGTH / 2));
 
-    public static final double FL_ZERO = -17.314453125;
-    public static final double BL_ZERO = 29.970703125000004;
-    public static final double BR_ZERO = 174.990234375;
-    public static final double FR_ZERO = 175.341796875;
+    public static final double FL_ZERO = -140.09765625;
+    public static final double BL_ZERO = -129.462890625;
+    public static final double BR_ZERO = 36.298828125;
+    public static final double FR_ZERO = -15.732421875;
 
     public static final class angle {
       public static final double FL_kP = -0.008;
@@ -132,22 +127,21 @@ public final class Constants {
       public static final double kF = 0.05;
     }
 
-    public static final class xPID {
-      public static final double kP = 5.2; 
+    public static final class xyPID {
+      public static final double kP = 3.0;
       public static final double kI = 0.0;
       public static final double kD = 0.0;
     }
 
-    public static final class yPID {
-      public static final double kP = 5.2;
+    public static final class rotPID {
+      public static final double kP = 1.5;
       public static final double kI = 0.0;
-      public static final double kD = 0.0;
+      public static final double kD = 0.1;
     }
+  }
 
-    public static final class thetaPID {
-      public static final double kP = -17.25;
-      public static final double kI = 0.0;
-      public static final double kD = -0.05;
-    }
+  public static final class sensors {
+      public static final Translation3d FRONT_POSITION = new Translation3d(0, 0, 0);
+      public static final Translation3d BACK_POSITION = new Translation3d(0, 0, 0);
   }
 }
