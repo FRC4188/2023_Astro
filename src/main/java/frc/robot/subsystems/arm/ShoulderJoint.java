@@ -4,84 +4,67 @@
 
 package frc.robot.subsystems.arm;
 
-import csplib.motors.CSP_Motor;
+import org.apache.commons.lang3.ObjectUtils.Null;
+
+import com.ctre.phoenix.sensors.AbsoluteSensorRange;
+import com.ctre.phoenix.sensors.CANCoder;
+import com.ctre.phoenix.sensors.WPI_CANCoder;
+import com.revrobotics.SparkMaxPIDController;
+import com.revrobotics.CANSparkMax.SoftLimitDirection;
+
 import csplib.motors.CSP_SparkMax;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import frc.robot.Constants;
+import frc.robot.Constants.controller;
 
-public class ShoulderJoint extends SubsystemBase { //uses two motors
+/** Add your docs here. */
+public class ShoulderJoint {
 
-  private static ShoulderJoint ShoulderJoint;
-  // private final ArmFeedforward m_feedforward =
-  // new ArmFeedforward(
-  //   Constants.ShoulderJoint.kS, Constants.ShoulderJoint.kG, Constants.ShoulderJoint.kV, Constants.ShoulderJoint.kA);
-  //   private static ProfiledPIDController pid = new ProfiledPIDController(
-  //       Constants.ShoulderJoint.Kp, Constants.ShoulderJoint.Ki, Constants.ShoulderJoint.Kd, Constants.ShoulderJoint.constriants, 0.0);
+    private CSP_SparkMax leader = new CSP_SparkMax(Constants.ids.SHOULDER_LEADER);
+    private CSP_SparkMax follower = new CSP_SparkMax(Constants.ids.SHOULDER_LEADER);
+    private WPI_CANCoder encoder = new WPI_CANCoder(Constants.ids.SHOULDER_ENCODER);
+    
+    private ProfiledPIDController pid = new ProfiledPIDController(Constants.arm.shoulder.kP, Constants.arm.shoulder.kI, Constants.arm.shoulder.kD, Constants.arm.shoulder.constriants);
+    private ArmFeedforward ff = new ArmFeedforward(Constants.arm.shoulder.kS, Constants.arm.shoulder.kG, Constants.arm.shoulder.kV);
 
-  public static synchronized ShoulderJoint getInstance()
-  {
-    if (ShoulderJoint == null)
-    {
-      ShoulderJoint = new ShoulderJoint();
+    public ShoulderJoint() {
+        init();
     }
-    return ShoulderJoint;
-  }
 
-  private CSP_Motor motor = new CSP_SparkMax(0); // no clue what the id is yet
-  private CSP_Motor motorTwo = new CSP_SparkMax(1); // no clue what the id is yet
+    private void init() {
+        encoder.configFactoryDefault();
+        encoder.clearStickyFaults();
+        encoder.configAbsoluteSensorRange(AbsoluteSensorRange.Signed_PlusMinus180);
+        encoder.setPosition(0.0);
+        encoder.configSensorDirection(false);
+        encoder.configMagnetOffset(-Constants.arm.shoulder.ZERO);
+        
+        leader.setScalar(1 / Constants.arm.shoulder.TICKS_PER_DEGREE);
+        leader.setBrake(true);
+        leader.setPosition(encoder.getAbsolutePosition());
+        leader.enableSoftLimit(SoftLimitDirection.kForward, true);
+        leader.enableSoftLimit(SoftLimitDirection.kReverse, true);
+        leader.setSoftLimit(SoftLimitDirection.kForward, (float) Constants.arm.shoulder.UPPER_LIMIT);
+        leader.setSoftLimit(SoftLimitDirection.kReverse, (float) Constants.arm.shoulder.LOWER_LIMIT);
+        leader.setPIDF(Constants.arm.shoulder.kP, Constants.arm.shoulder.kI, Constants.arm.shoulder.kD, Constants.arm.shoulder.kF);
 
-  public ShoulderJoint() {
+        follower.follow(leader);
 
-    CommandScheduler.getInstance().registerSubsystem(this);
+    }
 
-  }
+    public void setAngle(double goal){
+        leader.setVoltage(pid.calculate(getAngle(), goal) + ff.calculate(Math.toRadians(getAngle() + Math.PI / 2), pid.getSetpoint().velocity));
+    }
 
-  //Updates ShuffleBoard with information about the ShoulderJoint
-  private void updateShuffleboard() {
+    public void setPID(double kP, double kI, double kD){
+        pid.setPID(kP, kI, kD);
+    }
 
-    SmartDashboard.putNumber("Temperature", getTemperature());
-    SmartDashboard.putNumber("Position", getPosition());
-    SmartDashboard.putNumber("Angle", getAngle());
-
-  }
-
-  public double getTemperature()
-  {
-    return motor.getTemperature();
-  }
-
-  public double getPosition()
-  {
-    return motor.getPosition();
-  }
-
-  public double getAngle() // (we don't have the correct double values yet)
-  {
-    return ((getPosition() / 48.0) / 120.0) * 360.0 + 30.0;
-  }
-
-  public void set(double power)
-  {
-    motor.set(power);
-  }
-
-  public void setAngle(double angle)
-  {
-    // set(pid.calculate(getAngle(), angle));
-  }
-
-  @Override
-  // This method will be called once per scheduler run
-  public void periodic() { 
-
-    updateShuffleboard();
-
-  } 
+    public double getAngle(){
+        return encoder.getAbsolutePosition();
+    }
+    
 
 }
