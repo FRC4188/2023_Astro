@@ -1,22 +1,20 @@
 package csplib.motors;
 
-import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
 
-import edu.wpi.first.math.controller.PIDController;
 
 public class CSP_SparkMax extends CANSparkMax implements CSP_Motor {
   private RelativeEncoder encoder;
   private SparkMaxPIDController pid;
 
-    public CSP_SparkMax(int id) {
-        super(id, MotorType.kBrushless);
-        encoder = getEncoder();
-        pid = getPIDController();
-        init();
-    } 
+  public CSP_SparkMax(int id) {
+    super(id, MotorType.kBrushless);
+    encoder = getEncoder();
+    pid = getPIDController();
+    init();
+  }
 
   public void init() {
     super.restoreFactoryDefaults();
