@@ -1,0 +1,26 @@
+{
+  "NetworkTables": {
+    "Transitory Values": {
+      "open": false
+    },
+    "retained": {
+      "limelight": {
+        "open": true
+      }
+    },
+    "transitory": {
+      "SmartDashboard": {
+        "open": true
+      }
+    },
+    "types": {
+      "/FMSInfo": "FMSInfo",
+      "/SmartDashboard/Auto Chooser": "String Chooser",
+      "/SmartDashboard/Set Zero": "Command"
+    }
+  },
+  "NetworkTables Settings": {
+    "mode": "Client (NT4)",
+    "serverTeam": "4188"
+  }
+}
