@@ -1,11 +1,9 @@
-name: Format Code
+name: Code Formatter
 
 on:
   push:
-    branches: [main]
 
 jobs:
-
   formatting:
     runs-on: ubuntu-latest
     steps:
