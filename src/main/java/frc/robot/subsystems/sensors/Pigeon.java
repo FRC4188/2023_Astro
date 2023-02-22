@@ -2,6 +2,8 @@ package frc.robot.subsystems.sensors;
 
 import com.ctre.phoenix.sensors.Pigeon2;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Translation3d;
 
 public class Pigeon extends Pigeon2 {
   public Pigeon(int canID) {

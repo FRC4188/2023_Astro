@@ -3,6 +3,7 @@ package frc.robot;
 import java.util.HashMap;
 
 import com.pathplanner.lib.PathConstraints;
+import com.pathplanner.lib.PathPlannerTrajectory;
 
 import csplib.inputs.CSP_Controller;
 import csplib.inputs.CSP_Controller.Scale;
@@ -92,7 +93,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // An ExampleCommand will run in autonomous
     return autoChooser.getSelected();
   }
+
 }

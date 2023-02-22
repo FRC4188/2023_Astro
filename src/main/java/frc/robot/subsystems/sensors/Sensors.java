@@ -19,22 +19,11 @@ public class Sensors extends SubsystemBase {
     return instance;
   }
 
-  private SendableChooser<String> alliance = new SendableChooser<>();
-
   private Pigeon pigeon = new Pigeon(Constants.ids.PIGEON);
   private Limelights limelights = new Limelights("limelight-front", "limelight-back");
 
   /** Creates a new Sensors. */
   private Sensors() {
-
-    alliance.setDefaultOption("FMS", "FMS");
-    alliance.addOption("Blue", "Blue");
-    alliance.addOption("Red", "Red");
-    alliance.addOption("All", "All");
-
-    SmartDashboard.putData("Alliance Color", alliance);
-
-    // setPower(true);
   }
 
   private void init() {
