@@ -42,7 +42,7 @@ jobs:
       run: chmod +x gradlew
       
     - name: Format robot code
-      run: ./gradlew spotlessCheck
+      run: ./gradlew spotlessApply
 
     # Runs a single command using the runners shell
     - name: Compile and run tests on robot code

@@ -3,7 +3,6 @@ package frc.robot;
 import java.util.HashMap;
 
 import com.pathplanner.lib.PathConstraints;
-import com.pathplanner.lib.PathPlannerTrajectory;
 
 import csplib.inputs.CSP_Controller;
 import csplib.inputs.CSP_Controller.Scale;
@@ -30,8 +29,7 @@ public class RobotContainer {
   private Drivetrain drivetrain = Drivetrain.getInstance();
   private Sensors sensors = Sensors.getInstance();
 
-  private SendableChooser<Command> autoChooser =
-      new SendableChooser<Command>();
+  private SendableChooser<Command> autoChooser = new SendableChooser<Command>();
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -62,14 +60,16 @@ public class RobotContainer {
     pilot.getAButtonObj().whileTrue(new InstantCommand(() -> sensors.resetPigeon(), sensors));
   }
 
-  private void smartdashboardButtons() {
-    
-  };
+  private void smartdashboardButtons() {}
+  ;
 
   private void addChooser() {
     autoChooser.setDefaultOption("Do nothing", new SequentialCommandGroup());
-    autoChooser.addOption("Straight", AutoBuilder.buildAuto("Straight Line", new HashMap<>(), new PathConstraints(10.0, 3)));
-    autoChooser.addOption("2 Score", AutoBuilder.buildAuto("2 Score", new HashMap<>(), new PathConstraints(10.0, 3)));
+    autoChooser.addOption(
+        "Straight",
+        AutoBuilder.buildAuto("Straight Line", new HashMap<>(), new PathConstraints(10.0, 3)));
+    autoChooser.addOption(
+        "2 Score", AutoBuilder.buildAuto("2 Score", new HashMap<>(), new PathConstraints(10.0, 3)));
 
     SmartDashboard.putData("Auto Chooser", autoChooser);
   }
@@ -82,5 +82,4 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     return autoChooser.getSelected();
   }
-
 }
