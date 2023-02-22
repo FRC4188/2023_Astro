@@ -4,65 +4,66 @@
 
 package frc.robot.subsystems.arm;
 
-
 import com.ctre.phoenix.sensors.AbsoluteSensorRange;
-import com.ctre.phoenix.sensors.CANCoder;
 import com.ctre.phoenix.sensors.WPI_CANCoder;
-import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.SoftLimitDirection;
 
 import csplib.motors.CSP_SparkMax;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import frc.robot.Constants;
-import frc.robot.Constants.controller;
 
 /** Add your docs here. */
 public class Shoulder {
 
-    private CSP_SparkMax leader = new CSP_SparkMax(Constants.ids.SHOULDER_LEADER);
-    private CSP_SparkMax follower = new CSP_SparkMax(Constants.ids.SHOULDER_LEADER);
-    private WPI_CANCoder encoder = new WPI_CANCoder(Constants.ids.SHOULDER_ENCODER);
-    
-    private ProfiledPIDController pid = new ProfiledPIDController(Constants.arm.shoulder.kP, Constants.arm.shoulder.kI, Constants.arm.shoulder.kD, Constants.arm.shoulder.CONSTRAINTS);
-    private ArmFeedforward ff = new ArmFeedforward(Constants.arm.shoulder.kS, Constants.arm.shoulder.kG, Constants.arm.shoulder.kV);
+  private CSP_SparkMax leader = new CSP_SparkMax(Constants.ids.SHOULDER_LEADER);
+  private CSP_SparkMax follower = new CSP_SparkMax(Constants.ids.SHOULDER_LEADER);
+  private WPI_CANCoder encoder = new WPI_CANCoder(Constants.ids.SHOULDER_ENCODER);
 
-    public Shoulder() {
-        init();
-    }
+  private ProfiledPIDController pid =
+      new ProfiledPIDController(
+          Constants.arm.shoulder.kP,
+          Constants.arm.shoulder.kI,
+          Constants.arm.shoulder.kD,
+          Constants.arm.shoulder.CONSTRAINTS);
+  private ArmFeedforward ff =
+      new ArmFeedforward(
+          Constants.arm.shoulder.kS, Constants.arm.shoulder.kG, Constants.arm.shoulder.kV);
 
-    private void init() {
-        encoder.configFactoryDefault();
-        encoder.clearStickyFaults();
-        encoder.configAbsoluteSensorRange(AbsoluteSensorRange.Signed_PlusMinus180);
-        encoder.setPosition(0.0);
-        encoder.configSensorDirection(false);
-        encoder.configMagnetOffset(-Constants.arm.shoulder.ZERO);
-        
-        leader.setScalar(1 / Constants.arm.shoulder.TICKS_PER_DEGREE);
-        leader.setBrake(true);
-        leader.setPosition(encoder.getAbsolutePosition());
-        leader.enableSoftLimit(SoftLimitDirection.kForward, true);
-        leader.enableSoftLimit(SoftLimitDirection.kReverse, true);
-        leader.setSoftLimit(SoftLimitDirection.kForward, (float) Constants.arm.shoulder.UPPER_LIMIT);
-        leader.setSoftLimit(SoftLimitDirection.kReverse, (float) Constants.arm.shoulder.LOWER_LIMIT);
+  public Shoulder() {
+    init();
+  }
 
-        follower.follow(leader);
+  private void init() {
+    encoder.configFactoryDefault();
+    encoder.clearStickyFaults();
+    encoder.configAbsoluteSensorRange(AbsoluteSensorRange.Signed_PlusMinus180);
+    encoder.setPosition(0.0);
+    encoder.configSensorDirection(false);
+    encoder.configMagnetOffset(-Constants.arm.shoulder.ZERO);
 
-    }
+    leader.setScalar(1 / Constants.arm.shoulder.TICKS_PER_DEGREE);
+    leader.setBrake(true);
+    leader.setPosition(encoder.getAbsolutePosition());
+    leader.enableSoftLimit(SoftLimitDirection.kForward, true);
+    leader.enableSoftLimit(SoftLimitDirection.kReverse, true);
+    leader.setSoftLimit(SoftLimitDirection.kForward, (float) Constants.arm.shoulder.UPPER_LIMIT);
+    leader.setSoftLimit(SoftLimitDirection.kReverse, (float) Constants.arm.shoulder.LOWER_LIMIT);
 
-    public void setAngle(double goal){
-        leader.setVoltage(pid.calculate(getAngle(), goal) + ff.calculate(Math.toRadians(getAngle() + Math.PI / 2), pid.getSetpoint().velocity));
-    }
+    follower.follow(leader);
+  }
 
-    public void setPID(double kP, double kI, double kD){
-        pid.setPID(kP, kI, kD);
-    }
+  public void setAngle(double goal) {
+    leader.setVoltage(
+        pid.calculate(getAngle(), goal)
+            + ff.calculate(Math.toRadians(getAngle() + Math.PI / 2), pid.getSetpoint().velocity));
+  }
 
-    public double getAngle(){
-        return encoder.getAbsolutePosition();
-    }
-    
+  public void setPID(double kP, double kI, double kD) {
+    pid.setPID(kP, kI, kD);
+  }
 
+  public double getAngle() {
+    return encoder.getAbsolutePosition();
+  }
 }

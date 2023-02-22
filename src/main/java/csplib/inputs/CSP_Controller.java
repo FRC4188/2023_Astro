@@ -13,29 +13,31 @@ public class CSP_Controller extends XboxController {
     CUBED
   }
 
-    /**
-     * Creates a new CSP_Controller object
-     * @param port controller input port 
-     */
-    public CSP_Controller(int port) {
-        super(port);
+  /**
+   * Creates a new CSP_Controller object
+   *
+   * @param port controller input port
+   */
+  public CSP_Controller(int port) {
+    super(port);
+  }
+
+  /**
+   * Calculates joystick output to account for scale and deadband
+   *
+   * @param input input value
+   * @param scale input scale
+   * @return adjusted value
+   */
+  private double getOutput(double input, Scale scale) {
+    if (Math.abs(input) > Constants.controller.DEADBAND) {
+      if (scale == Scale.SQUARED) return Math.signum(input) * Math.pow(input, 2);
+      else if (scale == Scale.CUBED) return Math.pow(input, 3);
+      else return input;
+    } else {
+      return 0;
     }
-    
-    /**
-     * Calculates joystick output to account for scale and deadband
-     * @param input input value
-     * @param scale input scale
-     * @return adjusted value
-     */
-    private double getOutput(double input, Scale scale) {
-        if (Math.abs(input) > Constants.controller.DEADBAND) {
-            if (scale == Scale.SQUARED) return Math.signum(input) * Math.pow(input, 2);
-            else if (scale == Scale.CUBED) return Math.pow(input, 3);
-            else return input;
-        } else {
-            return 0;
-        }
-    }
+  }
 
   public double getRightY(Scale scale) {
     return -getOutput(getRightY(), scale);
@@ -111,11 +113,16 @@ public class CSP_Controller extends XboxController {
 
   public double getRightT(Scale scale) {
     return getOutput(
-        getRightTriggerAxis() > Constants.controller.TRIGGER_THRESHOLD ? getRightTriggerAxis() : 0.0, scale);
+        getRightTriggerAxis() > Constants.controller.TRIGGER_THRESHOLD
+            ? getRightTriggerAxis()
+            : 0.0,
+        scale);
   }
 
   public double getLeftT(Scale scale) {
-    return getOutput(getLeftTriggerAxis() > Constants.controller.TRIGGER_THRESHOLD ? getLeftTriggerAxis() : 0.0, scale);
+    return getOutput(
+        getLeftTriggerAxis() > Constants.controller.TRIGGER_THRESHOLD ? getLeftTriggerAxis() : 0.0,
+        scale);
   }
 
   public void setRumble(double intensity) {

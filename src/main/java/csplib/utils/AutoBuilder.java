@@ -17,11 +17,13 @@ import frc.robot.subsystems.drivetrain.Drivetrain;
 
 /** Add your docs here. */
 public class AutoBuilder {
-    private static Drivetrain drivetrain = Drivetrain.getInstance();
+  private static Drivetrain drivetrain = Drivetrain.getInstance();
 
-    public static Command buildAuto(String pathName, HashMap<String, Command> eventMap, PathConstraints constraints) {
-        List<PathPlannerTrajectory> paths = PathPlanner.loadPathGroup(pathName, constraints);
-        SwerveAutoBuilder autoBuilder = new SwerveAutoBuilder(
+  public static Command buildAuto(
+      String pathName, HashMap<String, Command> eventMap, PathConstraints constraints) {
+    List<PathPlannerTrajectory> paths = PathPlanner.loadPathGroup(pathName, constraints);
+    SwerveAutoBuilder autoBuilder =
+        new SwerveAutoBuilder(
             drivetrain::getPose2d,
             drivetrain::resetOdometry,
             drivetrain.getKinematics(),
@@ -30,14 +32,15 @@ public class AutoBuilder {
             drivetrain::setModuleStates,
             eventMap,
             true,
-            drivetrain
-        );
-        return autoBuilder.fullAuto(paths);
-    }
+            drivetrain);
+    return autoBuilder.fullAuto(paths);
+  }
 
-    public static Command buildAuto(String pathName, HashMap<String, Command> eventMap) {
-        List<PathPlannerTrajectory> paths = PathPlanner.loadPathGroup(pathName, new PathConstraints(0, 0));
-        SwerveAutoBuilder autoBuilder = new SwerveAutoBuilder(
+  public static Command buildAuto(String pathName, HashMap<String, Command> eventMap) {
+    List<PathPlannerTrajectory> paths =
+        PathPlanner.loadPathGroup(pathName, new PathConstraints(0, 0));
+    SwerveAutoBuilder autoBuilder =
+        new SwerveAutoBuilder(
             drivetrain::getPose2d,
             drivetrain::resetOdometry,
             drivetrain.getKinematics(),
@@ -46,8 +49,7 @@ public class AutoBuilder {
             drivetrain::setModuleStates,
             eventMap,
             true,
-            drivetrain
-        );
-        return autoBuilder.fullAuto(paths);
-    }
+            drivetrain);
+    return autoBuilder.fullAuto(paths);
+  }
 }
