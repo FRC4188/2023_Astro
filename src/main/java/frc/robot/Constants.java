@@ -36,7 +36,7 @@ public final class Constants {
         public static final double A_CROSSLENGTH = Math.hypot(A_LENGTH, A_WIDTH);
 
         public static final double FALCON_ENCODER_TICKS = 2048.0;
-        public static final double FALCON_MAX_VEL = 6380.0;
+        public static final double NEO_ENCODER_TICKS = 42.0;
 
         public static final double MAX_TEMP = 50.0;
     }
@@ -45,20 +45,31 @@ public final class Constants {
         public static final int FL_SPEED = 1;
         public static final int FL_ANGLE = 2;
         public static final int FL_ENCODER = 11;
-
+    
         public static final int BL_SPEED = 3;
         public static final int BL_ANGLE = 4;
         public static final int BL_ENCODER = 12;
-
+    
         public static final int BR_SPEED = 5;
         public static final int BR_ANGLE = 6;
         public static final int BR_ENCODER = 13;
-
+    
         public static final int FR_SPEED = 7;
         public static final int FR_ANGLE = 8;
         public static final int FR_ENCODER = 14;
-
+    
         public static final int PIGEON = 15;
+        
+        public static final int SHOULDER_LEADER = 69;
+        public static final int SHOULDER_FOLLOWER = 68;
+        public static final int SHOULDER_ENCODER = 67;
+
+        public static final int WRIST = 50;
+        public static final int WRIST_ENCODER = 59;
+
+        public static final int TELESCOPE = 39;
+        public static final int TELESCOPE_LIMIT_SWITCH = 3;
+
     }
 
   public static class drivetrain {
@@ -147,4 +158,68 @@ public final class Constants {
       public static final Translation3d FRONT_POSITION = new Translation3d(0, 0, 0);
       public static final Translation3d BACK_POSITION = new Translation3d(0, 0, 0);
   }
+    public static final class arm {
+        public static final class shoulder {
+            public static final double ZERO = 0.0;
+
+            public static final double GEAR_RATIO = 132.741; // 132.741:1
+            public static final double TICKS_PER_ROTATION = robot.NEO_ENCODER_TICKS * GEAR_RATIO;
+            public static final double TICKS_PER_DEGREE = TICKS_PER_ROTATION / 360;
+
+            public static final double UPPER_LIMIT = 120;
+            public static final double LOWER_LIMIT = -120;
+
+            public static final double kP = 0.0;
+            public static final double kI = 0.0;
+            public static final double kD = 0.0;
+            public static final Constraints CONSTRAINTS = new Constraints(0.0, 0.0);
+
+            public static final double kS = 0.0;
+            public static final double kG = 0.0;
+            public static final double kV = 0.0;
+        }
+
+        public static class wrist {
+            public static final double ZERO = 0.0;
+
+            public static final double GEAR_RATIO = 100; // 100:1
+            public static final double TICKS_PER_ROTATION = robot.NEO_ENCODER_TICKS * GEAR_RATIO;
+            public static final double TICKS_PER_DEGREE = TICKS_PER_ROTATION / 360;
+
+            public static final double UPPER_LIMIT = 120;
+            public static final double LOWER_LIMIT = -120;
+
+            public static final double kP = 0.0;
+            public static final double kI = 0.0;
+            public static final double kD = 0.0;
+            public static final Constraints CONSTRAINTS = new Constraints(0.0, 0.0);
+
+            public static final double kS = 0.0;
+            public static final double kG = 0.0;
+            public static final double kV = 0.0;
+        }
+
+        public static class telescope {
+            public static final double ROTATIONS_PER_INCH = 62.197; // 62.197 rotations per inch
+            public static final double TICKS_PER_INCH = ROTATIONS_PER_INCH * robot.NEO_ENCODER_TICKS;
+            public static final double TICKS_PER_METER = Units.inchesToMeters(TICKS_PER_INCH);
+
+            public static final double UPPER_LIMIT = Units.inchesToMeters(51.125);
+            public static final double LOWER_LIMIT = 0.0;
+
+            public static final double kP = 0.0;
+            public static final double kI = 0.0;
+            public static final double kD = 0.0;
+            public static final Constraints CONSTRAINTS = new Constraints(0.0, 0.0);
+
+            public static final double kS = 0.0;
+            public static final double kG = 0.0;
+            public static final double kV = 0.0;
+        }
+    }
+
+    public static final class claw {
+        public static final double CUBE_DISTANCE = Units.inchesToMeters(9.313251);
+        public static final double TOTAL_DISTANCE = Units.inchesToMeters(14.824533);
+    }
 }
