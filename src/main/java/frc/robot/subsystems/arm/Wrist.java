@@ -1,103 +1,54 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.subsystems.arm;
 
-import csplib.motors.CSP_Motor;
+import com.ctre.phoenix.sensors.AbsoluteSensorRange;
+import com.ctre.phoenix.sensors.WPI_CANCoder;
+import com.revrobotics.CANSparkMax.SoftLimitDirection;
+
 import csplib.motors.CSP_SparkMax;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-public class Wrist extends SubsystemBase {
+public class Wrist {
 
-  private static Wrist Wrist;
-  // private final ArmFeedforward m_feedforward =
-  // new ArmFeedforward(
-  //   Constants.wrist.kS, Constants.wrist.kG, Constants.wrist.kV, Constants.wrist.kA);
-  //   private static ProfiledPIDController pid = new ProfiledPIDController(
-  //       Constants.wrist.Kp, Constants.wrist.Ki, Constants.wrist.Kd, Constants.wrist.constriants, 0.0);
+    private CSP_SparkMax motor = new CSP_SparkMax(Constants.ids.WRIST);
+    private WPI_CANCoder encoder = new WPI_CANCoder(Constants.ids.WRIST_ENCODER);
 
-  public static synchronized Wrist getInstance()
-  {
-    if (Wrist == null)
-    {
-      Wrist = new Wrist();
-    }
-    return Wrist;
-  }
-
-  private CSP_Motor armMotor = new CSP_SparkMax(0); // no clue what the id is yet
-  private CSP_Motor wristMotor = new CSP_SparkMax(1); // no clue what the id is yet
-
-  public Wrist() {
-
-    CommandScheduler.getInstance().registerSubsystem(this);
-
-  }
-
-  //Updates ShuffleBoard with information about the Wrist
-  private void updateShuffleboard() {
-
-    SmartDashboard.putNumber("(Wrist) Arm Temperature", getArmTemperature());
-    SmartDashboard.putNumber("(Wrist) Wrist Temperature", getArmTemperature());
-    SmartDashboard.putNumber("(Wrist) Arm Position", getArmPosition());
-    SmartDashboard.putNumber("(Wrist) Wrist Position", getWristPosition());
-   
-  }
-
-  public double getArmTemperature()
-  {
-    return armMotor.getTemperature();
-  }
-
-  public double getWristTemperature()
-  {
-    return wristMotor.getTemperature();
-  }
-
-  public double getArmPosition()
-  {
-    return armMotor.getPosition();
-  }
-
-  public double getWristPosition()
-  {
-    return wristMotor.getPosition();
-  }
-
-  public double getAngle(CSP_Motor motor) // WIP 
-  {
-    return 0.0;
-  }
-
-  public void set(String motor, double power)
-  {
-    if (motor == "arm")
-    armMotor.set(power);
-    else if (motor == "wrist")
-    wristMotor.set(power);
+    private ProfiledPIDController pid = new ProfiledPIDController(Constants.arm.wrist.kP, Constants.arm.wrist.kI, Constants.arm.wrist.kD, Constants.arm.wrist.CONSTRAINTS);
+    private ArmFeedforward ff = new ArmFeedforward(Constants.arm.wrist.kS, Constants.arm.wrist.kG, Constants.arm.wrist.kV);
     
-  }
+    public Wrist(){
+        init();
+    }
 
-  public void setAngle(String motor, double angle) // WIP
-  {
-    // set(pid.calculate(getAngle(), angle));
-    set(motor, angle);
-  }
+    private void init() {
+        encoder.configFactoryDefault();
+        encoder.clearStickyFaults();
+        encoder.configAbsoluteSensorRange(AbsoluteSensorRange.Signed_PlusMinus180);
+        encoder.setPosition(0.0);
+        encoder.configSensorDirection(false);
+        encoder.configMagnetOffset(-Constants.arm.wrist.ZERO);
 
-  @Override
-  // This method will be called once per scheduler run
-  public void periodic() { 
+        motor.setScalar(1 / Constants.arm.wrist.TICKS_PER_DEGREE);
+        motor.setBrake(true);
+        motor.setPosition(encoder.getAbsolutePosition());
+        motor.enableSoftLimit(SoftLimitDirection.kForward, true);
+        motor.enableSoftLimit(SoftLimitDirection.kReverse, true);
+        motor.setSoftLimit(SoftLimitDirection.kForward, (float) Constants.arm.wrist.UPPER_LIMIT);
+        motor.setSoftLimit(SoftLimitDirection.kReverse, (float) Constants.arm.wrist.LOWER_LIMIT);
+    }
 
-    updateShuffleboard();
+    public void setAngle(double goal){
+        motor.setVoltage(pid.calculate(motor.getPosition(), goal) + ff.calculate(Math.toRadians(getAngle()), pid.getSetpoint().velocity));
+    }
 
-  } 
+    public void setPID(double kP, double kI, double kD){
+        pid.setPID(kP, kI, kD);
+    } 
 
+    public double getAngle(){
+        return encoder.getAbsolutePosition();
+    }
+
+   
 }

@@ -21,7 +21,7 @@ public class CSP_Controller extends XboxController {
     public CSP_Controller(int port) {
         super(port);
     }
-
+    
     /**
      * Calculates joystick output to account for scale and deadband
      * @param input input value

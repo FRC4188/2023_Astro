@@ -67,6 +67,7 @@ public class CSP_SparkMax extends CANSparkMax implements CSP_Motor {
     public void setScalar(double scalar) {
         encoder.setPositionConversionFactor(scalar);
         encoder.setVelocityConversionFactor(scalar);
+
     }
 
     public double getVelocity() {

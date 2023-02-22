@@ -1,96 +1,83 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.subsystems.arm;
 
-import csplib.motors.CSP_Motor;
+import com.ctre.phoenix.sensors.AbsoluteSensorRange;
+import com.ctre.phoenix.sensors.WPI_CANCoder;
+import com.revrobotics.CANSparkMax.SoftLimitDirection;
+
 import csplib.motors.CSP_SparkMax;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.math.controller.ElevatorFeedforward;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.Constants;
 
-public class Telescope extends SubsystemBase {
-  /** Creates a new ExampleSubsystem. */
-  private static Telescope telescope;
+public class Telescope {
 
-  public static synchronized Telescope getInstance()
-  {
-    if (telescope == null)
-    {
-      telescope = new Telescope();
-    }
-    return telescope;
-  }
+    private CSP_SparkMax motor = new CSP_SparkMax(Constants.ids.TELESCOPE);
 
-  public enum telescopeHeight {
-    GROUND(0),
-    MIDDLE(1),
-    TOP(2);
+    private ProfiledPIDController pid = new ProfiledPIDController(Constants.arm.telescope.kP, Constants.arm.telescope.kI, Constants.arm.telescope.kD, Constants.arm.telescope.CONSTRAINTS);
 
-    private int height;
-    private telescopeHeight(int height) {
-      this.height = height;
+    private ElevatorFeedforward ff = new ElevatorFeedforward(Constants.arm.telescope.kS, Constants.arm.telescope.kG, Constants.arm.telescope.kV);
+
+    private DigitalInput limitSwitch = new DigitalInput(Constants.ids.TELESCOPE_LIMIT_SWITCH);
+
+    int counter;    
+
+
+    public Telescope(){
+        init();
     }
 
-    public int getLevel() {
-      return height;
+    public void init(){
+        motor.setScalar(1 / Constants.arm.telescope.TICKS_PER_METER);
+        motor.setBrake(true);
+        motor.enableSoftLimit(SoftLimitDirection.kForward, true);
+        motor.enableSoftLimit(SoftLimitDirection.kReverse, true);
+        motor.setSoftLimit(SoftLimitDirection.kForward, (float) Constants.arm.shoulder.UPPER_LIMIT);
+        motor.setSoftLimit(SoftLimitDirection.kReverse, (float) Constants.arm.shoulder.LOWER_LIMIT);
     }
-  }
 
-  public enum telescopeMode {
-    RETRACT,
-    EXTEND;
-  }
+    public void resetAngle(){
+        if(!limitSwitch.get()){
+            motor.enableSoftLimit(SoftLimitDirection.kForward, false);
+            motor.enableSoftLimit(SoftLimitDirection.kReverse, false);
+            motor.set(-0.2);
+        }
+        else{
+            motor.setEncoder(0.0);
+            motor.enableSoftLimit(SoftLimitDirection.kForward, true);
+            motor.enableSoftLimit(SoftLimitDirection.kReverse, true);
+            motor.set(0.0);
+        }
+    }
 
-  public telescopeMode telescopeMode;
-  public telescopeHeight telescopeHeight;
+    public void setPID(double kP, double kI, double kD){
+        pid.setPID(kP, kI, kD);
+    }
+    
 
-  private CSP_Motor motor = new CSP_SparkMax(0); // no clue what the id is yet
+    public void setMotorSpeed(double speed) {
+        if (speed > 0) {
+            if (limitSwitch.get()) {
+                motor.setVoltage(0);
+            } else {
+                motor.setVoltage(speed);
+            }
+        }
+    }       
 
-  public Telescope() {
+    public void setAngle(double goal){
+        if (pid.calculate(motor.getPosition(), goal) + ff.calculate(pid.getSetpoint().velocity) > 0) {
+            if (limitSwitch.get()) {
+                motor.setVoltage(0);
+            } else {
+                motor.setVoltage(pid.calculate(motor.getPosition(), goal)+ff.calculate(pid.getSetpoint().velocity));
+            }
+        }
+        
+    }
 
-    CommandScheduler.getInstance().registerSubsystem(this);
-  }
-
-  //Sets the telescope mode to "retract" 
-  public void resetTelescope()
-  {
-    telescopeMode = telescopeMode.RETRACT;
-  }
-
-  //Updates ShuffleBoard with information about the telescope
-  // private void updateShuffleboard() {
-  //   SmartDashboard.putNumber("telescope Height", gettelescopeHeight)); //doesn't work for now
-  //   SmartDashboard.putString("telescope Mode", gettelescopeMode()); //doesn't work for now
-  // }
-
-  //Returns telescope mode for shuttleboard
-  // public telescopeMode gettelescopeMode()  
-  // {
-  //   return telescopeMode;
-  // }
-
-  //Returns telescope height for shuttleboard
-  // public telescopeHeight gettelescopeHeight() 
-  // {
-  //   return telescopeHeight;
-  // }
-
-
-
-
-
-
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-  }
-
-  @Override
-  public void simulationPeriodic() {
-    // This method will be called once per scheduler run during simulation
-  }
+    public double getAngle(){
+        return(motor.getPosition());
+    }
 }
