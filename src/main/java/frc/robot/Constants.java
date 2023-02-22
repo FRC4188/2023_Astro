@@ -70,6 +70,9 @@ public final class Constants {
         public static final int TELESCOPE = 39;
         public static final int TELESCOPE_LIMIT_SWITCH = 3;
 
+        public static final int CLAW = 0;
+        public static final int ULTRASONIC_SENSOR = 4;
+
     }
 
   public static class drivetrain {
@@ -221,5 +224,7 @@ public final class Constants {
     public static final class claw {
         public static final double CUBE_DISTANCE = Units.inchesToMeters(9.313251);
         public static final double TOTAL_DISTANCE = Units.inchesToMeters(14.824533);
+
+        public static final double SENSOR_SCALE = 2.0;
     }
 }

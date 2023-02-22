@@ -4,7 +4,6 @@
 
 package frc.robot.subsystems.arm;
 
-import org.apache.commons.lang3.ObjectUtils.Null;
 
 import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 import com.ctre.phoenix.sensors.CANCoder;
