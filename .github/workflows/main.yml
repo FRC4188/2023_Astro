@@ -24,6 +24,14 @@ jobs:
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v3
+      with: 
+        fetch-depth: 0
+    
+    - uses: actions/setup-java@v3
+      with:
+          distribution: 'zulu'
+          java-version: 17
+    - run: ./gradlew spotlessCheck
 
     # Declares the repository safe and not under dubious ownership.
     - name: Add repository to git safe directories
