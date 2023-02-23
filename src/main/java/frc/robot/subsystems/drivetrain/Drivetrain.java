@@ -4,6 +4,7 @@ import com.pathplanner.lib.auto.PIDConstants;
 
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
@@ -131,11 +132,10 @@ public class Drivetrain extends SubsystemBase {
 
     Rotation2d pigeonAngle = sensors.getRotation2d();
 
-    lastAngle = (rotSpeed != 0) ? pigeonAngle.getDegrees() : lastAngle;
-
     boolean noInput = xSpeed == 0 && ySpeed == 0 && rotSpeed == 0;  
 
-    rotSpeed = (rotSpeed == 0) ? rotPID.calculate(lastAngle, pigeonAngle.getDegrees()) : rotSpeed;
+    // rotSpeed = (rotSpeed == 0) ? rotPID.calculate(lastAngle, pigeonAngle.getDegrees()) : rotSpeed;
+    rotSpeed = (rotSpeed == 0) ? rotPID.calculate(rotSpeed, 0) : rotSpeed;
 
     SwerveModuleState[] states =
         noInput
