@@ -90,11 +90,7 @@ public static class drivetrain {
 
     public static final double M1_ZERO = 174.462890625;
     public static final double M2_ZERO = -19.16015625;
-<<<<<<< HEAD
-    public static final double M3_ZERO = 32.255859375;
-=======
     public static final double M3_ZERO = 32.34375;
->>>>>>> 5dad44cdc2ef20642c180dc333b49617a5f57742
     public static final double M4_ZERO = -177.890625;
 
     public static final class angle {

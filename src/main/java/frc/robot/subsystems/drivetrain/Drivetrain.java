@@ -42,9 +42,7 @@ public class Drivetrain extends SubsystemBase {
   private Sensors sensors = Sensors.getInstance();
 
   private int moduleNum = 0;
-
-  private int moduleNum = 0;
-
+  
   private SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
     Constants.drivetrain.FL_LOCATION, 
     Constants.drivetrain.FR_LOCATION, 
@@ -187,16 +185,11 @@ public class Drivetrain extends SubsystemBase {
     backRight.zeroPower();
   }
 
-<<<<<<< HEAD
-  public Object setModuleNum(int number) {
-    return null;
-=======
   public void setModuleNum(int moduleNum) {
     if (moduleNum >= 1 && moduleNum <= 4) {
       this.moduleNum = moduleNum;
     }
     System.out.println(this.moduleNum);
->>>>>>> 5dad44cdc2ef20642c180dc333b49617a5f57742
   }
 
 }
