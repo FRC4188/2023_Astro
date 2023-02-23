@@ -6,11 +6,9 @@ import edu.wpi.first.math.geometry.Rotation2d;
 public class Pigeon extends Pigeon2 {
   public Pigeon(int canID) {
     super(canID, "canivore");
-
     super.configFactoryDefault();
-
     super.clearStickyFaults();
-
+    
     reset();
   }
 
@@ -19,7 +17,7 @@ public class Pigeon extends Pigeon2 {
   }
 
   public Rotation2d getRotation2d() {
-    return Rotation2d.fromDegrees((super.getYaw() + 180.0) % 360.0 - 180.0);
+    return Rotation2d.fromDegrees(((super.getYaw() + 180) % 360) - 180);
   }
 
   public double getRoll() {
