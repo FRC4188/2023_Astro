@@ -2,16 +2,15 @@ package frc.robot.subsystems.sensors;
 
 import com.ctre.phoenix.sensors.Pigeon2;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Translation3d;
+
 
 public class Pigeon extends Pigeon2 {
   public Pigeon(int canID) {
     super(canID, "canivore");
-
     super.configFactoryDefault();
-
     super.clearStickyFaults();
+    
+    super.configMountPose(AxisDirection.PositiveX, AxisDirection.PositiveZ);
 
     reset();
   }
@@ -21,7 +20,7 @@ public class Pigeon extends Pigeon2 {
   }
 
   public Rotation2d getRotation2d() {
-    return Rotation2d.fromDegrees((super.getYaw() + 180.0) % 360.0 - 180.0);
+    return Rotation2d.fromDegrees(((super.getYaw() + 180) % 360) - 180);
   }
 
   public double getRoll() {

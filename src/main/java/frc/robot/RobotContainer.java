@@ -59,7 +59,7 @@ public class RobotContainer {
 
   /** Use this method to define your button->command mappings. */
   private void configureButtonBindings() {
-    pilot.getAButtonObj().whileTrue(new InstantCommand(() -> sensors.resetPigeon(), sensors));
+    pilot.getAButtonObj().onTrue(new InstantCommand(() -> sensors.resetPigeon(), sensors));
   }
 
   private void smartdashboardButtons() {
@@ -68,10 +68,15 @@ public class RobotContainer {
         new RunCommand(
             () -> drivetrain.setVelocity(SmartDashboard.getNumber("Set Drive Velocity", 0)),
             drivetrain));
+
     SmartDashboard.putData(
-        "Set Angle",
-        new RunCommand(
-            () -> drivetrain.setAngle(SmartDashboard.getNumber("Set Drive Angle", 0)), drivetrain));
+      "Set Rot PID",
+      new InstantCommand(() -> drivetrain.setRotPID(
+        SmartDashboard.getNumber("Rot kP", 0), 
+        SmartDashboard.getNumber("Rot kI", 0), 
+        SmartDashboard.getNumber("Rot kD", 0)))
+    );
+
     SmartDashboard.putData(
         "Set Zero", new InstantCommand(() -> drivetrain.zeroPower(), drivetrain));
 
