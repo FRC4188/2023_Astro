@@ -1,10 +1,12 @@
 package frc.robot.subsystems.sensors;
 
+import csplib.utils.LimelightHelpers;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
-
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -17,30 +19,30 @@ public class Sensors extends SubsystemBase {
     return instance;
   }
 
-  private SendableChooser<String> alliance = new SendableChooser<>();
-
   private Pigeon pigeon = new Pigeon(Constants.ids.PIGEON);
- 
+  private Limelights limelights = new Limelights("limelight-front", "limelight-back");
+
   /** Creates a new Sensors. */
   private Sensors() {
-    
-    alliance.setDefaultOption("FMS", "FMS");
-    alliance.addOption("Blue", "Blue");
-    alliance.addOption("Red", "Red");
-    alliance.addOption("All", "All");
-
-    SmartDashboard.putData("Alliance Color", alliance);
-
-    //setPower(true);
   }
 
-  public void updateDashboard() {
+  private void init() {
   }
 
-
-  public Rotation2d getPigeonAngle() {
-    return pigeon.getAngle();
+  @Override
+  public void periodic() {
+    SmartDashboard.putNumber("Pigeon Angle", getRotation2d().getDegrees());
   }
 
-
+  public Pose3d getPose3d() {
+    return limelights.getPose3d();
   }
+
+  public Rotation2d getRotation2d() {
+    return pigeon.getRotation2d();
+  }
+
+  public void resetPigeon() {
+    pigeon.reset();
+  }
+}

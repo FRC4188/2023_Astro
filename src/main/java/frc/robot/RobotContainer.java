@@ -1,7 +1,13 @@
 package frc.robot;
 
+import java.util.HashMap;
+
+import com.pathplanner.lib.PathConstraints;
+import com.pathplanner.lib.PathPlannerTrajectory;
+
 import csplib.inputs.CSP_Controller;
-import edu.wpi.first.wpilibj.Preferences;
+import csplib.inputs.CSP_Controller.Scale;
+import csplib.utils.AutoBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -9,7 +15,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.drivetrain.Drivetrain;
-
+import frc.robot.subsystems.sensors.Sensors;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -20,10 +26,12 @@ import frc.robot.subsystems.drivetrain.Drivetrain;
 public class RobotContainer {
 
   private Drivetrain drivetrain = Drivetrain.getInstance();
-  
+  private Sensors sensors = Sensors.getInstance();
+
   private CSP_Controller pilot = new CSP_Controller(0);
 
-  private SendableChooser<SequentialCommandGroup> autoChooser = new SendableChooser<SequentialCommandGroup>();
+  private SendableChooser<Command> autoChooser =
+      new SendableChooser<Command>();
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -38,44 +46,48 @@ public class RobotContainer {
   }
 
   private void setDefaultCommands() {
- 
 
+    drivetrain.setDefaultCommand(
+        new RunCommand(
+            () ->
+                drivetrain.drive(
+                    pilot.getLeftY(Scale.SQUARED),
+                    pilot.getLeftX(Scale.SQUARED),
+                    pilot.getRightX(Scale.SQUARED)),
+            drivetrain));
   }
 
-  /**
-   * Use this method to define your button->command mappings.
-   */
+  /** Use this method to define your button->command mappings. */
   private void configureButtonBindings() {
-
+    pilot.getAButtonObj().onTrue(new InstantCommand(() -> sensors.resetPigeon(), sensors));
   }
 
   private void smartdashboardButtons() {
-    SmartDashboard.putData("Set Velocity", new InstantCommand(() -> drivetrain.setVelocity(SmartDashboard.getNumber("Set Drive Velocity", 0)), drivetrain));
-    SmartDashboard.putData("Set Angle", new InstantCommand(() -> drivetrain.setAngle(SmartDashboard.getNumber("Set Drive Angle", 0)), drivetrain));  
-    SmartDashboard.putData("Set Zero", new InstantCommand(() -> drivetrain.zeroPower(), drivetrain));
-    SmartDashboard.putData("Set Selected Module", new InstantCommand(() -> drivetrain.setModuleNum((int) SmartDashboard.getNumber("Set Module", 0)), drivetrain));
+    SmartDashboard.putData(
+        "Set Velocity",
+        new RunCommand(
+            () -> drivetrain.setVelocity(SmartDashboard.getNumber("Set Drive Velocity", 0)),
+            drivetrain));
 
+    SmartDashboard.putData(
+      "Set Rot PID",
+      new InstantCommand(() -> drivetrain.setRotPID(
+        SmartDashboard.getNumber("Rot kP", 0), 
+        SmartDashboard.getNumber("Rot kI", 0), 
+        SmartDashboard.getNumber("Rot kD", 0)))
+    );
 
-
-    SmartDashboard.putData("Set Speed PIDs", new InstantCommand(() -> drivetrain.setSpeedPIDs(
-      SmartDashboard.getNumber("Speed kP", 0), 
-      SmartDashboard.getNumber("Speed kI", 0), 
-      SmartDashboard.getNumber("Speed kD", 0), 
-      SmartDashboard.getNumber("Speed kF", 0)), drivetrain));
-
-      SmartDashboard.putData("Set Angle PIDs", new InstantCommand(() -> drivetrain.setAnglePIDs(
-        SmartDashboard.getNumber("Angle kP", 0), 
-        SmartDashboard.getNumber("Angle kI", 0), 
-        SmartDashboard.getNumber("Angle kD", 0), 
-        SmartDashboard.getNumber("Angle kF", 0)), drivetrain));
+    SmartDashboard.putData(
+        "Set Zero", new InstantCommand(() -> drivetrain.zeroPower(), drivetrain));
 
     
-
   };
 
   private void addChooser() {
+
     autoChooser.setDefaultOption("Do nothing", new SequentialCommandGroup());
-  
+    autoChooser.addOption("Straight", AutoBuilder.buildAuto("Straight Line", new HashMap<>(), new PathConstraints(10.0, 3)));
+    autoChooser.addOption("2 Score", AutoBuilder.buildAuto("2 Score", new HashMap<>(), new PathConstraints(10.0, 3)));
 
     SmartDashboard.putData("pAuto Chooser", autoChooser);
   }
@@ -86,7 +98,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // An ExampleCommand will run in autonomous
     return autoChooser.getSelected();
   }
+
 }
