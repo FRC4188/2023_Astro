@@ -65,7 +65,6 @@ public class SwerveModule {
     encoder.configSensorDirection(false);
     encoder.configMagnetOffset(-zero);
 
-    angle.configFactoryDefault();
     angle.setBrake(false);
     angle.setScalar(Constants.drivetrain.ANGLE_DEGREES_PER_TICK);
     angle.setEncoder(Conversions.degreesSignedToUnsigned(getAngle()));

@@ -123,7 +123,7 @@ public class CSP_Falcon extends WPI_TalonFX implements CSP_Motor {
    * @param position desired position to set encoder to
    */
   public void setEncoder(double position) {
-    super.setSelectedSensorPosition(position);
+    super.setSelectedSensorPosition(scaledToNative(position));
   }
 
   /**

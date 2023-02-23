@@ -92,10 +92,16 @@ public class Drivetrain extends SubsystemBase {
           new Pose2d());
 
   private Notifier notifier = new Notifier(() -> recalibrate());
+
+  private double lastAngle;
+
+  private PIDController rotPID = new PIDController(-0.1, 0.0, -0.006);
     
   private Drivetrain() {
     putDashboard();
     notifier.startPeriodic(1.0);
+    rotPID.enableContinuousInput(-180, 180);
+    rotPID.setTolerance(0.5);
   }
 
 
@@ -103,6 +109,7 @@ public class Drivetrain extends SubsystemBase {
   public void periodic() {
     updateOdometry();
     SmartDashboard.putString("Position", getPose2d().toString());
+    SmartDashboard.putNumber("Angular Velocity", getChassisSpeeds().omegaRadiansPerSecond);
 
 
     // SmartDashboard.putNumber("FL Angle", frontLeft.getModulePosition().angle.getDegrees());
@@ -112,8 +119,9 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public void putDashboard() {
-    SmartDashboard.putNumber("Set Drive Velocity", 0);
-    SmartDashboard.putNumber("Set Drive Angle", 0);
+    SmartDashboard.putNumber("Rot kP", 0);
+    SmartDashboard.putNumber("Rot kI", 0);
+    SmartDashboard.putNumber("Rot kD", 0);
   }
 
   public void drive(double x, double y, double rot) {
@@ -121,7 +129,13 @@ public class Drivetrain extends SubsystemBase {
     double ySpeed = y * Constants.drivetrain.MAX_VELOCITY;
     double rotSpeed = -rot * Constants.drivetrain.MAX_RADIANS;
 
+    Rotation2d pigeonAngle = sensors.getRotation2d();
+
+    lastAngle = (rotSpeed != 0) ? pigeonAngle.getDegrees() : lastAngle;
+
     boolean noInput = xSpeed == 0 && ySpeed == 0 && rotSpeed == 0;  
+
+    rotSpeed = (rotSpeed == 0) ? rotPID.calculate(lastAngle, pigeonAngle.getDegrees()) : rotSpeed;
 
     SwerveModuleState[] states =
         noInput
@@ -133,9 +147,13 @@ public class Drivetrain extends SubsystemBase {
             }
             : kinematics.toSwerveModuleStates(
                 ChassisSpeeds.fromFieldRelativeSpeeds(
-                    xSpeed, ySpeed, rotSpeed, sensors.getRotation2d()));
+                    xSpeed, ySpeed, rotSpeed, pigeonAngle));
     
     setModuleStates(states);
+  }
+
+  public void setRotPID(double kP, double kI, double kD) {
+    rotPID.setPID(kP, kI, kD);
   }
 
   public void recalibrate() {
@@ -166,8 +184,6 @@ public class Drivetrain extends SubsystemBase {
         backRight.getModulePosition()
     }, initPose);
   }
-
-
 
   public void setModuleStates(SwerveModuleState[] states) {
     SwerveDriveKinematics.desaturateWheelSpeeds(states, Constants.drivetrain.MAX_VELOCITY);
