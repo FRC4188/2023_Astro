@@ -90,7 +90,7 @@ public class RobotContainer {
     autoChooser.addOption(
         "2 Score", AutoBuilder.buildAuto("2 Score", new HashMap<>(), new PathConstraints(10.0, 3)));
 
-    SmartDashboard.putData("Auto Chooser", autoChooser);
+    SmartDashboard.putData("pAuto Chooser", autoChooser);
   }
 
   /**
