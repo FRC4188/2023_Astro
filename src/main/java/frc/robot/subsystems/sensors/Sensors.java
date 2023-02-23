@@ -1,11 +1,7 @@
 package frc.robot.subsystems.sensors;
 
-import csplib.utils.LimelightHelpers;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -23,11 +19,9 @@ public class Sensors extends SubsystemBase {
   private Limelights limelights = new Limelights("limelight-front", "limelight-back");
 
   /** Creates a new Sensors. */
-  private Sensors() {
-  }
+  private Sensors() {}
 
-  private void init() {
-  }
+  private void init() {}
 
   @Override
   public void periodic() {

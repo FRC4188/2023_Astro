@@ -10,9 +10,6 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
-import edu.wpi.first.math.trajectory.constraint.CentripetalAccelerationConstraint;
 import edu.wpi.first.math.util.Units;
 
 /**
@@ -62,12 +59,10 @@ public final class Constants {
 
   public static class drivetrain {
     public static final double DRIVE_GEARING = 6.55; // 6.55 : 1
-    public static final double WHEEL_DIAMETER =
-        Units.inchesToMeters(4); 
+    public static final double WHEEL_DIAMETER = Units.inchesToMeters(4);
     public static final double DRIVE_TICKS_PER_ROTATION =
         robot.FALCON_ENCODER_TICKS * DRIVE_GEARING;
-    public static final double WHEEL_CIRCUMFRENCE =
-        Math.PI * WHEEL_DIAMETER; 
+    public static final double WHEEL_CIRCUMFRENCE = Math.PI * WHEEL_DIAMETER;
     public static final double DRIVE_TICKS_PER_METER =
         DRIVE_TICKS_PER_ROTATION / WHEEL_CIRCUMFRENCE;
     public static final double DRIVE_METERS_PER_TICK = 1 / DRIVE_TICKS_PER_METER;
@@ -78,10 +73,10 @@ public final class Constants {
     public static final double ANGLE_TICKS_PER_DEGREE = ANGLE_TICKS_PER_ROTATION / 360.0;
     public static final double ANGLE_DEGREES_PER_TICK = 1.0 / ANGLE_TICKS_PER_DEGREE;
 
-    public static final double MAX_VOLTS = 12.0; 
-    public static final double MAX_VELOCITY = 5.0; 
-    public static final double MAX_ACCEL = 12.0; 
-    public static final double MAX_CACCEL = 8.0; 
+    public static final double MAX_VOLTS = 12.0;
+    public static final double MAX_VELOCITY = 5.0;
+    public static final double MAX_ACCEL = 12.0;
+    public static final double MAX_CACCEL = 8.0;
     public static final double MAX_RADIANS = 3.0 * Math.PI;
     public static final double RAMP_RATE = 0.5;
 
@@ -143,7 +138,7 @@ public final class Constants {
   }
 
   public static final class sensors {
-      public static final Translation3d FRONT_POSITION = new Translation3d(0, 0, 0);
-      public static final Translation3d BACK_POSITION = new Translation3d(0, 0, 0);
+    public static final Translation3d FRONT_POSITION = new Translation3d(0, 0, 0);
+    public static final Translation3d BACK_POSITION = new Translation3d(0, 0, 0);
   }
 }

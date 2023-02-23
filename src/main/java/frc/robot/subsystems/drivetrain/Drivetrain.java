@@ -2,9 +2,7 @@ package frc.robot.subsystems.drivetrain;
 
 import com.pathplanner.lib.auto.PIDConstants;
 
-import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
@@ -97,7 +95,7 @@ public class Drivetrain extends SubsystemBase {
   private double lastAngle;
 
   private PIDController rotPID = new PIDController(-0.1, 0.0, -0.006);
-    
+
   private Drivetrain() {
     putDashboard();
     notifier.startPeriodic(1.0);
@@ -105,13 +103,11 @@ public class Drivetrain extends SubsystemBase {
     rotPID.setTolerance(0.5);
   }
 
-
   @Override
   public void periodic() {
     updateOdometry();
     SmartDashboard.putString("Position", getPose2d().toString());
     SmartDashboard.putNumber("Angular Velocity", getChassisSpeeds().omegaRadiansPerSecond);
-
 
     // SmartDashboard.putNumber("FL Angle", frontLeft.getModulePosition().angle.getDegrees());
     // SmartDashboard.putNumber("BL Angle", backLeft.getModulePosition().angle.getDegrees());
@@ -132,10 +128,10 @@ public class Drivetrain extends SubsystemBase {
 
     Rotation2d pigeonAngle = sensors.getRotation2d();
 
+    boolean noInput = xSpeed == 0 && ySpeed == 0 && rotSpeed == 0;
 
-    boolean noInput = xSpeed == 0 && ySpeed == 0 && rotSpeed == 0;  
-
-    // rotSpeed = (rotSpeed == 0) ? rotPID.calculate(lastAngle, pigeonAngle.getDegrees()) : rotSpeed;
+    // rotSpeed = (rotSpeed == 0) ? rotPID.calculate(lastAngle, pigeonAngle.getDegrees()) :
+    // rotSpeed;
     rotSpeed = (rotSpeed == 0) ? rotPID.calculate(rotSpeed, 0) : rotSpeed;
 
     SwerveModuleState[] states =
@@ -147,9 +143,8 @@ public class Drivetrain extends SubsystemBase {
               new SwerveModuleState(0, Rotation2d.fromDegrees(45))
             }
             : kinematics.toSwerveModuleStates(
-                ChassisSpeeds.fromFieldRelativeSpeeds(
-                    xSpeed, ySpeed, rotSpeed, pigeonAngle));
-    
+                ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rotSpeed, pigeonAngle));
+
     setModuleStates(states);
   }
 
@@ -177,13 +172,14 @@ public class Drivetrain extends SubsystemBase {
 
   public void resetOdometry(Pose2d initPose) {
     odometry.resetPosition(
-      sensors.getRotation2d(), 
-      new SwerveModulePosition[] {
-        frontLeft.getModulePosition(),
-        frontRight.getModulePosition(),
-        backLeft.getModulePosition(),
-        backRight.getModulePosition()
-    }, initPose);
+        sensors.getRotation2d(),
+        new SwerveModulePosition[] {
+          frontLeft.getModulePosition(),
+          frontRight.getModulePosition(),
+          backLeft.getModulePosition(),
+          backRight.getModulePosition()
+        },
+        initPose);
   }
 
   public void setModuleStates(SwerveModuleState[] states) {
@@ -237,11 +233,17 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public PIDConstants getTransValues() {
-    return new PIDConstants(Constants.drivetrain.xyPID.kP, Constants.drivetrain.xyPID.kI, Constants.drivetrain.xyPID.kD);
+    return new PIDConstants(
+        Constants.drivetrain.xyPID.kP,
+        Constants.drivetrain.xyPID.kI,
+        Constants.drivetrain.xyPID.kD);
   }
 
   public PIDConstants getRotValues() {
-    return new PIDConstants(Constants.drivetrain.rotPID.kP, Constants.drivetrain.rotPID.kI, Constants.drivetrain.rotPID.kD);
+    return new PIDConstants(
+        Constants.drivetrain.rotPID.kP,
+        Constants.drivetrain.rotPID.kI,
+        Constants.drivetrain.rotPID.kD);
   }
 
   public double getSpeed() {
