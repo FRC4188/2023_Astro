@@ -92,9 +92,7 @@ public class Drivetrain extends SubsystemBase {
 
   private Notifier notifier = new Notifier(() -> recalibrate());
 
-  private double lastAngle;
-
-  private PIDController rotPID = new PIDController(-0.1, 0.0, -0.006);
+  private PIDController rotPID = new PIDController(Constants.drivetrain.correctionPID.kP, 0.0, Constants.drivetrain.correctionPID.kD);
 
   private Drivetrain() {
     putDashboard();
@@ -107,7 +105,7 @@ public class Drivetrain extends SubsystemBase {
   public void periodic() {
     updateOdometry();
     SmartDashboard.putString("Position", getPose2d().toString());
-    SmartDashboard.putNumber("Angular Velocity", getChassisSpeeds().omegaRadiansPerSecond);
+    SmartDashboard.putNumber("Angular Velocity", getAngularVelocity());
 
     // SmartDashboard.putNumber("FL Angle", frontLeft.getModulePosition().angle.getDegrees());
     // SmartDashboard.putNumber("BL Angle", backLeft.getModulePosition().angle.getDegrees());

@@ -5,6 +5,7 @@
 package frc.robot.subsystems.sensors;
 
 import csplib.utils.LimelightHelpers;
+import edu.wpi.first.math.filter.MedianFilter;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -14,6 +15,8 @@ import frc.robot.Constants;
 public class Limelights {
   private String frontLLName;
   private String backLLName;
+
+  private MedianFilter filter = new MedianFilter(2);
 
   public Limelights(String frontLLName, String backLLName) {
     this.frontLLName = frontLLName;
@@ -53,4 +56,6 @@ public class Limelights {
           : LimelightHelpers.getBotPose3d_wpiBlue(backLLName);
     } else return new Pose3d();
   }
+
+
 }
