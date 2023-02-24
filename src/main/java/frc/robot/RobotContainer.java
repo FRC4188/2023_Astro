@@ -79,7 +79,6 @@ public class RobotContainer {
     SmartDashboard.putData(
         "Set Zero", new InstantCommand(() -> drivetrain.zeroPower(), drivetrain));
   }
-  ;
 
   private void addChooser() {
 

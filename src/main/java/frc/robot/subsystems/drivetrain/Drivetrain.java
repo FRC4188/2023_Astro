@@ -11,6 +11,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.Counter;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -129,7 +130,7 @@ public class Drivetrain extends SubsystemBase {
     boolean noInput = xSpeed == 0 && ySpeed == 0 && rotSpeed == 0;  
 
     // rotSpeed = (rotSpeed == 0) ? rotPID.calculate(lastAngle, pigeonAngle.getDegrees()) : rotSpeed;
-    rotSpeed = (rotSpeed == 0) ? rotPID.calculate(rotSpeed, 0) : rotSpeed;
+    rotSpeed = (rotSpeed == 0) ? rotPID.calculate(getAngularVelocity(), 0) : rotSpeed;
 
     SwerveModuleState[] states =
         noInput
