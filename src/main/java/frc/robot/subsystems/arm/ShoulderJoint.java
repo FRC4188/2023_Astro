@@ -23,7 +23,7 @@ import frc.robot.Constants.controller;
 public class ShoulderJoint {
 
     private CSP_SparkMax leader = new CSP_SparkMax(Constants.ids.SHOULDER_LEADER);
-    private CSP_SparkMax follower = new CSP_SparkMax(Constants.ids.SHOULDER_LEADER);
+    private CSP_SparkMax follower = new CSP_SparkMax(Constants.ids.SHOULDER_FOLLOWER);
     private WPI_CANCoder encoder = new WPI_CANCoder(Constants.ids.SHOULDER_ENCODER);
     
     private ProfiledPIDController pid = new ProfiledPIDController(Constants.arm.shoulder.kP, Constants.arm.shoulder.kI, Constants.arm.shoulder.kD, Constants.arm.shoulder.constriants);
@@ -52,10 +52,11 @@ public class ShoulderJoint {
 
         follower.follow(leader);
 
+        leader.setMotionPlaning(Constants.arm.shoulder.minVel, Constants.arm.shoulder.maxVel, Constants.arm.shoulder.allowedErr);
     }
 
-    public void setAngle(double goal){
-        leader.setVoltage(pid.calculate(getAngle(), goal) + ff.calculate(Math.toRadians(getAngle() + Math.PI / 2), pid.getSetpoint().velocity));
+    public void setAngle(double angle){
+        leader.setPosition(angle);
     }
 
     public void setPID(double kP, double kI, double kD){

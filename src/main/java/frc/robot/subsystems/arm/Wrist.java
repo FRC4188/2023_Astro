@@ -2,6 +2,7 @@ package frc.robot.subsystems.arm;
 
 import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 import com.ctre.phoenix.sensors.WPI_CANCoder;
+import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.SoftLimitDirection;
 
 import csplib.motors.CSP_SparkMax;
@@ -12,9 +13,9 @@ import frc.robot.Constants;
 
 public class Wrist {
 
-    private CSP_SparkMax motor = new CSP_SparkMax(0);
+    private CSP_SparkMax motor = new CSP_SparkMax(Constants.ids.WRIST);
 
-    private WPI_CANCoder encoder = new WPI_CANCoder(Constants.ids.SHOULDER_ENCODER);
+    private WPI_CANCoder encoder = new WPI_CANCoder(Constants.ids.WRIST_ENCODER);
 
     private ProfiledPIDController pid = new ProfiledPIDController(0, 0, 0, null);
 
@@ -40,10 +41,11 @@ public class Wrist {
         motor.setSoftLimit(SoftLimitDirection.kReverse, (float) Constants.arm.Wrist.LOWER_LIMIT);
         motor.setPIDF(Constants.arm.Wrist.kP, Constants.arm.Wrist.kI, Constants.arm.Wrist.kD, Constants.arm.Wrist.kF);
 
+        motor.setMotionPlaning(Constants.arm.Wrist.minVel, Constants.arm.Wrist.maxVel, Constants.arm.Wrist.allowedErr);
     }
 
-    public void setAngle(double goal){
-        motor.setVoltage(pid.calculate( motor.getPosition(), goal) + ff.calculate(Math.toRadians(getAngle()), pid.getSetpoint().velocity));
+    public void setAngle(double angle){
+        motor.setPosition(angle);;
     }
 
     public void setPID(double kP, double kI, double kD){

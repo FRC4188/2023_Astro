@@ -40,7 +40,8 @@ public Pose2d getPosition(){
 }
 
 public double[] getInverseKinematic(Pose2d pose){
-    double x = pose.getX();
+    
+    double x = (pose.getX() > Constants.arm.limit) ? Constants.arm.limit : pose.getX()  ;
     double z = pose.getY();
     double pickUpAngle = pose.getRotation().getDegrees();
     double wristLength = Constants.arm.totalArm.WRIST_LENGTH;

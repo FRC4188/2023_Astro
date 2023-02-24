@@ -2,6 +2,7 @@ package frc.robot.subsystems.arm;
 
 import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 import com.ctre.phoenix.sensors.WPI_CANCoder;
+import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.SoftLimitDirection;
 
 import csplib.motors.CSP_SparkMax;
@@ -35,7 +36,11 @@ public class Elevator {
         liftMotor.setBrake(true);
         liftMotor.enableSoftLimit(SoftLimitDirection.kForward, true);
         liftMotor.enableSoftLimit(SoftLimitDirection.kReverse, true);
+        liftMotor.setSoftLimit(SoftLimitDirection.kForward, (float) Constants.arm.elevator.UPPER_LIMIT);
+        liftMotor.setSoftLimit(SoftLimitDirection.kReverse, (float) Constants.arm.elevator.LOWER_LIMIT);
         liftMotor.setPIDF(Constants.arm.elevator.kP, Constants.arm.elevator.kI, Constants.arm.elevator.kD, Constants.arm.elevator.kF);
+        
+        liftMotor.setMotionPlaning(Constants.arm.elevator.minVel, Constants.arm.elevator.maxVel, Constants.arm.elevator.allowedErr);
     }
 
     public void resetAngle(){
@@ -67,15 +72,13 @@ public class Elevator {
         }
     }       
 
-    public void setAngle(double goal){
-        if (pid.calculate(liftMotor.getPosition(), goal) + ff.calculate(pid.getSetpoint().velocity) > 0) {
+    public void setAngle(double meter){
             if (limitSwitch.get()) {
                 liftMotor.setVoltage(0);
             } else {
-                liftMotor.setVoltage(pid.calculate(liftMotor.getPosition(), goal)+ff.calculate(pid.getSetpoint().velocity));
+                liftMotor.setPosition(meter);
             }
-        }
-        
+
     }
 
     public double getAngle(){
