@@ -5,15 +5,16 @@
 package frc.robot.subsystems.sensors;
 
 import csplib.utils.LimelightHelpers;
+import edu.wpi.first.math.filter.MedianFilter;
 import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.Constants;
 
 /** Add your docs here. */
 public class Limelights {
   private String frontLLName;
   private String backLLName;
+
+  private MedianFilter filter = new MedianFilter(2);
 
   public Limelights(String frontLLName, String backLLName) {
     this.frontLLName = frontLLName;
@@ -39,18 +40,14 @@ public class Limelights {
         Constants.sensors.BACK_POSITION.getZ(),
         0,
         0,
-        0);
+        180);
   }
 
   public Pose3d getPose3d() {
     if (LimelightHelpers.getTV(frontLLName)) {
-      return (DriverStation.getAlliance() == Alliance.Red)
-          ? LimelightHelpers.getBotPose3d_wpiRed(frontLLName)
-          : LimelightHelpers.getBotPose3d_wpiBlue(frontLLName);
+      return LimelightHelpers.getBotPose3d_wpiBlue(frontLLName);
     } else if (LimelightHelpers.getTV(backLLName)) {
-      return (DriverStation.getAlliance() == Alliance.Red)
-          ? LimelightHelpers.getBotPose3d_wpiRed(backLLName)
-          : LimelightHelpers.getBotPose3d_wpiBlue(backLLName);
+      return LimelightHelpers.getBotPose3d_wpiBlue(backLLName);
     } else return new Pose3d();
   }
 }

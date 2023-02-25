@@ -91,10 +91,17 @@ public class Drivetrain extends SubsystemBase {
           new Pose2d());
 
   private Notifier notifier = new Notifier(() -> recalibrate());
+  private double lastAngle;
+
+  private PIDController rotPID =
+      new PIDController(
+          Constants.drivetrain.correctionPID.kP, 0.0, Constants.drivetrain.correctionPID.kD);
 
   private Drivetrain() {
     putDashboard();
     notifier.startPeriodic(1.0);
+    rotPID.enableContinuousInput(-180, 180);
+    rotPID.setTolerance(0.5);
   }
 
   @Override
@@ -109,8 +116,9 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public void putDashboard() {
-    SmartDashboard.putNumber("Set Drive Velocity", 0);
-    SmartDashboard.putNumber("Set Drive Angle", 0);
+    SmartDashboard.putNumber("Rot kP", 0);
+    SmartDashboard.putNumber("Rot kI", 0);
+    SmartDashboard.putNumber("Rot kD", 0);
   }
 
   public void drive(double x, double y, double rot) {
@@ -118,7 +126,13 @@ public class Drivetrain extends SubsystemBase {
     double ySpeed = y * Constants.drivetrain.MAX_VELOCITY;
     double rotSpeed = -rot * Constants.drivetrain.MAX_RADIANS;
 
+    Rotation2d pigeonAngle = sensors.getRotation2d();
+
+    lastAngle = pigeonAngle.getDegrees();
+
     boolean noInput = xSpeed == 0 && ySpeed == 0 && rotSpeed == 0;
+
+    rotSpeed = (rotSpeed == 0) ? rotPID.calculate(lastAngle, pigeonAngle.getDegrees()) : rotSpeed;
 
     SwerveModuleState[] states =
         noInput
@@ -135,9 +149,12 @@ public class Drivetrain extends SubsystemBase {
     setModuleStates(states);
   }
 
+  public void setRotPID(double kP, double kI, double kD) {
+    rotPID.setPID(kP, kI, kD);
+  }
+
   public void recalibrate() {
     if (!sensors.getPose3d().equals(new Pose3d())) {
-      odometry.setVisionMeasurementStdDevs(Constants.drivetrain.VISION_STD_DEVS);
       resetOdometry(sensors.getPose3d().toPose2d());
     }
   }
@@ -154,6 +171,7 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public void resetOdometry(Pose2d initPose) {
+    sensors.resetPigeon();
     odometry.resetPosition(
         sensors.getRotation2d(),
         new SwerveModulePosition[] {

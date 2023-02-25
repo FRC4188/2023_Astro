@@ -10,7 +10,6 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
-import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.util.Units;
 
 /**
@@ -58,17 +57,17 @@ public final class Constants {
 
     public static final int PIGEON = 15;
 
-    public static final int SHOULDER_LEADER = 69;
-    public static final int SHOULDER_FOLLOWER = 68;
-    public static final int SHOULDER_ENCODER = 67;
+    public static final int SHOULDER_LEADER = 21;
+    public static final int SHOULDER_FOLLOWER = 22;
+    public static final int SHOULDER_ENCODER = 10;
 
-    public static final int WRIST = 50;
-    public static final int WRIST_ENCODER = 59;
+    public static final int WRIST = 24;
+    public static final int WRIST_ENCODER = 9;
 
-    public static final int TELESCOPE = 39;
+    public static final int TELESCOPE = 23;
     public static final int TELESCOPE_LIMIT_SWITCH = 3;
 
-    public static final int CLAW = 0;
+    public static final int CLAW = 16;
     public static final int ULTRASONIC_SENSOR = 4;
   }
 
@@ -109,10 +108,10 @@ public final class Constants {
     public static final Translation2d BR_LOCATION =
         new Translation2d(-(Constants.robot.A_WIDTH / 2), -(Constants.robot.A_LENGTH / 2));
 
-    public static final double FL_ZERO = -140.09765625;
-    public static final double BL_ZERO = -129.462890625;
-    public static final double BR_ZERO = 36.298828125;
-    public static final double FR_ZERO = -15.732421875;
+    public static final double FL_ZERO = -138.427734375;
+    public static final double BL_ZERO = -130.25390625;
+    public static final double BR_ZERO = 34.27734375;
+    public static final double FR_ZERO = -20.478515625;
 
     public static final class angle {
       public static final double FL_kP = -0.008;
@@ -150,6 +149,12 @@ public final class Constants {
       public static final double kI = 0.0;
       public static final double kD = 0.1;
     }
+
+    public static final class correctionPID {
+      public static final double kP = -0.1;
+      public static final double kI = 0.0;
+      public static final double kD = -0.006;
+    }
   }
 
   public static final class sensors {
@@ -157,70 +162,81 @@ public final class Constants {
     public static final Translation3d BACK_POSITION = new Translation3d(0, 0, 0);
   }
 
-  public static final class arm {
-    public static final class shoulder {
-      public static final double ZERO = 0.0;
-
-      public static final double GEAR_RATIO = 132.741; // 132.741:1
-      public static final double TICKS_PER_ROTATION = robot.NEO_ENCODER_TICKS * GEAR_RATIO;
-      public static final double TICKS_PER_DEGREE = TICKS_PER_ROTATION / 360;
-
-      public static final double UPPER_LIMIT = 120;
-      public static final double LOWER_LIMIT = -120;
-
-      public static final double kP = 0.0;
-      public static final double kI = 0.0;
-      public static final double kD = 0.0;
-      public static final Constraints CONSTRAINTS = new Constraints(0.0, 0.0);
-
-      public static final double kS = 0.0;
-      public static final double kG = 0.0;
-      public static final double kV = 0.0;
-    }
-
-    public static class wrist {
-      public static final double ZERO = 0.0;
-
-      public static final double GEAR_RATIO = 100; // 100:1
-      public static final double TICKS_PER_ROTATION = robot.NEO_ENCODER_TICKS * GEAR_RATIO;
-      public static final double TICKS_PER_DEGREE = TICKS_PER_ROTATION / 360;
-
-      public static final double UPPER_LIMIT = 120;
-      public static final double LOWER_LIMIT = -120;
-
-      public static final double kP = 0.0;
-      public static final double kI = 0.0;
-      public static final double kD = 0.0;
-      public static final Constraints CONSTRAINTS = new Constraints(0.0, 0.0);
-
-      public static final double kS = 0.0;
-      public static final double kG = 0.0;
-      public static final double kV = 0.0;
-    }
-
-    public static class telescope {
-      public static final double ROTATIONS_PER_INCH = 62.197; // 62.197 rotations per inch
-      public static final double TICKS_PER_INCH = ROTATIONS_PER_INCH * robot.NEO_ENCODER_TICKS;
-      public static final double TICKS_PER_METER = Units.inchesToMeters(TICKS_PER_INCH);
-
-      public static final double UPPER_LIMIT = Units.inchesToMeters(51.125);
-      public static final double LOWER_LIMIT = 0.0;
-
-      public static final double kP = 0.0;
-      public static final double kI = 0.0;
-      public static final double kD = 0.0;
-      public static final Constraints CONSTRAINTS = new Constraints(0.0, 0.0);
-
-      public static final double kS = 0.0;
-      public static final double kG = 0.0;
-      public static final double kV = 0.0;
-    }
-  }
-
   public static final class claw {
     public static final double CUBE_DISTANCE = Units.inchesToMeters(9.313251);
     public static final double TOTAL_DISTANCE = Units.inchesToMeters(14.824533);
 
-    public static final double SENSOR_SCALE = 2.0;
+    public static final double SENSOR_SCALE = 0.195;
+  }
+
+  public static final class arm {
+    public static final class shoulder {
+      public static final double ZERO = 0.0;
+      public static final double GEAR_RATIO = 132.741; // 132.741 to 1
+      public static final double TICKS_PER_ROTATION = robot.NEO_ENCODER_TICKS * GEAR_RATIO;
+      public static final double TICKS_PER_DEGREE = TICKS_PER_ROTATION / 360;
+
+      public static final double UPPER_LIMIT = 120;
+      public static final double LOWER_LIMIT = -120;
+
+      public static final double kP = 0.0;
+      public static final double kI = 0.0;
+      public static final double kD = 0.0;
+      public static final double kF = 0.0;
+
+      public static final double MIN_VEL = 0.0;
+      public static final double MAX_VEL = 0.0;
+      public static final double ALLOWED_ERROR = 0.0;
+
+      public static final double kS = 0.0;
+      public static final double kG = 0.0;
+      public static final double kV = 0.0;
+    }
+
+    public static final class telescope {
+
+      public static final double ROTATIONS_PER_INCH = 62.197; // 62.197 rotations per inch
+      public static final double TICKS_PER_INCH = ROTATIONS_PER_INCH * robot.NEO_ENCODER_TICKS;
+      public static final double TICKS_PER_METER = Units.inchesToMeters(TICKS_PER_INCH);
+      public static final double UPPER_LIMIT = 120;
+      public static final double LOWER_LIMIT = -120;
+
+      public static final double kP = 0.0;
+      public static final double kI = 0.0;
+      public static final double kD = 0.0;
+      public static final double kF = 0.0;
+
+      public static final double kS = 0.0;
+      public static final double kG = 0.0;
+      public static final double kV = 0.0;
+
+      public static final double MIN_VEL = 0.0;
+      public static final double MAX_VEL = 0.0;
+      public static final double ALLOWED_ERROR = 0.0;
+    }
+
+    public static final class wrist {
+      public static final double ZERO = 0.0;
+
+      public static final double GEAR_RATIO = 100; // 100 to 1
+      public static final double TICKS_PER_ROTATION = robot.NEO_ENCODER_TICKS * GEAR_RATIO;
+      public static final double TICKS_PER_DEGREE = TICKS_PER_ROTATION / 360;
+
+      public static final double UPPER_LIMIT = 0;
+      public static final double LOWER_LIMIT = 131.167406;
+
+      public static final double kP = 0.0;
+      public static final double kI = 0.0;
+      public static final double kD = 0.0;
+      public static final double kF = 0.0;
+
+      public static final double kS = 0.0;
+      public static final double kG = 0.0;
+      public static final double kV = 0.0;
+
+      public static final double MIN_VEL = 0.0;
+      public static final double MAX_VEL = 0.0;
+      public static final double ALLOWED_ERROR = 0.0;
+    }
   }
 }
