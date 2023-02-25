@@ -9,7 +9,6 @@ public class Pigeon extends Pigeon2 {
     super.configFactoryDefault();
     super.clearStickyFaults();
 
-
     reset();
   }
 
