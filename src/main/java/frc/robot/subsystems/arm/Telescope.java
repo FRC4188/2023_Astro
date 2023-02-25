@@ -1,83 +1,64 @@
 package frc.robot.subsystems.arm;
 
-import com.ctre.phoenix.sensors.AbsoluteSensorRange;
-import com.ctre.phoenix.sensors.WPI_CANCoder;
 import com.revrobotics.CANSparkMax.SoftLimitDirection;
 
 import csplib.motors.CSP_SparkMax;
-import edu.wpi.first.math.controller.ElevatorFeedforward;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.Constants;
 
 public class Telescope {
 
-    private CSP_SparkMax motor = new CSP_SparkMax(Constants.ids.TELESCOPE);
+  private CSP_SparkMax liftMotor = new CSP_SparkMax(Constants.ids.TELESCOPE_MOTOR);
 
-    private ProfiledPIDController pid = new ProfiledPIDController(Constants.arm.telescope.kP, Constants.arm.telescope.kI, Constants.arm.telescope.kD, Constants.arm.telescope.CONSTRAINTS);
+  private DigitalInput limitSwitch = new DigitalInput(0);
 
-    private ElevatorFeedforward ff = new ElevatorFeedforward(Constants.arm.telescope.kS, Constants.arm.telescope.kG, Constants.arm.telescope.kV);
+  int counter;
 
-    private DigitalInput limitSwitch = new DigitalInput(Constants.ids.TELESCOPE_LIMIT_SWITCH);
+  public Telescope() {
+    init();
+  }
 
-    int counter;    
+  public void init() {
+    liftMotor.setScalar(1 / Constants.arm.telescope.TICKS_PER_METER);
+    liftMotor.setBrake(true);
+    liftMotor.enableSoftLimit(SoftLimitDirection.kForward, true);
+    liftMotor.enableSoftLimit(SoftLimitDirection.kReverse, true);
+    liftMotor.setSoftLimit(
+        SoftLimitDirection.kForward, (float) Constants.arm.telescope.UPPER_LIMIT);
+    liftMotor.setSoftLimit(
+        SoftLimitDirection.kReverse, (float) Constants.arm.telescope.LOWER_LIMIT);
+    liftMotor.setPIDF(
+        Constants.arm.telescope.kP,
+        Constants.arm.telescope.kI,
+        Constants.arm.telescope.kD,
+        Constants.arm.telescope.kF);
 
+    liftMotor.setMotionPlaning(Constants.arm.telescope.MINVEL, Constants.arm.telescope.MAXVEL);
+    liftMotor.setError(Constants.arm.telescope.ALLOWERROR);
+  }
 
-    public Telescope(){
-        init();
+  public void zero() {
+    if (!limitSwitch.get()) {
+      liftMotor.enableSoftLimit(SoftLimitDirection.kForward, false);
+      liftMotor.enableSoftLimit(SoftLimitDirection.kReverse, false);
+      liftMotor.set(-0.2);
+    } else {
+      liftMotor.setEncoder(0.0);
+      liftMotor.enableSoftLimit(SoftLimitDirection.kForward, true);
+      liftMotor.enableSoftLimit(SoftLimitDirection.kReverse, true);
+      liftMotor.set(0.0);
     }
+  }
 
-    public void init(){
-        motor.setScalar(1 / Constants.arm.telescope.TICKS_PER_METER);
-        motor.setBrake(true);
-        motor.enableSoftLimit(SoftLimitDirection.kForward, true);
-        motor.enableSoftLimit(SoftLimitDirection.kReverse, true);
-        motor.setSoftLimit(SoftLimitDirection.kForward, (float) Constants.arm.shoulder.UPPER_LIMIT);
-        motor.setSoftLimit(SoftLimitDirection.kReverse, (float) Constants.arm.shoulder.LOWER_LIMIT);
-    }
+  public void setPID(double kP, double kI, double kD, double kF) {
+    liftMotor.setPIDF(kP, kI, kD, kF);
+  }
 
-    public void resetAngle(){
-        if(!limitSwitch.get()){
-            motor.enableSoftLimit(SoftLimitDirection.kForward, false);
-            motor.enableSoftLimit(SoftLimitDirection.kReverse, false);
-            motor.set(-0.2);
-        }
-        else{
-            motor.setEncoder(0.0);
-            motor.enableSoftLimit(SoftLimitDirection.kForward, true);
-            motor.enableSoftLimit(SoftLimitDirection.kReverse, true);
-            motor.set(0.0);
-        }
-    }
+  public void setPosition(double position) {
+    liftMotor.setPosition(position);
+  }
 
-    public void setPID(double kP, double kI, double kD){
-        pid.setPID(kP, kI, kD);
-    }
-    
-
-    public void setMotorSpeed(double speed) {
-        if (speed > 0) {
-            if (limitSwitch.get()) {
-                motor.setVoltage(0);
-            } else {
-                motor.setVoltage(speed);
-            }
-        }
-    }       
-
-    public void setAngle(double goal){
-        if (pid.calculate(motor.getPosition(), goal) + ff.calculate(pid.getSetpoint().velocity) > 0) {
-            if (limitSwitch.get()) {
-                motor.setVoltage(0);
-            } else {
-                motor.setVoltage(pid.calculate(motor.getPosition(), goal)+ff.calculate(pid.getSetpoint().velocity));
-            }
-        }
-        
-    }
-
-    public double getAngle(){
-        return(motor.getPosition());
-    }
+  public double getPosition() {
+    return (liftMotor.getPosition());
+  }
 }

@@ -4,11 +4,7 @@ import csplib.inputs.CSP_Controller;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.utils.CSPController;
-import frc.robot.utils.CSPController.Scaling;
-
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -19,7 +15,8 @@ public class RobotContainer {
 
   private CSP_Controller pilot = new CSP_Controller(Constants.controller.PILOT_PORT);
 
-  private SendableChooser<SequentialCommandGroup> autoChooser = new SendableChooser<SequentialCommandGroup>();
+  private SendableChooser<SequentialCommandGroup> autoChooser =
+      new SendableChooser<SequentialCommandGroup>();
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -33,23 +30,16 @@ public class RobotContainer {
     addChooser();
   }
 
-  private void setDefaultCommands() {
-  }
+  private void setDefaultCommands() {}
 
-  /**
-   * Use this method to define your button->command mappings.
-   */
-  private void configureButtonBindings() {
+  /** Use this method to define your button->command mappings. */
+  private void configureButtonBindings() {}
 
-  }
-
-  private void smartdashboardButtons() {
-    
-  };
+  private void smartdashboardButtons() {}
+  ;
 
   private void addChooser() {
     autoChooser.setDefaultOption("Do nothing", new SequentialCommandGroup());
-  
 
     SmartDashboard.putData("Auto Chooser", autoChooser);
   }

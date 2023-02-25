@@ -2,35 +2,35 @@ package csplib.motors;
 
 public interface CSP_Motor {
 
-    public void setInverted(boolean inverted);
+  public void setInverted(boolean inverted);
 
-    public void init();
+  public void init();
 
-    public void setBrake(boolean braking);
+  public void setBrake(boolean braking);
 
-    public void setRampRate(double rampRate);
-    
-    public void set(double percent);
+  public void setRampRate(double rampRate);
 
-    public void setVoltage(double volts);
+  public void set(double percent);
 
-    public void setEncoder(double position);
+  public void setVoltage(double volts);
 
-    public void setPIDF(double kP, double kI, double kD, double kF);
+  public void setEncoder(double position);
 
-    public void setScalar(double scalar);
+  public void setPIDF(double kP, double kI, double kD, double kF);
 
-    public void setPosition(double position);
-    
-    public void setVelocity(double velocity);
+  public void setScalar(double scalar);
 
-    public double getVelocity();
+  public void setPosition(double position);
 
-    public double getPosition();
+  public void setVelocity(double velocity);
 
-    public double getTemperature();
+  public double getVelocity();
 
-    public double getCurrent();
+  public double getPosition();
 
-    public int getID();
+  public double getTemperature();
+
+  public double getCurrent();
+
+  public int getID();
 }
