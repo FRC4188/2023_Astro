@@ -20,16 +20,13 @@ import frc.robot.Constants;
 import frc.robot.Constants.controller;
 
 /** Add your docs here. */
-public class ShoulderJoint {
+public class Shoulder {
 
     private CSP_SparkMax leader = new CSP_SparkMax(Constants.ids.SHOULDER_LEADER);
     private CSP_SparkMax follower = new CSP_SparkMax(Constants.ids.SHOULDER_FOLLOWER);
     private WPI_CANCoder encoder = new WPI_CANCoder(Constants.ids.SHOULDER_ENCODER);
     
-    private ProfiledPIDController pid = new ProfiledPIDController(Constants.arm.shoulder.kP, Constants.arm.shoulder.kI, Constants.arm.shoulder.kD, Constants.arm.shoulder.constriants);
-    private ArmFeedforward ff = new ArmFeedforward(Constants.arm.shoulder.kS, Constants.arm.shoulder.kG, Constants.arm.shoulder.kV);
-
-    public ShoulderJoint() {
+    public Shoulder() {
         init();
     }
 
@@ -52,15 +49,17 @@ public class ShoulderJoint {
 
         follower.follow(leader);
 
-        leader.setMotionPlaning(Constants.arm.shoulder.minVel, Constants.arm.shoulder.maxVel, Constants.arm.shoulder.allowedErr);
+        leader.setMotionPlaning(Constants.arm.shoulder.MINVEL, Constants.arm.shoulder.MAXVEL);
+        leader.setError(Constants.arm.shoulder.ALLOWERROR);
+        
     }
 
     public void setAngle(double angle){
         leader.setPosition(angle);
     }
 
-    public void setPID(double kP, double kI, double kD){
-        pid.setPID(kP, kI, kD);
+    public void setPID(double kP, double kI, double kD, double kF){
+        leader.setPIDF(kP, kI, kD, kF);
     }
 
     public double getAngle(){

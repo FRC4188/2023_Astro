@@ -21,6 +21,7 @@ public class CSP_Controller extends XboxController {
     public CSP_Controller(int port) {
         super(port);
     }
+<<<<<<< HEAD
 
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -31,13 +32,19 @@ public class CSP_Controller extends XboxController {
 =======
 >>>>>>> 56c362aebdce62bca6010cd79440815143a53295
 =======
+=======
+    
+>>>>>>> 0691a41bf559ed70e1a05506f6ec6d5af5cde0b6
     /**
      * Calculates joystick output to account for scale and deadband
      * @param input input value
      * @param scale input scale
      * @return adjusted value
      */
+<<<<<<< HEAD
 >>>>>>> 4cb66e0ea8021806465a430afb2d765de6919b02
+=======
+>>>>>>> 0691a41bf559ed70e1a05506f6ec6d5af5cde0b6
     private double getOutput(double input, Scale scale) {
         if (Math.abs(input) > Constants.controller.DEADBAND) {
             if (scale == Scale.SQUARED) return Math.signum(input) * Math.pow(input, 2);

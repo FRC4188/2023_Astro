@@ -1,8 +1,11 @@
 package csplib.motors;
 
+import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
+
+import edu.wpi.first.math.controller.PIDController;
 
 public class CSP_SparkMax extends CANSparkMax implements CSP_Motor {
     private RelativeEncoder encoder;
@@ -13,6 +16,7 @@ public class CSP_SparkMax extends CANSparkMax implements CSP_Motor {
         super(id, MotorType.kBrushless);
         encoder = getEncoder();
         pid = getPIDController();
+        init();
     } 
 
     public void init() {
@@ -99,7 +103,7 @@ public class CSP_SparkMax extends CANSparkMax implements CSP_Motor {
         pid.setPositionPIDWrappingMinInput(min);
     }
 
-    public void setErr(double allowedErr){
+    public void setError(double allowedErr){
         pid.setSmartMotionAllowedClosedLoopError(allowedErr, 0);
 
     }

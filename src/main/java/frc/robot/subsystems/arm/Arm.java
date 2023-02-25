@@ -9,42 +9,36 @@ import frc.robot.Constants;
 public class Arm extends SubsystemBase {
 
   private static Arm instance;
-  Elevator elevator = new Elevator();
-  Wrist wrist = new Wrist();
-  ShoulderJoint shoulderJoint = new ShoulderJoint();
-
   public static synchronized Arm getInstance() {
     if (instance == null) instance = new Arm();
     return instance;
   }
 
+  private Telescope elevator = new Telescope();
+  private Wrist wrist = new Wrist();
+  private Shoulder shoulderJoint = new Shoulder();
 
-public Arm(){
-    CommandScheduler.getInstance().registerSubsystem(this);
-    initialize();
-}
 
-public void initialize(){
+  private Arm() {
 
-}
+  }
 
-public Pose2d getPosition(){
-    double elevatorLength = elevator.getAngle();
+  public Pose2d getPosition()   {
+    double elevatorLength = elevator.getPosition();
     double shoulderAngle = Math.toRadians(shoulderJoint.getAngle());
     double wristAngle = Math.toRadians(wrist.getAngle());
-    double x = elevatorLength * Math.sin(shoulderAngle)+ Constants.arm.totalArm.WRIST_LENGTH * Math.sin(shoulderAngle - wristAngle);
-    double z = elevatorLength * Math.cos(shoulderAngle)+ Constants.arm.totalArm.WRIST_LENGTH * Math.cos(shoulderAngle - wristAngle);
+    double x = elevatorLength * Math.sin(shoulderAngle)+ 0 * Math.sin(shoulderAngle - wristAngle);
+    double z = elevatorLength * Math.cos(shoulderAngle)+ 0 * Math.cos(shoulderAngle - wristAngle);
     double pickUpAngle = Math.PI / 2 - shoulderAngle + wristAngle;
     
     return (new Pose2d(x, z, new Rotation2d(pickUpAngle)));
 }
 
 public double[] getInverseKinematic(Pose2d pose){
-    
-    double x = (pose.getX() > Constants.arm.limit) ? Constants.arm.limit : pose.getX()  ;
+    double x = pose.getX();
     double z = pose.getY();
     double pickUpAngle = pose.getRotation().getDegrees();
-    double wristLength = Constants.arm.totalArm.WRIST_LENGTH;
+    double wristLength = 0;
     
 
     double elevatorLength = Math.sqrt(Math.pow(x, 2) + Math.pow(z, 2) + Math.pow(wristLength, 2) - 2 * x * wristLength * Math.cos(pickUpAngle) - 2 * z * wristLength * Math.sin(pickUpAngle));
@@ -57,7 +51,7 @@ public double[] getInverseKinematic(Pose2d pose){
 
 public void setPosition(Pose2d pose){
     double[] iKinematic = getInverseKinematic(pose);
-    elevator.setAngle(iKinematic[0]);
+    elevator.setPosition(iKinematic[0]);
     shoulderJoint.setAngle(iKinematic[1]);
     wrist.setAngle(iKinematic[2]);
 }
