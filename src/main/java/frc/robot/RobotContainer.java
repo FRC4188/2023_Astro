@@ -84,8 +84,7 @@ public class RobotContainer {
   private void addChooser() {
     autoChooser.setDefaultOption("Do nothing", new SequentialCommandGroup());
     autoChooser.addOption(
-        "Test",
-        AutoBuilder.buildAuto("New Path", new HashMap<>(), new PathConstraints(5.0, 1)));
+        "Test", AutoBuilder.buildAuto("New Path", new HashMap<>(), new PathConstraints(5.0, 1)));
     autoChooser.addOption(
         "B21", AutoBuilder.buildAuto("B21", new HashMap<>(), new PathConstraints(5.0, 2)));
 

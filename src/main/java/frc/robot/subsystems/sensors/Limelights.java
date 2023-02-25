@@ -50,6 +50,4 @@ public class Limelights {
       return LimelightHelpers.getBotPose3d_wpiBlue(backLLName);
     } else return new Pose3d();
   }
-
-
 }

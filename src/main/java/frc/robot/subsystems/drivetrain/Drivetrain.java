@@ -3,7 +3,6 @@ package frc.robot.subsystems.drivetrain;
 import com.pathplanner.lib.auto.PIDConstants;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
@@ -12,7 +11,6 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.Counter;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -95,7 +93,9 @@ public class Drivetrain extends SubsystemBase {
   private Notifier notifier = new Notifier(() -> recalibrate());
   private double lastAngle;
 
-  private PIDController rotPID = new PIDController(Constants.drivetrain.correctionPID.kP, 0.0, Constants.drivetrain.correctionPID.kD);
+  private PIDController rotPID =
+      new PIDController(
+          Constants.drivetrain.correctionPID.kP, 0.0, Constants.drivetrain.correctionPID.kD);
 
   private Drivetrain() {
     putDashboard();
@@ -145,7 +145,7 @@ public class Drivetrain extends SubsystemBase {
             : kinematics.toSwerveModuleStates(
                 ChassisSpeeds.fromFieldRelativeSpeeds(
                     xSpeed, ySpeed, rotSpeed, sensors.getRotation2d()));
-    
+
     setModuleStates(states);
   }
 
