@@ -9,6 +9,8 @@ import com.ctre.phoenix.sensors.WPI_CANCoder;
 import com.revrobotics.CANSparkMax.SoftLimitDirection;
 
 import csplib.motors.CSP_SparkMax;
+import edu.wpi.first.math.controller.ArmFeedforward;
+import edu.wpi.first.math.controller.ElevatorFeedforward;
 import frc.robot.Constants;
 
 /** Add your docs here. */
@@ -17,6 +19,8 @@ public class Shoulder {
   private CSP_SparkMax leader = new CSP_SparkMax(Constants.ids.SHOULDER_LEADER);
   private CSP_SparkMax follower = new CSP_SparkMax(Constants.ids.SHOULDER_FOLLOWER);
   private WPI_CANCoder encoder = new WPI_CANCoder(Constants.ids.SHOULDER_ENCODER);
+
+  private ArmFeedforward armFF = new ArmFeedforward(Constants.arm.shoulder.kS, Constants.arm.shoulder.kG, Constants.arm.shoulder.kV); 
 
   public Shoulder() {
     init();
@@ -45,12 +49,12 @@ public class Shoulder {
 
     follower.follow(leader);
 
-    leader.setMotionPlaning(Constants.arm.shoulder.MINVEL, Constants.arm.shoulder.MAXVEL);
-    leader.setError(Constants.arm.shoulder.ALLOWERROR);
+    leader.setMotionPlaning(Constants.arm.shoulder.MIN_VEL, Constants.arm.shoulder.MAX_VEL);
+    leader.setError(Constants.arm.shoulder.ALLOWED_ERROR);
   }
 
   public void setAngle(double angle) {
-    leader.setPosition(angle);
+    leader.setPosition(angle, armFF.calculate(angle, Constants.arm.shoulder.MAX_VEL));
   }
 
   public void setPID(double kP, double kI, double kD, double kF) {

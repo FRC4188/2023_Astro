@@ -32,8 +32,8 @@ public class Wrist {
     motor.setSoftLimit(SoftLimitDirection.kForward, (float) Constants.arm.wrist.UPPER_LIMIT);
     motor.setSoftLimit(SoftLimitDirection.kReverse, (float) Constants.arm.wrist.LOWER_LIMIT);
 
-    motor.setMotionPlaning(Constants.arm.telescope.MINVEL, Constants.arm.telescope.MAXVEL);
-    motor.setError(Constants.arm.wrist.ALLOWERROR);
+    motor.setMotionPlaning(Constants.arm.telescope.MIN_VEL, Constants.arm.telescope.MAX_VEL);
+    motor.setError(Constants.arm.wrist.ALLOWED_ERROR);
   }
 
   public void setAngle(double goal) {

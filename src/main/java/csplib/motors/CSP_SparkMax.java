@@ -33,6 +33,10 @@ public class CSP_SparkMax extends CANSparkMax implements CSP_Motor {
     pid.setReference(position, ControlType.kPosition);
   }
 
+  public void setPosition(double position, double ff) {
+    pid.setReference(position, ControlType.kPosition, 0, ff);
+  }
+
   public void setVelocity(double velocity) {
     pid.setReference(velocity, ControlType.kVelocity);
   }

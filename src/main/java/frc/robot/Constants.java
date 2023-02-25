@@ -58,17 +58,17 @@ public final class Constants {
 
     public static final int PIGEON = 15;
 
-    public static final int SHOULDER_LEADER = 69;
-    public static final int SHOULDER_FOLLOWER = 68;
-    public static final int SHOULDER_ENCODER = 67;
+    public static final int SHOULDER_LEADER = 21;
+    public static final int SHOULDER_FOLLOWER = 22;
+    public static final int SHOULDER_ENCODER = 10;
 
-    public static final int WRIST = 50;
-    public static final int WRIST_ENCODER = 59;
+    public static final int WRIST = 24;
+    public static final int WRIST_ENCODER = 9;
 
-    public static final int TELESCOPE = 39;
+    public static final int TELESCOPE = 23;
     public static final int TELESCOPE_LIMIT_SWITCH = 3;
 
-    public static final int CLAW = 0;
+    public static final int CLAW = 16;
     public static final int ULTRASONIC_SENSOR = 4;
   }
 
@@ -167,22 +167,16 @@ public final class Constants {
     public static final double CUBE_DISTANCE = Units.inchesToMeters(9.313251);
     public static final double TOTAL_DISTANCE = Units.inchesToMeters(14.824533);
 
-    public static final double SENSOR_SCALE = 2.0;
-    public static final int SHOULDER_LEADER = 21;
-    public static final int SHOULDER_FOLLOWER = 22;
-    public static final int SHOULDER_ENCODER = 10;
-
-    public static final int TELESCOPE_MOTOR = 23;
-    public static final int WRIST = 24;
-    public static final int WRIST_ENCODER = 9;
+    public static final double SENSOR_SCALE = 0.195;
   }
 
   public static final class arm {
     public static final class shoulder {
       public static final double ZERO = 0.0;
-      public static final double GEAR_RATIO = 132.741; // 101.1358 to 1
+      public static final double GEAR_RATIO = 132.741; // 132.741 to 1
       public static final double TICKS_PER_ROTATION = robot.NEO_ENCODER_TICKS * GEAR_RATIO;
       public static final double TICKS_PER_DEGREE = TICKS_PER_ROTATION / 360;
+      
       public static final double UPPER_LIMIT = 120;
       public static final double LOWER_LIMIT = -120;
 
@@ -191,9 +185,9 @@ public final class Constants {
       public static final double kD = 0.0;
       public static final double kF = 0.0;
 
-      public static final double MINVEL = 0.0;
-      public static final double MAXVEL = 0.0;
-      public static final double ALLOWERROR = 0.0;
+      public static final double MIN_VEL = 0.0;
+      public static final double MAX_VEL = 0.0;
+      public static final double ALLOWED_ERROR = 0.0;
 
       public static final double kS = 0.0;
       public static final double kG = 0.0;
@@ -217,19 +211,20 @@ public final class Constants {
       public static final double kG = 0.0;
       public static final double kV = 0.0;
 
-      public static final double MINVEL = 0.0;
-      public static final double MAXVEL = 0.0;
-      public static final double ALLOWERROR = 0.0;
+      public static final double MIN_VEL = 0.0;
+      public static final double MAX_VEL = 0.0;
+      public static final double ALLOWED_ERROR = 0.0;
     }
 
     public static final class wrist {
-      public static final double GEAR_RATIO = 100; // 101.1358 to 1
+      public static final double ZERO = 0.0;
+
+      public static final double GEAR_RATIO = 100; // 100 to 1
       public static final double TICKS_PER_ROTATION = robot.NEO_ENCODER_TICKS * GEAR_RATIO;
       public static final double TICKS_PER_DEGREE = TICKS_PER_ROTATION / 360;
 
-      public static final double ZERO = 0.0;
-      public static final double UPPER_LIMIT = 120;
-      public static final double LOWER_LIMIT = -120;
+      public static final double UPPER_LIMIT = 0;
+      public static final double LOWER_LIMIT = 131.167406;
 
       public static final double kP = 0.0;
       public static final double kI = 0.0;
@@ -240,9 +235,9 @@ public final class Constants {
       public static final double kG = 0.0;
       public static final double kV = 0.0;
 
-      public static final double MINVEL = 0.0;
-      public static final double MAXVEL = 0.0;
-      public static final double ALLOWERROR = 0.0;
+      public static final double MIN_VEL = 0.0;
+      public static final double MAX_VEL = 0.0;
+      public static final double ALLOWED_ERROR = 0.0;
     }
   }
 }

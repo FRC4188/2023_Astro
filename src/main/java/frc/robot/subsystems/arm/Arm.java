@@ -2,7 +2,9 @@ package frc.robot.subsystems.arm;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class Arm extends SubsystemBase {
 
@@ -13,18 +15,38 @@ public class Arm extends SubsystemBase {
     return instance;
   }
 
-  private Telescope elevator = new Telescope();
+  private Telescope telescope = new Telescope();
   private Wrist wrist = new Wrist();
-  private Shoulder shoulderJoint = new Shoulder();
+  private Shoulder shoulder = new Shoulder();
 
   private Arm() {}
 
+  @Override
+  public void periodic() {
+    SmartDashboard.putNumber("Shoulder Angle", getShoulderAngle());
+    SmartDashboard.putNumber("Telescope Position", getTelescopeLength());
+    SmartDashboard.putNumber("Wrist Angle", getWristAngle());
+  }
+
+  public void setPosition(Pose2d pose) {
+    double[] iKinematic = getInverseKinematic(pose);
+    telescope.setPosition(iKinematic[0]);
+    shoulder.setAngle(iKinematic[1]);
+    wrist.setAngle(iKinematic[2]);
+  }
+
+  public void stow() {
+    shoulder.setAngle(0);
+    telescope.zero();
+    wrist.setAngle(Constants.arm.wrist.LOWER_LIMIT);
+  }
+
   public Pose2d getPosition() {
-    double elevatorLength = elevator.getPosition();
-    double shoulderAngle = Math.toRadians(shoulderJoint.getAngle());
+    double telescopeLength = telescope.getPosition();
+    double shoulderAngle = Math.toRadians(shoulder.getAngle());
     double wristAngle = Math.toRadians(wrist.getAngle());
-    double x = elevatorLength * Math.sin(shoulderAngle) + 0 * Math.sin(shoulderAngle - wristAngle);
-    double z = elevatorLength * Math.cos(shoulderAngle) + 0 * Math.cos(shoulderAngle - wristAngle);
+    double x = telescopeLength * Math.sin(shoulderAngle) + 0 * Math.sin(shoulderAngle - wristAngle);
+    double z = telescopeLength * Math.cos(shoulderAngle) + 0 * Math.cos(shoulderAngle - wristAngle);
     double pickUpAngle = Math.PI / 2 - shoulderAngle + wristAngle;
 
     return (new Pose2d(x, z, new Rotation2d(pickUpAngle)));
@@ -36,7 +58,7 @@ public class Arm extends SubsystemBase {
     double pickUpAngle = pose.getRotation().getDegrees();
     double wristLength = 0;
 
-    double elevatorLength =
+    double telescopeLength =
         Math.sqrt(
             Math.pow(x, 2)
                 + Math.pow(z, 2)
@@ -56,13 +78,18 @@ public class Arm extends SubsystemBase {
                     (z - wristLength * Math.sin(pickUpAngle)),
                     (x - wristLength * Math.cos(pickUpAngle))));
 
-    return new double[] {elevatorLength, shoulderAngle, wristAngle};
+    return new double[] {telescopeLength, shoulderAngle, wristAngle};
   }
 
-  public void setPosition(Pose2d pose) {
-    double[] iKinematic = getInverseKinematic(pose);
-    elevator.setPosition(iKinematic[0]);
-    shoulderJoint.setAngle(iKinematic[1]);
-    wrist.setAngle(iKinematic[2]);
+  private double getTelescopeLength() {
+    return telescope.getPosition();
+  }
+
+  private double getShoulderAngle() {
+    return shoulder.getAngle();
+  }
+
+  private double getWristAngle() {
+    return wrist.getAngle();
   }
 }

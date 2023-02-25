@@ -127,8 +127,12 @@ public class Drivetrain extends SubsystemBase {
     double rotSpeed = -rot * Constants.drivetrain.MAX_RADIANS;
 
     Rotation2d pigeonAngle = sensors.getRotation2d();
+
     lastAngle = pigeonAngle.getDegrees();
-    boolean noInput = xSpeed == 0 && ySpeed == 0 && rotSpeed == 0;  
+
+    boolean noInput = xSpeed == 0 && ySpeed == 0 && rotSpeed == 0; 
+    
+    rotSpeed = (rotSpeed == 0) ? rotPID.calculate(lastAngle, pigeonAngle.getDegrees()) : rotSpeed;
 
     SwerveModuleState[] states =
         noInput
