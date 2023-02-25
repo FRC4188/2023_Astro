@@ -94,10 +94,10 @@ public final class Constants {
     public static final Translation2d BR_LOCATION =
         new Translation2d(-(Constants.robot.A_WIDTH / 2), -(Constants.robot.A_LENGTH / 2));
 
-    public static final double FL_ZERO = -140.09765625;
-    public static final double BL_ZERO = -129.462890625;
-    public static final double BR_ZERO = 36.298828125;
-    public static final double FR_ZERO = -15.732421875;
+    public static final double FL_ZERO = -138.427734375;
+    public static final double BL_ZERO = -130.25390625;
+    public static final double BR_ZERO = 34.27734375;
+    public static final double FR_ZERO = -20.478515625;
 
     public static final class angle {
       public static final double FL_kP = -0.008;
