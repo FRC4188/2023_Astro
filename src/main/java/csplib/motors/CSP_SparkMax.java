@@ -4,7 +4,6 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
 
-
 public class CSP_SparkMax extends CANSparkMax implements CSP_Motor {
   private RelativeEncoder encoder;
   private SparkMaxPIDController pid;
