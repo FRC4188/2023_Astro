@@ -175,7 +175,7 @@ public final class Constants {
       public static final double GEAR_RATIO = 132.741; // 132.741 to 1
       public static final double TICKS_PER_ROTATION = robot.NEO_ENCODER_TICKS * GEAR_RATIO;
       public static final double TICKS_PER_DEGREE = TICKS_PER_ROTATION / 360;
-      
+
       public static final double UPPER_LIMIT = 120;
       public static final double LOWER_LIMIT = -120;
 
