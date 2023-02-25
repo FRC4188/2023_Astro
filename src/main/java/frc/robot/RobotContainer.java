@@ -7,6 +7,7 @@ import com.pathplanner.lib.PathConstraints;
 import csplib.inputs.CSP_Controller;
 import csplib.inputs.CSP_Controller.Scale;
 import csplib.utils.AutoBuilder;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -57,7 +58,7 @@ public class RobotContainer {
 
   /** Use this method to define your button->command mappings. */
   private void configureButtonBindings() {
-    pilot.getAButtonObj().onTrue(new InstantCommand(() -> sensors.resetPigeon(), sensors));
+    pilot.getAButtonObj().onTrue(new InstantCommand(() -> drivetrain.resetOdometry(new Pose2d())));
   }
 
   private void smartdashboardButtons() {
@@ -68,26 +69,25 @@ public class RobotContainer {
             drivetrain));
 
     SmartDashboard.putData(
-      "Set Rot PID",
-      new InstantCommand(() -> drivetrain.setRotPID(
-        SmartDashboard.getNumber("Rot kP", 0), 
-        SmartDashboard.getNumber("Rot kI", 0), 
-        SmartDashboard.getNumber("Rot kD", 0)))
-    );
+        "Set Rot PID",
+        new RunCommand(
+            () ->
+                drivetrain.setRotPID(
+                    SmartDashboard.getNumber("Rot kP", 0),
+                    SmartDashboard.getNumber("Rot kI", 0),
+                    SmartDashboard.getNumber("Rot kD", 0))));
 
     SmartDashboard.putData(
         "Set Zero", new InstantCommand(() -> drivetrain.zeroPower(), drivetrain));
-
-    
-  };
+  }
 
   private void addChooser() {
     autoChooser.setDefaultOption("Do nothing", new SequentialCommandGroup());
     autoChooser.addOption(
-        "Straight",
-        AutoBuilder.buildAuto("Straight Line", new HashMap<>()));
+        "Test",
+        AutoBuilder.buildAuto("New Path", new HashMap<>(), new PathConstraints(5.0, 1)));
     autoChooser.addOption(
-        "2 Score", AutoBuilder.buildAuto("2 Score", new HashMap<>()));
+        "B21", AutoBuilder.buildAuto("B21", new HashMap<>(), new PathConstraints(5.0, 2)));
 
     SmartDashboard.putData("Auto Chooser", autoChooser);
   }

@@ -8,7 +8,8 @@ public class Pigeon extends Pigeon2 {
     super(canID, "canivore");
     super.configFactoryDefault();
     super.clearStickyFaults();
-    
+
+
     reset();
   }
 

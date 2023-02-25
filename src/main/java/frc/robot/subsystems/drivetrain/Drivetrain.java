@@ -3,6 +3,7 @@ package frc.robot.subsystems.drivetrain;
 import com.pathplanner.lib.auto.PIDConstants;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
@@ -11,6 +12,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.Counter;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -91,11 +93,10 @@ public class Drivetrain extends SubsystemBase {
           new Pose2d());
 
   private Notifier notifier = new Notifier(() -> recalibrate());
-
   private double lastAngle;
 
-  private PIDController rotPID = new PIDController(-0.1, 0.0, -0.006);
-    
+  private PIDController rotPID = new PIDController(Constants.drivetrain.correctionPID.kP, 0.0, Constants.drivetrain.correctionPID.kD);
+
   private Drivetrain() {
     putDashboard();
     notifier.startPeriodic(1.0);
@@ -107,7 +108,6 @@ public class Drivetrain extends SubsystemBase {
   public void periodic() {
     updateOdometry();
     SmartDashboard.putString("Position", getPose2d().toString());
-
 
     // SmartDashboard.putNumber("FL Angle", frontLeft.getModulePosition().angle.getDegrees());
     // SmartDashboard.putNumber("BL Angle", backLeft.getModulePosition().angle.getDegrees());
@@ -127,9 +127,7 @@ public class Drivetrain extends SubsystemBase {
     double rotSpeed = -rot * Constants.drivetrain.MAX_RADIANS;
 
     Rotation2d pigeonAngle = sensors.getRotation2d();
-
-    lastAngle = (rotSpeed != 0) ? pigeonAngle.getDegrees() : lastAngle;
-
+    lastAngle = pigeonAngle.getDegrees();
     boolean noInput = xSpeed == 0 && ySpeed == 0 && rotSpeed == 0;  
 
     SwerveModuleState[] states =
@@ -153,7 +151,6 @@ public class Drivetrain extends SubsystemBase {
 
   public void recalibrate() {
     if (!sensors.getPose3d().equals(new Pose3d())) {
-      odometry.setVisionMeasurementStdDevs(Constants.drivetrain.VISION_STD_DEVS);
       resetOdometry(sensors.getPose3d().toPose2d());
     }
   }
@@ -170,6 +167,7 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public void resetOdometry(Pose2d initPose) {
+    sensors.resetPigeon();
     odometry.resetPosition(
         sensors.getRotation2d(),
         new SwerveModulePosition[] {
