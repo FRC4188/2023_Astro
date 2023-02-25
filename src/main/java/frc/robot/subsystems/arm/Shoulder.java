@@ -9,26 +9,14 @@ import com.ctre.phoenix.sensors.WPI_CANCoder;
 import com.revrobotics.CANSparkMax.SoftLimitDirection;
 
 import csplib.motors.CSP_SparkMax;
-import edu.wpi.first.math.controller.ArmFeedforward;
-import edu.wpi.first.math.controller.ProfiledPIDController;
 import frc.robot.Constants;
 
 /** Add your docs here. */
 public class Shoulder {
 
   private CSP_SparkMax leader = new CSP_SparkMax(Constants.ids.SHOULDER_LEADER);
-  private CSP_SparkMax follower = new CSP_SparkMax(Constants.ids.SHOULDER_LEADER);
+  private CSP_SparkMax follower = new CSP_SparkMax(Constants.ids.SHOULDER_FOLLOWER);
   private WPI_CANCoder encoder = new WPI_CANCoder(Constants.ids.SHOULDER_ENCODER);
-
-  private ProfiledPIDController pid =
-      new ProfiledPIDController(
-          Constants.arm.shoulder.kP,
-          Constants.arm.shoulder.kI,
-          Constants.arm.shoulder.kD,
-          Constants.arm.shoulder.CONSTRAINTS);
-  private ArmFeedforward ff =
-      new ArmFeedforward(
-          Constants.arm.shoulder.kS, Constants.arm.shoulder.kG, Constants.arm.shoulder.kV);
 
   public Shoulder() {
     init();
@@ -49,18 +37,24 @@ public class Shoulder {
     leader.enableSoftLimit(SoftLimitDirection.kReverse, true);
     leader.setSoftLimit(SoftLimitDirection.kForward, (float) Constants.arm.shoulder.UPPER_LIMIT);
     leader.setSoftLimit(SoftLimitDirection.kReverse, (float) Constants.arm.shoulder.LOWER_LIMIT);
+    leader.setPIDF(
+        Constants.arm.shoulder.kP,
+        Constants.arm.shoulder.kI,
+        Constants.arm.shoulder.kD,
+        Constants.arm.shoulder.kF);
 
     follower.follow(leader);
+
+    leader.setMotionPlaning(Constants.arm.shoulder.MINVEL, Constants.arm.shoulder.MAXVEL);
+    leader.setError(Constants.arm.shoulder.ALLOWERROR);
   }
 
-  public void setAngle(double goal) {
-    leader.setVoltage(
-        pid.calculate(getAngle(), goal)
-            + ff.calculate(Math.toRadians(getAngle() + Math.PI / 2), pid.getSetpoint().velocity));
+  public void setAngle(double angle) {
+    leader.setPosition(angle);
   }
 
-  public void setPID(double kP, double kI, double kD) {
-    pid.setPID(kP, kI, kD);
+  public void setPID(double kP, double kI, double kD, double kF) {
+    leader.setPIDF(kP, kI, kD, kF);
   }
 
   public double getAngle() {

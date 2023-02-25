@@ -3,7 +3,6 @@ package frc.robot.subsystems.arm;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 
 public class Arm extends SubsystemBase {
 
@@ -21,15 +20,11 @@ public class Arm extends SubsystemBase {
   private Arm() {}
 
   public Pose2d getPosition() {
-    double elevatorLength = elevator.getAngle();
+    double elevatorLength = elevator.getPosition();
     double shoulderAngle = Math.toRadians(shoulderJoint.getAngle());
     double wristAngle = Math.toRadians(wrist.getAngle());
-    double x =
-        elevatorLength * Math.sin(shoulderAngle)
-            + Constants.claw.TOTAL_DISTANCE * Math.sin(shoulderAngle - wristAngle);
-    double z =
-        elevatorLength * Math.cos(shoulderAngle)
-            + Constants.claw.TOTAL_DISTANCE * Math.cos(shoulderAngle - wristAngle);
+    double x = elevatorLength * Math.sin(shoulderAngle) + 0 * Math.sin(shoulderAngle - wristAngle);
+    double z = elevatorLength * Math.cos(shoulderAngle) + 0 * Math.cos(shoulderAngle - wristAngle);
     double pickUpAngle = Math.PI / 2 - shoulderAngle + wristAngle;
 
     return (new Pose2d(x, z, new Rotation2d(pickUpAngle)));
@@ -39,7 +34,7 @@ public class Arm extends SubsystemBase {
     double x = pose.getX();
     double z = pose.getY();
     double pickUpAngle = pose.getRotation().getDegrees();
-    double wristLength = Constants.claw.TOTAL_DISTANCE;
+    double wristLength = 0;
 
     double elevatorLength =
         Math.sqrt(
@@ -66,7 +61,7 @@ public class Arm extends SubsystemBase {
 
   public void setPosition(Pose2d pose) {
     double[] iKinematic = getInverseKinematic(pose);
-    elevator.setAngle(iKinematic[0]);
+    elevator.setPosition(iKinematic[0]);
     shoulderJoint.setAngle(iKinematic[1]);
     wrist.setAngle(iKinematic[2]);
   }

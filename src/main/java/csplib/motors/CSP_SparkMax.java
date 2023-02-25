@@ -85,4 +85,19 @@ public class CSP_SparkMax extends CANSparkMax implements CSP_Motor {
   public int getID() {
     return super.getDeviceId();
   }
+
+  public void setMotionPlaning(double minVel, double maxVel) {
+    pid.setSmartMotionMaxVelocity(minVel, 0);
+    pid.setSmartMotionMaxAccel(maxVel, 0);
+  }
+
+  public void setContinousInputWrap(double min, double max) {
+    pid.setPositionPIDWrappingEnabled(true);
+    pid.setPositionPIDWrappingMaxInput(max);
+    pid.setPositionPIDWrappingMinInput(min);
+  }
+
+  public void setError(double allowedErr) {
+    pid.setSmartMotionAllowedClosedLoopError(allowedErr, 0);
+  }
 }
