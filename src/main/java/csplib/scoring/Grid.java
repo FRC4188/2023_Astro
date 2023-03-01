@@ -2,17 +2,17 @@ package csplib.scoring;
 
 import csplib.scoring.Node.NodeType;
 import edu.wpi.first.math.geometry.Translation3d;
-import edu.wpi.first.math.util.Units;
+import frc.robot.Constants;
 
 public class Grid {
-  private double topX = 0.4;
-  private double topZ = Units.inchesToMeters(46.0);
+  private double topX = Constants.field.GRID_TOP_X;
+  private double topZ = Constants.field.GRID_TOP_Z;
 
-  private double middleX = 0.8;
-  private double middleZ = Units.inchesToMeters(34.0);
+  private double middleX = Constants.field.GRID_MID_X;
+  private double middleZ = Constants.field.GRID_MID_Z;
 
-  private double bottomX = 1.2;
-  private double bottomZ = 0.0;
+  private double bottomX = Constants.field.GRID_BOTTOM_X;
+  private double bottomZ = Constants.field.GRID_BOTTOM_X;
 
   private Node[][] grid = {
     {

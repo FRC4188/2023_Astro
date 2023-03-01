@@ -9,6 +9,8 @@ import com.ctre.phoenix.sensors.WPI_CANCoder;
 import com.revrobotics.CANSparkMax.SoftLimitDirection;
 
 import csplib.motors.CSP_SparkMax;
+import csplib.utils.Conversions;
+import csplib.utils.TempManager;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import frc.robot.Constants;
 
@@ -25,6 +27,7 @@ public class Shoulder {
 
   public Shoulder() {
     init();
+    TempManager.addMotor(leader, follower);
   }
 
   private void init() {
@@ -35,13 +38,15 @@ public class Shoulder {
     encoder.configSensorDirection(false);
     encoder.configMagnetOffset(-Constants.arm.shoulder.ZERO);
 
-    leader.setScalar(1 / Constants.arm.shoulder.TICKS_PER_DEGREE);
+    leader.setScalar(1 / Constants.arm.shoulder.ROTATIONS_PER_DEGREE);
+    leader.setInverted(true);
     leader.setBrake(true);
-    leader.setPosition(encoder.getAbsolutePosition());
+    leader.setEncoder(Conversions.degreesSignedToUnsigned(encoder.getAbsolutePosition()));
     leader.enableSoftLimit(SoftLimitDirection.kForward, true);
     leader.enableSoftLimit(SoftLimitDirection.kReverse, true);
     leader.setSoftLimit(SoftLimitDirection.kForward, (float) Constants.arm.shoulder.UPPER_LIMIT);
     leader.setSoftLimit(SoftLimitDirection.kReverse, (float) Constants.arm.shoulder.LOWER_LIMIT);
+
     leader.setPIDF(
         Constants.arm.shoulder.kP,
         Constants.arm.shoulder.kI,
@@ -50,12 +55,17 @@ public class Shoulder {
 
     follower.follow(leader);
 
-    leader.setMotionPlaning(Constants.arm.shoulder.MIN_VEL, Constants.arm.shoulder.MAX_VEL);
+    leader.setMotionPlaning(Constants.arm.shoulder.MAX_VEL, Constants.arm.shoulder.MAX_ACCEL);
+    leader.setContinousInputWrap(-180, 180);
     leader.setError(Constants.arm.shoulder.ALLOWED_ERROR);
   }
 
+  public void set(double percent) {
+    leader.set(percent);
+  }
+
   public void setAngle(double angle) {
-    leader.setPosition(angle, armFF.calculate(angle, Constants.arm.shoulder.MAX_VEL));
+    leader.setPosition(angle, armFF.calculate(angle, 0));
   }
 
   public void setPID(double kP, double kI, double kD, double kF) {
@@ -64,5 +74,9 @@ public class Shoulder {
 
   public double getAngle() {
     return encoder.getAbsolutePosition();
+  }
+
+  public double getLeaderAngle() {
+    return leader.getPosition();
   }
 }

@@ -34,7 +34,7 @@ public class CSP_SparkMax extends CANSparkMax implements CSP_Motor {
   }
 
   public void setPosition(double position, double ff) {
-    pid.setReference(position, ControlType.kPosition, 0, ff);
+    pid.setReference(position, ControlType.kSmartMotion, 0, ff);
   }
 
   public void setVelocity(double velocity) {
@@ -90,8 +90,8 @@ public class CSP_SparkMax extends CANSparkMax implements CSP_Motor {
     return super.getDeviceId();
   }
 
-  public void setMotionPlaning(double minVel, double maxVel) {
-    pid.setSmartMotionMaxVelocity(minVel, 0);
+  public void setMotionPlaning(double maxVel, double maxAccel) {
+    pid.setSmartMotionMaxVelocity(maxVel, 0);
     pid.setSmartMotionMaxAccel(maxVel, 0);
   }
 
