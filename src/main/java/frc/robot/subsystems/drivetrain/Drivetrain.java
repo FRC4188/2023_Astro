@@ -90,7 +90,6 @@ public class Drivetrain extends SubsystemBase {
           },
           new Pose2d());
 
-  private Notifier notifier = new Notifier(() -> recalibrate());
   private double lastAngle;
 
   private PIDController rotPID =
@@ -99,7 +98,6 @@ public class Drivetrain extends SubsystemBase {
 
   private Drivetrain() {
     putDashboard();
-    notifier.startPeriodic(1.0);
     rotPID.enableContinuousInput(-180, 180);
     rotPID.setTolerance(0.5);
   }
@@ -109,10 +107,10 @@ public class Drivetrain extends SubsystemBase {
     updateOdometry();
     SmartDashboard.putString("Position", getPose2d().toString());
 
-    // SmartDashboard.putNumber("FL Angle", frontLeft.getModulePosition().angle.getDegrees());
-    // SmartDashboard.putNumber("BL Angle", backLeft.getModulePosition().angle.getDegrees());
-    // SmartDashboard.putNumber("BR Angle", backRight.getModulePosition().angle.getDegrees());
-    // SmartDashboard.putNumber("FR Angle", frontRight.getModulePosition().angle.getDegrees());
+    SmartDashboard.putNumber("FL Angle", frontLeft.getModulePosition().angle.getDegrees());
+    SmartDashboard.putNumber("BL Angle", backLeft.getModulePosition().angle.getDegrees());
+    SmartDashboard.putNumber("BR Angle", backRight.getModulePosition().angle.getDegrees());
+    SmartDashboard.putNumber("FR Angle", frontRight.getModulePosition().angle.getDegrees());
   }
 
   public void putDashboard() {
@@ -132,7 +130,7 @@ public class Drivetrain extends SubsystemBase {
 
     boolean noInput = xSpeed == 0 && ySpeed == 0 && rotSpeed == 0; 
     
-    rotSpeed = (rotSpeed == 0) ? rotPID.calculate(lastAngle, pigeonAngle.getDegrees()) : rotSpeed;
+    rotSpeed = (rotSpeed == 0 /* && (xSpeed != 0.0 || ySpeed != 0.0)*/ ) ? rotPID.calculate(lastAngle, pigeonAngle.getDegrees()) : rotSpeed;
 
     SwerveModuleState[] states =
         noInput

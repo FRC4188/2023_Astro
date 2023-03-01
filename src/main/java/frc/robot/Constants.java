@@ -27,15 +27,36 @@ public final class Constants {
     public static final double TRIGGER_THRESHOLD = 0.6;
   }
 
+  public static final class field {
+    public static double GRID_TOP_X = 0.4;
+    public static double GRID_TOP_Z = Units.inchesToMeters(46.0);
+  
+    public static double GRID_MID_X = 0.8;
+    public static double GRID_MID_Z = Units.inchesToMeters(34.0);
+  
+    public static double GRID_BOTTOM_X = 1.2;
+    public static double GRID_BOTTOM_Z = Units.inchesToMeters(5.0);
+
+    public static double DOUBLE_Z = 0.0;
+    public static double SINGLE_Z = 0.0; 
+  }
+
   public static final class robot {
     public static final double A_LENGTH = Units.inchesToMeters(33);
     public static final double A_WIDTH = Units.inchesToMeters(27.5);
     public static final double A_CROSSLENGTH = Math.hypot(A_LENGTH, A_WIDTH);
 
+    public static final double MAX_EXTENSION = Units.inchesToMeters(48);
+
     public static final double FALCON_ENCODER_TICKS = 2048.0;
     public static final double NEO_ENCODER_TICKS = 42.0;
 
     public static final double MAX_TEMP = 50.0;
+
+    public static final double SHOULDER_HEIGHT = Units.inchesToMeters(20);
+
+    public static final double CUBE_DISTANCE = Units.inchesToMeters(9.313251);
+    public static final double TOTAL_DISTANCE = Units.inchesToMeters(14.824533);
   }
 
   public static final class ids {
@@ -65,7 +86,7 @@ public final class Constants {
     public static final int WRIST_ENCODER = 9;
 
     public static final int TELESCOPE = 23;
-    public static final int TELESCOPE_LIMIT_SWITCH = 3;
+    public static final int TELESCOPE_LIMIT_SWITCH = 9;
 
     public static final int CLAW = 16;
     public static final int ULTRASONIC_SENSOR = 4;
@@ -108,10 +129,10 @@ public final class Constants {
     public static final Translation2d BR_LOCATION =
         new Translation2d(-(Constants.robot.A_WIDTH / 2), -(Constants.robot.A_LENGTH / 2));
 
-    public static final double FL_ZERO = -138.427734375;
-    public static final double BL_ZERO = -130.25390625;
-    public static final double BR_ZERO = 34.27734375;
-    public static final double FR_ZERO = -20.478515625;
+    public static final double FL_ZERO = -140.80078125;
+    public static final double BL_ZERO = -126.298828125;
+    public static final double BR_ZERO = 34.365234375;
+    public static final double FR_ZERO = -20.56640625;
 
     public static final class angle {
       public static final double FL_kP = -0.008;
@@ -163,43 +184,42 @@ public final class Constants {
   }
 
   public static final class claw {
-    public static final double CUBE_DISTANCE = Units.inchesToMeters(9.313251);
-    public static final double TOTAL_DISTANCE = Units.inchesToMeters(14.824533);
+
 
     public static final double SENSOR_SCALE = 0.195;
   }
 
   public static final class arm {
     public static final class shoulder {
-      public static final double ZERO = 0.0;
+      public static final double ZERO = 117.7734375;
       public static final double GEAR_RATIO = 132.741; // 132.741 to 1
-      public static final double TICKS_PER_ROTATION = robot.NEO_ENCODER_TICKS * GEAR_RATIO;
-      public static final double TICKS_PER_DEGREE = TICKS_PER_ROTATION / 360;
+      public static final double ROTATIONS_PER_DEGREE = GEAR_RATIO / 360;
       
-      public static final double UPPER_LIMIT = 120;
-      public static final double LOWER_LIMIT = -120;
+      public static final double UPPER_LIMIT = 112.1484375;
+      public static final double LOWER_LIMIT = -112.1484375;
 
       public static final double kP = 0.0;
       public static final double kI = 0.0;
       public static final double kD = 0.0;
       public static final double kF = 0.0;
 
-      public static final double MIN_VEL = 0.0;
+      public static final double MAX_ACCEL = 0.0;
       public static final double MAX_VEL = 0.0;
       public static final double ALLOWED_ERROR = 0.0;
 
-      public static final double kS = 0.0;
-      public static final double kG = 0.0;
-      public static final double kV = 0.0;
+      public static final double kS = -0.011135;
+      public static final double kG = 0.50345;
+      public static final double kV = 6.5364;
     }
 
     public static final class telescope {
+      public static final double ZERO_CURRENT = 0.0;
 
-      public static final double ROTATIONS_PER_INCH = 62.197; // 62.197 rotations per inch
-      public static final double TICKS_PER_INCH = ROTATIONS_PER_INCH * robot.NEO_ENCODER_TICKS;
-      public static final double TICKS_PER_METER = Units.inchesToMeters(TICKS_PER_INCH);
-      public static final double UPPER_LIMIT = 120;
-      public static final double LOWER_LIMIT = -120;
+      public static final double ROTATIONS_PER_INCH = 57.014; // 57.014 rotations per inch
+      public static final double ROTATIONS_PER_METER = Units.inchesToMeters(ROTATIONS_PER_INCH);
+
+      public static final double UPPER_LIMIT = 20.58035659790039;
+      public static final double LOWER_LIMIT = 0.5334;
 
       public static final double kP = 0.0;
       public static final double kI = 0.0;
@@ -210,32 +230,33 @@ public final class Constants {
       public static final double kG = 0.0;
       public static final double kV = 0.0;
 
-      public static final double MIN_VEL = 0.0;
       public static final double MAX_VEL = 0.0;
+      public static final double MAX_ACCEL = 0.0;
       public static final double ALLOWED_ERROR = 0.0;
     }
 
     public static final class wrist {
       public static final double ZERO = 0.0;
 
-      public static final double GEAR_RATIO = 100; // 100 to 1
-      public static final double TICKS_PER_ROTATION = robot.NEO_ENCODER_TICKS * GEAR_RATIO;
-      public static final double TICKS_PER_DEGREE = TICKS_PER_ROTATION / 360;
+      public static final double ZERO_CURRENT = 25.0;
 
-      public static final double UPPER_LIMIT = 0;
-      public static final double LOWER_LIMIT = 131.167406;
+      public static final double GEAR_RATIO = 100; // 100 to 1
+      public static final double ROTATIONS_PER_DEGREE = GEAR_RATIO / 360;
+
+      public static final double UPPER_LIMIT = 122.91316986083984;
+      public static final double LOWER_LIMIT = -122.99888610839844;
 
       public static final double kP = 0.0;
       public static final double kI = 0.0;
       public static final double kD = 0.0;
       public static final double kF = 0.0;
 
-      public static final double kS = 0.0;
-      public static final double kG = 0.0;
-      public static final double kV = 0.0;
+      public static final double kS = 0.080142;
+      public static final double kG = 0.69185;
+      public static final double kV = 0.017496;
 
-      public static final double MIN_VEL = 0.0;
       public static final double MAX_VEL = 0.0;
+      public static final double MAX_ACCEL = 0.0;
       public static final double ALLOWED_ERROR = 0.0;
     }
   }

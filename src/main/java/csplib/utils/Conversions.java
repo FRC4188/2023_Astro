@@ -8,6 +8,16 @@ public final class Conversions {
    * @return the angle between [0, 360]
    */
   public static double degreesSignedToUnsigned(double input) {
-    return (-input + 360.0) % 360.0 - 180.0;
+    return Math.floorMod((long) input, 360);
+  }
+
+  /**
+   * Converts angles with range [0, 360] to [-180, 180]
+   *
+   * @param input
+   * @return the angle between [-180, 180]
+   */
+  public static double degreesUnsignedToSigned(double input) {
+    return (input + 180) % 360 - 180;
   }
 }

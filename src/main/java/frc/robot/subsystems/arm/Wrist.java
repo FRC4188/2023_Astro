@@ -3,37 +3,58 @@ package frc.robot.subsystems.arm;
 import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 import com.ctre.phoenix.sensors.WPI_CANCoder;
 import com.revrobotics.CANSparkMax.SoftLimitDirection;
+import com.revrobotics.SparkMaxLimitSwitch.Type;
 
 import csplib.motors.CSP_SparkMax;
+import csplib.utils.TempManager;
 import frc.robot.Constants;
 
 public class Wrist {
 
   private CSP_SparkMax motor = new CSP_SparkMax(Constants.ids.WRIST);
-  private WPI_CANCoder encoder = new WPI_CANCoder(Constants.ids.WRIST_ENCODER);
+  // private WPI_CANCoder encoder = new WPI_CANCoder(Constants.ids.WRIST_ENCODER);
 
   public Wrist() {
     init();
+    TempManager.addMotor(motor);
   }
 
   private void init() {
-    encoder.configFactoryDefault();
-    encoder.clearStickyFaults();
-    encoder.configAbsoluteSensorRange(AbsoluteSensorRange.Signed_PlusMinus180);
-    encoder.setPosition(0.0);
-    encoder.configSensorDirection(false);
-    encoder.configMagnetOffset(-Constants.arm.wrist.ZERO);
+    // encoder.configFactoryDefault();
+    // encoder.clearStickyFaults();
+    // encoder.configAbsoluteSensorRange(AbsoluteSensorRange.Signed_PlusMinus180);
+    // encoder.setPosition(0.0);
+    // encoder.configSensorDirection(false);
+    // encoder.configMagnetOffset(-Constants.arm.wrist.ZERO);
 
-    motor.setScalar(1 / Constants.arm.wrist.TICKS_PER_DEGREE);
+    motor.setScalar(1 / Constants.arm.wrist.ROTATIONS_PER_DEGREE);
     motor.setBrake(true);
-    motor.setPosition(encoder.getAbsolutePosition());
+    motor.setPosition(0.0);
     motor.enableSoftLimit(SoftLimitDirection.kForward, true);
-    motor.enableSoftLimit(SoftLimitDirection.kReverse, true);
+    motor.enableSoftLimit(SoftLimitDirection.kReverse, false);
     motor.setSoftLimit(SoftLimitDirection.kForward, (float) Constants.arm.wrist.UPPER_LIMIT);
     motor.setSoftLimit(SoftLimitDirection.kReverse, (float) Constants.arm.wrist.LOWER_LIMIT);
 
-    motor.setMotionPlaning(Constants.arm.telescope.MIN_VEL, Constants.arm.telescope.MAX_VEL);
+    motor.setMotionPlaning(Constants.arm.telescope.MAX_VEL, Constants.arm.telescope.MAX_ACCEL);
     motor.setError(Constants.arm.wrist.ALLOWED_ERROR);
+  }
+
+  public void zero() {
+    if (motor.getCurrent() < Constants.arm.wrist.ZERO_CURRENT) {
+      motor.enableSoftLimit(SoftLimitDirection.kReverse, false);
+      motor.set(-0.2);
+    } else {
+      motor.setEncoder(Constants.arm.wrist.LOWER_LIMIT);
+      motor.enableSoftLimit(SoftLimitDirection.kReverse, true);
+    }
+  }
+
+  public void set(double percent) {
+    motor.set(percent);
+  }
+
+  public void disable() {
+    motor.disable();
   }
 
   public void setAngle(double goal) {
@@ -45,6 +66,11 @@ public class Wrist {
   }
 
   public double getAngle() {
-    return encoder.getAbsolutePosition();
+    // return encoder.getAbsolutePosition();
+    return motor.getPosition();
+  }
+
+  public double getCurrent() {
+    return motor.getCurrent();
   }
 }

@@ -1,6 +1,7 @@
 package frc.robot.subsystems.claw;
 
 import csplib.motors.CSP_Talon;
+import csplib.utils.TempManager;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -17,7 +18,9 @@ public class Claw extends SubsystemBase {
   private AnalogPotentiometer sensor =
       new AnalogPotentiometer(Constants.ids.ULTRASONIC_SENSOR, Constants.claw.SENSOR_SCALE);
 
-  private Claw() {}
+  private Claw() {
+    TempManager.addMotor(motor);
+  }
 
   public void set(double percent) {
     motor.set(percent);

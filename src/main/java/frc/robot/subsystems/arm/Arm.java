@@ -1,7 +1,10 @@
 package frc.robot.subsystems.arm;
 
+import csplib.utils.Conversions;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -23,13 +26,15 @@ public class Arm extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Shoulder Angle", getShoulderAngle());
+    SmartDashboard.putNumber("Shouler Angle", getShoulderAngle());
+    SmartDashboard.putNumber("Shoulder Motor Angle", shoulder.getLeaderAngle());
+
     SmartDashboard.putNumber("Telescope Position", getTelescopeLength());
-    SmartDashboard.putNumber("Wrist Angle", getWristAngle());
+    SmartDashboard.putNumber("Telescope Current", telescope.getCurrent());
   }
 
   public void setPosition(Pose2d pose) {
-    double[] iKinematic = getInverseKinematic(pose);
+    double[] iKinematic = getInverseKinematics(pose);
     telescope.setPosition(iKinematic[0]);
     shoulder.setAngle(iKinematic[1]);
     wrist.setAngle(iKinematic[2]);
@@ -38,22 +43,61 @@ public class Arm extends SubsystemBase {
   public void stow() {
     shoulder.setAngle(0);
     telescope.zero();
-    wrist.setAngle(Constants.arm.wrist.LOWER_LIMIT);
+    wrist.zero();
+  }
+
+  public void zeroWrist() {
+    wrist.zero();
+  }
+
+  public void zeroTelescope() {
+    telescope.zero();
   }
 
   public Pose2d getPosition() {
     double telescopeLength = telescope.getPosition();
     double shoulderAngle = Math.toRadians(shoulder.getAngle());
     double wristAngle = Math.toRadians(wrist.getAngle());
-    double x = telescopeLength * Math.sin(shoulderAngle) + 0 * Math.sin(shoulderAngle - wristAngle);
-    double z = telescopeLength * Math.cos(shoulderAngle) + 0 * Math.cos(shoulderAngle - wristAngle);
+    double wristLength = 0;
+
+    double x = telescopeLength * Math.sin(shoulderAngle) + wristLength * Math.sin(shoulderAngle - wristAngle);
+    double z = telescopeLength * Math.cos(shoulderAngle) + wristLength * Math.cos(shoulderAngle - wristAngle);
     double pickUpAngle = Math.PI / 2 - shoulderAngle + wristAngle;
 
-    return (new Pose2d(x, z, new Rotation2d(pickUpAngle)));
+    Transform2d transform = new Transform2d(new Translation2d(0, Constants.robot.SHOULDER_HEIGHT), new Rotation2d());
+    return new Pose2d(x, z, new Rotation2d(pickUpAngle)).transformBy(transform);
   }
 
-  public double[] getInverseKinematic(Pose2d pose) {
-    double x = pose.getX();
+  public void setTelescope(double percent) {
+    telescope.set(percent);
+  } 
+
+  public void setShoulder(double percent) {
+    shoulder.set(percent);
+  }
+
+  public void setWrist(double percent) {
+    wrist.set(percent);
+  }
+
+  public void setShoulderPosition(double angle) {
+    shoulder.setAngle(angle);
+  }
+
+  public void setTelescopePID(double kP, double kI, double kD, double kF) {
+    telescope.setPID(kP, kI, kD, kF);
+  }
+
+  public void setShoulderPID(double kP, double kI, double kD, double kF) {
+    shoulder.setPID(kP, kI, kD, kF);
+  }
+
+  public void setWristPID(double kP, double kI, double kD, double kF) {
+    wrist.setPID(kP, kI, kD, kF);
+  }
+
+  public double[] getInverseKinematics(Pose2d pose) {
+    double x = (pose.getX() > Constants.robot.MAX_EXTENSION) ? Constants.robot.MAX_EXTENSION : pose.getX();
     double z = pose.getY();
     double pickUpAngle = pose.getRotation().getDegrees();
     double wristLength = 0;
@@ -78,18 +122,18 @@ public class Arm extends SubsystemBase {
                     (z - wristLength * Math.sin(pickUpAngle)),
                     (x - wristLength * Math.cos(pickUpAngle))));
 
-    return new double[] {telescopeLength, shoulderAngle, wristAngle};
+    return new double[] {telescopeLength, Conversions.degreesUnsignedToSigned(shoulderAngle), Conversions.degreesUnsignedToSigned(wristAngle)};
   }
 
-  private double getTelescopeLength() {
+  public double getTelescopeLength() {
     return telescope.getPosition();
   }
 
-  private double getShoulderAngle() {
+  public double getShoulderAngle() {
     return shoulder.getAngle();
   }
 
-  private double getWristAngle() {
+  public double getWristAngle() {
     return wrist.getAngle();
   }
 }
