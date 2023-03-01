@@ -12,7 +12,6 @@ import csplib.motors.CSP_SparkMax;
 import csplib.utils.Conversions;
 import csplib.utils.TempManager;
 import edu.wpi.first.math.controller.ArmFeedforward;
-import edu.wpi.first.math.controller.ElevatorFeedforward;
 import frc.robot.Constants;
 
 /** Add your docs here. */
@@ -22,7 +21,9 @@ public class Shoulder {
   private CSP_SparkMax follower = new CSP_SparkMax(Constants.ids.SHOULDER_FOLLOWER);
   private WPI_CANCoder encoder = new WPI_CANCoder(Constants.ids.SHOULDER_ENCODER);
 
-  private ArmFeedforward armFF = new ArmFeedforward(Constants.arm.shoulder.kS, Constants.arm.shoulder.kG, Constants.arm.shoulder.kV); 
+  private ArmFeedforward armFF =
+      new ArmFeedforward(
+          Constants.arm.shoulder.kS, Constants.arm.shoulder.kG, Constants.arm.shoulder.kV);
 
   public Shoulder() {
     init();
