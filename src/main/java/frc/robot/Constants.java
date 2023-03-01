@@ -185,7 +185,6 @@ public final class Constants {
 
   public static final class claw {
 
-
     public static final double SENSOR_SCALE = 0.195;
   }
 

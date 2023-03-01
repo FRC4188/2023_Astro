@@ -132,6 +132,8 @@ public class Drivetrain extends SubsystemBase {
     
     rotSpeed = (rotSpeed == 0 /* && (xSpeed != 0.0 || ySpeed != 0.0)*/ ) ? rotPID.calculate(lastAngle, pigeonAngle.getDegrees()) : rotSpeed;
 
+    rotSpeed = (rotSpeed == 0) ? rotPID.calculate(lastAngle, pigeonAngle.getDegrees()) : rotSpeed;
+
     SwerveModuleState[] states =
         noInput
             ? new SwerveModuleState[] {
