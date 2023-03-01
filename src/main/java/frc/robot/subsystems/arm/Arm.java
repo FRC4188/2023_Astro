@@ -60,17 +60,22 @@ public class Arm extends SubsystemBase {
     double wristAngle = Math.toRadians(wrist.getAngle());
     double wristLength = 0;
 
-    double x = telescopeLength * Math.sin(shoulderAngle) + wristLength * Math.sin(shoulderAngle - wristAngle);
-    double z = telescopeLength * Math.cos(shoulderAngle) + wristLength * Math.cos(shoulderAngle - wristAngle);
+    double x =
+        telescopeLength * Math.sin(shoulderAngle)
+            + wristLength * Math.sin(shoulderAngle - wristAngle);
+    double z =
+        telescopeLength * Math.cos(shoulderAngle)
+            + wristLength * Math.cos(shoulderAngle - wristAngle);
     double pickUpAngle = Math.PI / 2 - shoulderAngle + wristAngle;
 
-    Transform2d transform = new Transform2d(new Translation2d(0, Constants.robot.SHOULDER_HEIGHT), new Rotation2d());
+    Transform2d transform =
+        new Transform2d(new Translation2d(0, Constants.robot.SHOULDER_HEIGHT), new Rotation2d());
     return new Pose2d(x, z, new Rotation2d(pickUpAngle)).transformBy(transform);
   }
 
   public void setTelescope(double percent) {
     telescope.set(percent);
-  } 
+  }
 
   public void setShoulder(double percent) {
     shoulder.set(percent);
@@ -97,7 +102,8 @@ public class Arm extends SubsystemBase {
   }
 
   public double[] getInverseKinematics(Pose2d pose) {
-    double x = (pose.getX() > Constants.robot.MAX_EXTENSION) ? Constants.robot.MAX_EXTENSION : pose.getX();
+    double x =
+        (pose.getX() > Constants.robot.MAX_EXTENSION) ? Constants.robot.MAX_EXTENSION : pose.getX();
     double z = pose.getY();
     double pickUpAngle = pose.getRotation().getDegrees();
     double wristLength = 0;
@@ -122,7 +128,11 @@ public class Arm extends SubsystemBase {
                     (z - wristLength * Math.sin(pickUpAngle)),
                     (x - wristLength * Math.cos(pickUpAngle))));
 
-    return new double[] {telescopeLength, Conversions.degreesUnsignedToSigned(shoulderAngle), Conversions.degreesUnsignedToSigned(wristAngle)};
+    return new double[] {
+      telescopeLength,
+      Conversions.degreesUnsignedToSigned(shoulderAngle),
+      Conversions.degreesUnsignedToSigned(wristAngle)
+    };
   }
 
   public double getTelescopeLength() {

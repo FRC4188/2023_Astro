@@ -46,7 +46,7 @@ public class Shoulder {
     leader.enableSoftLimit(SoftLimitDirection.kReverse, true);
     leader.setSoftLimit(SoftLimitDirection.kForward, (float) Constants.arm.shoulder.UPPER_LIMIT);
     leader.setSoftLimit(SoftLimitDirection.kReverse, (float) Constants.arm.shoulder.LOWER_LIMIT);
-    
+
     leader.setPIDF(
         Constants.arm.shoulder.kP,
         Constants.arm.shoulder.kI,

@@ -11,7 +11,6 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -128,9 +127,12 @@ public class Drivetrain extends SubsystemBase {
 
     lastAngle = pigeonAngle.getDegrees();
 
-    boolean noInput = xSpeed == 0 && ySpeed == 0 && rotSpeed == 0; 
-    
-    rotSpeed = (rotSpeed == 0 /* && (xSpeed != 0.0 || ySpeed != 0.0)*/ ) ? rotPID.calculate(lastAngle, pigeonAngle.getDegrees()) : rotSpeed;
+    boolean noInput = xSpeed == 0 && ySpeed == 0 && rotSpeed == 0;
+
+    rotSpeed =
+        (rotSpeed == 0 /* && (xSpeed != 0.0 || ySpeed != 0.0)*/)
+            ? rotPID.calculate(lastAngle, pigeonAngle.getDegrees())
+            : rotSpeed;
 
     rotSpeed = (rotSpeed == 0) ? rotPID.calculate(lastAngle, pigeonAngle.getDegrees()) : rotSpeed;
 

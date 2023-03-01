@@ -70,16 +70,39 @@ public class RobotContainer {
   }
 
   private void bareMinimum() {
-    pilot.getDpadUpButtonObj().whileTrue(new InstantCommand(() -> arm.setTelescope(0.4), arm)).onFalse(new InstantCommand(() -> arm.setTelescope(0.0), arm));
-    pilot.getDpadDownButtonObj().whileTrue(new InstantCommand(() -> arm.setTelescope(-0.2), arm)).onFalse(new InstantCommand(() -> arm.setTelescope(0.0), arm));
-    pilot.getDpadRightButtonObj().whileTrue(new InstantCommand(() -> arm.setShoulder(0.3), arm)).onFalse(new InstantCommand(() -> arm.setShoulder(0.0), arm));
-    pilot.getDpadLeftButtonObj().whileTrue(new InstantCommand(() -> arm.setShoulder(-0.3), arm)).onFalse(new InstantCommand(() -> arm.setShoulder(0.0), arm));
+    pilot
+        .getDpadUpButtonObj()
+        .whileTrue(new InstantCommand(() -> arm.setTelescope(0.4), arm))
+        .onFalse(new InstantCommand(() -> arm.setTelescope(0.0), arm));
+    pilot
+        .getDpadDownButtonObj()
+        .whileTrue(new InstantCommand(() -> arm.setTelescope(-0.2), arm))
+        .onFalse(new InstantCommand(() -> arm.setTelescope(0.0), arm));
+    pilot
+        .getDpadRightButtonObj()
+        .whileTrue(new InstantCommand(() -> arm.setShoulder(0.3), arm))
+        .onFalse(new InstantCommand(() -> arm.setShoulder(0.0), arm));
+    pilot
+        .getDpadLeftButtonObj()
+        .whileTrue(new InstantCommand(() -> arm.setShoulder(-0.3), arm))
+        .onFalse(new InstantCommand(() -> arm.setShoulder(0.0), arm));
 
-    pilot.getYButtonObj().whileTrue(new InstantCommand(() -> arm.setWrist(0.3), arm)).onFalse(new InstantCommand(() -> arm.setWrist(0.0), arm));
-    pilot.getAButtonObj().whileTrue(new InstantCommand(() -> arm.setWrist(-0.3), arm)).onFalse(new InstantCommand(() -> arm.setWrist(0.0), arm));
-    pilot.getXButtonObj().whileTrue(new InstantCommand(() -> claw.set(0.7), arm)).onFalse(new InstantCommand(() -> claw.set(0.0), arm));
-    pilot.getBButtonObj().whileTrue(new InstantCommand(() -> claw.set(-0.5), arm)).onFalse(new InstantCommand(() -> claw.set(0.0), arm));
-
+    pilot
+        .getYButtonObj()
+        .whileTrue(new InstantCommand(() -> arm.setWrist(0.3), arm))
+        .onFalse(new InstantCommand(() -> arm.setWrist(0.0), arm));
+    pilot
+        .getAButtonObj()
+        .whileTrue(new InstantCommand(() -> arm.setWrist(-0.3), arm))
+        .onFalse(new InstantCommand(() -> arm.setWrist(0.0), arm));
+    pilot
+        .getXButtonObj()
+        .whileTrue(new InstantCommand(() -> claw.set(0.7), arm))
+        .onFalse(new InstantCommand(() -> claw.set(0.0), arm));
+    pilot
+        .getBButtonObj()
+        .whileTrue(new InstantCommand(() -> claw.set(-0.5), arm))
+        .onFalse(new InstantCommand(() -> claw.set(0.0), arm));
   }
 
   private void smartdashboardButtons() {
