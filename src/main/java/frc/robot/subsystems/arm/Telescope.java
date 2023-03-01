@@ -25,10 +25,8 @@ public class Telescope {
     motor.setEncoder(Constants.arm.telescope.LOWER_LIMIT);
     motor.enableSoftLimit(SoftLimitDirection.kForward, true);
     motor.enableSoftLimit(SoftLimitDirection.kReverse, true);
-    motor.setSoftLimit(
-        SoftLimitDirection.kForward, (float) Constants.arm.telescope.UPPER_LIMIT);
-    motor.setSoftLimit(
-        SoftLimitDirection.kReverse, (float) Constants.arm.telescope.LOWER_LIMIT);
+    motor.setSoftLimit(SoftLimitDirection.kForward, (float) Constants.arm.telescope.UPPER_LIMIT);
+    motor.setSoftLimit(SoftLimitDirection.kReverse, (float) Constants.arm.telescope.LOWER_LIMIT);
     motor.setPIDF(
         Constants.arm.telescope.kP,
         Constants.arm.telescope.kI,

@@ -30,15 +30,15 @@ public final class Constants {
   public static final class field {
     public static double GRID_TOP_X = 0.4;
     public static double GRID_TOP_Z = Units.inchesToMeters(46.0);
-  
+
     public static double GRID_MID_X = 0.8;
     public static double GRID_MID_Z = Units.inchesToMeters(34.0);
-  
+
     public static double GRID_BOTTOM_X = 1.2;
     public static double GRID_BOTTOM_Z = Units.inchesToMeters(5.0);
 
     public static double DOUBLE_Z = 0.0;
-    public static double SINGLE_Z = 0.0; 
+    public static double SINGLE_Z = 0.0;
   }
 
   public static final class robot {
@@ -185,7 +185,6 @@ public final class Constants {
 
   public static final class claw {
 
-
     public static final double SENSOR_SCALE = 0.195;
   }
 
@@ -194,7 +193,7 @@ public final class Constants {
       public static final double ZERO = 117.7734375;
       public static final double GEAR_RATIO = 132.741; // 132.741 to 1
       public static final double ROTATIONS_PER_DEGREE = GEAR_RATIO / 360;
-      
+
       public static final double UPPER_LIMIT = 112.1484375;
       public static final double LOWER_LIMIT = -112.1484375;
 

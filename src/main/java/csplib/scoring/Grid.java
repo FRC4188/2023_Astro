@@ -2,7 +2,6 @@ package csplib.scoring;
 
 import csplib.scoring.Node.NodeType;
 import edu.wpi.first.math.geometry.Translation3d;
-import edu.wpi.first.math.util.Units;
 import frc.robot.Constants;
 
 public class Grid {
