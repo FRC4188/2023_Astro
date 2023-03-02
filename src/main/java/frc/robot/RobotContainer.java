@@ -28,6 +28,7 @@ import frc.robot.subsystems.drivetrain.Drivetrain;
 public class RobotContainer {
 
   private CSP_Controller pilot = new CSP_Controller(Constants.controller.PILOT_PORT);
+  private CSP_Controller copilot = new CSP_Controller(1);
 
   private Drivetrain drivetrain = Drivetrain.getInstance();
   private Arm arm = Arm.getInstance();
@@ -59,7 +60,9 @@ public class RobotContainer {
     arm.setDefaultCommand(
         new RunCommand(
             () -> {
-              arm.setWristAngle(0);
+              arm.setWristAngle(copilot.getRightX(Scale.LINEAR) * Constants.arm.wrist.UPPER_LIMIT);
+              arm.setShoulderPosition(copilot.getLeftX(Scale.LINEAR) * 90.0);
+              arm.setTelescope(copilot.getRightTriggerAxis() - copilot.getLeftTriggerAxis());
             },
             arm));
   }

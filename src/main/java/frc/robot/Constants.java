@@ -246,8 +246,8 @@ public final class Constants {
       public static final double GEAR_RATIO = 100; // 100 to 1
       public static final double ROTATIONS_PER_DEGREE = GEAR_RATIO / 360;
 
-      public static final double UPPER_LIMIT = 122.91316986083984;
-      public static final double LOWER_LIMIT = -122.99888610839844;
+      public static final double UPPER_LIMIT = 122.91316986083984 + 1.7;
+      public static final double LOWER_LIMIT = -122.99888610839844 - 1.7;
 
       public static final double kP = 0.012;
       public static final double kI = 0.0;
