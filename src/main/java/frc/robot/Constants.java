@@ -24,6 +24,7 @@ import edu.wpi.first.math.util.Units;
 public final class Constants {
   public static class controller {
     public static final int PILOT_PORT = 0;
+    public static final int COPILOT_PORT = 1;
     public static final double DEADBAND = 0.15;
     public static final double TRIGGER_THRESHOLD = 0.6;
   }
@@ -246,8 +247,8 @@ public final class Constants {
       public static final double GEAR_RATIO = 100; // 100 to 1
       public static final double ROTATIONS_PER_DEGREE = GEAR_RATIO / 360;
 
-      public static final double UPPER_LIMIT = 122.91316986083984;
-      public static final double LOWER_LIMIT = -122.99888610839844;
+      public static final double UPPER_LIMIT = 122.91316986083984 + 1.7;
+      public static final double LOWER_LIMIT = -122.99888610839844 - 1.7;
 
       public static final double kP = 0.012;
       public static final double kI = 0.0;
