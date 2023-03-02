@@ -34,7 +34,7 @@ public class Wrist {
     motor.setBrake(true);
     motor.setEncoder(0.0);
     motor.enableSoftLimit(SoftLimitDirection.kForward, true);
-    motor.enableSoftLimit(SoftLimitDirection.kReverse, true);
+    motor.enableSoftLimit(SoftLimitDirection.kReverse, false);
     motor.setSoftLimit(SoftLimitDirection.kForward, (float) Constants.arm.wrist.UPPER_LIMIT);
     motor.setSoftLimit(SoftLimitDirection.kReverse, (float) Constants.arm.wrist.LOWER_LIMIT);
 
