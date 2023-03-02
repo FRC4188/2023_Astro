@@ -8,7 +8,7 @@ public final class Conversions {
    * @return the angle between [0, 360]
    */
   public static double degreesSignedToUnsigned(double input) {
-    return Math.floorMod((long) input, 360);
+    return (input < 0.0) ? input + 360 : input;
   }
 
   /**

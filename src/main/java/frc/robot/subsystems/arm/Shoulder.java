@@ -10,8 +10,8 @@ import com.revrobotics.CANSparkMax.SoftLimitDirection;
 
 import csplib.motors.CSP_SparkMax;
 import csplib.utils.Conversions;
-import csplib.utils.TempManager;
 import edu.wpi.first.math.controller.ArmFeedforward;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import frc.robot.Constants;
 
 /** Add your docs here. */
@@ -21,13 +21,20 @@ public class Shoulder {
   private CSP_SparkMax follower = new CSP_SparkMax(Constants.ids.SHOULDER_FOLLOWER);
   private WPI_CANCoder encoder = new WPI_CANCoder(Constants.ids.SHOULDER_ENCODER);
 
+  private ProfiledPIDController pid =
+      new ProfiledPIDController(
+          Constants.arm.shoulder.kP,
+          Constants.arm.shoulder.kI,
+          Constants.arm.shoulder.kD,
+          Constants.arm.shoulder.CONSTRAINTS);
+
   private ArmFeedforward armFF =
       new ArmFeedforward(
           Constants.arm.shoulder.kS, Constants.arm.shoulder.kG, Constants.arm.shoulder.kV);
 
   public Shoulder() {
     init();
-    TempManager.addMotor(leader, follower);
+    // TempManager.addMotor(leader, follower);
   }
 
   private void init() {
@@ -42,16 +49,18 @@ public class Shoulder {
     leader.setInverted(true);
     leader.setBrake(true);
     leader.setEncoder(Conversions.degreesSignedToUnsigned(encoder.getAbsolutePosition()));
-    leader.enableSoftLimit(SoftLimitDirection.kForward, true);
-    leader.enableSoftLimit(SoftLimitDirection.kReverse, true);
+    leader.enableSoftLimit(SoftLimitDirection.kForward, false);
+    leader.enableSoftLimit(SoftLimitDirection.kReverse, false);
     leader.setSoftLimit(SoftLimitDirection.kForward, (float) Constants.arm.shoulder.UPPER_LIMIT);
     leader.setSoftLimit(SoftLimitDirection.kReverse, (float) Constants.arm.shoulder.LOWER_LIMIT);
 
-    leader.setPIDF(
-        Constants.arm.shoulder.kP,
-        Constants.arm.shoulder.kI,
-        Constants.arm.shoulder.kD,
-        Constants.arm.shoulder.kF);
+    // leader.setPIDF(
+    //     Constants.arm.shoulder.kP,
+    //     Constants.arm.shoulder.kI,
+    //     Constants.arm.shoulder.kD,
+    //     Constants.arm.shoulder.kF);
+
+    pid.enableContinuousInput(-180, 180);
 
     follower.follow(leader);
 
@@ -65,11 +74,13 @@ public class Shoulder {
   }
 
   public void setAngle(double angle) {
-    leader.setPosition(angle, armFF.calculate(angle, 0));
+    // leader.setPosition(angle, armFF.calculate(angle, 0));
+
+    leader.setVoltage(pid.calculate(getAngle(), angle));
   }
 
   public void setPID(double kP, double kI, double kD, double kF) {
-    leader.setPIDF(kP, kI, kD, kF);
+    pid.setPID(kP, kI, kD);
   }
 
   public double getAngle() {
