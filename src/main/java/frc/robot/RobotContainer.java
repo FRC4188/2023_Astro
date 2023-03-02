@@ -102,7 +102,6 @@ public class RobotContainer {
         .onFalse(new InstantCommand(() -> arm.setWrist(0.0), arm));
 
     copilot.getStartButtonObj().onTrue(new ZeroWrist());
-    
   }
 
   private void smartdashboardButtons() {
