@@ -4,6 +4,7 @@ import com.revrobotics.CANSparkMax.SoftLimitDirection;
 
 import csplib.motors.CSP_SparkMax;
 import csplib.utils.TempManager;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.Constants;
 
@@ -12,6 +13,8 @@ public class Telescope {
   private CSP_SparkMax motor = new CSP_SparkMax(Constants.ids.TELESCOPE);
 
   private DigitalInput limitSwitch = new DigitalInput(Constants.ids.TELESCOPE_LIMIT_SWITCH);
+
+  private ProfiledPIDController pid = new ProfiledPIDController(Constants.arm.telescope.kP, Constants.arm.telescope.kI,Constants.arm.telescope.kD, Constants.arm.telescope.CONSTRAINTS);
 
   public Telescope() {
     init();
@@ -23,8 +26,8 @@ public class Telescope {
     motor.setInverted(true);
     motor.setBrake(true);
     motor.setEncoder(Constants.arm.telescope.LOWER_LIMIT);
-    motor.enableSoftLimit(SoftLimitDirection.kForward, true);
-    motor.enableSoftLimit(SoftLimitDirection.kReverse, true);
+    motor.enableSoftLimit(SoftLimitDirection.kForward, false);
+    motor.enableSoftLimit(SoftLimitDirection.kReverse, false);
     motor.setSoftLimit(SoftLimitDirection.kForward, (float) Constants.arm.telescope.UPPER_LIMIT);
     motor.setSoftLimit(SoftLimitDirection.kReverse, (float) Constants.arm.telescope.LOWER_LIMIT);
     motor.setPIDF(
@@ -52,11 +55,11 @@ public class Telescope {
   }
 
   public void setPID(double kP, double kI, double kD, double kF) {
-    motor.setPIDF(kP, kI, kD, kF);
+    pid.setPID(kP, kI, kD);
   }
 
   public void setPosition(double position) {
-    motor.setPosition(position);
+    motor.setVoltage(pid.calculate(getPosition(), position));
   }
 
   public double getPosition() {

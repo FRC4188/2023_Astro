@@ -31,7 +31,6 @@ public class RobotContainer {
   private CSP_Controller pilot = new CSP_Controller(Constants.controller.PILOT_PORT);
 
   private Drivetrain drivetrain = Drivetrain.getInstance();
-  private Sensors sensors = Sensors.getInstance();
   private Arm arm = Arm.getInstance();
   private Claw claw = Claw.getInstance();
 
@@ -58,13 +57,15 @@ public class RobotContainer {
                     pilot.getLeftX(Scale.SQUARED),
                     pilot.getRightX(Scale.SQUARED)),
             drivetrain));
+    arm.setDefaultCommand(new RunCommand(() -> {arm.setWristAngle(0);}, arm));
+    
   }
 
   /** Use this method to define your button->command mappings. */
   private void configureButtonBindings() {
     pilot.getStartButtonObj().onTrue(new ZeroWrist());
     pilot.getLSButtonObj().onTrue(new InstantCommand(() -> drivetrain.resetOdometry(new Pose2d())));
-    pilot.getRBButtonObj().onTrue(new InstantCommand(() -> arm.setShoulderPosition(-20)));
+    pilot.getBackButtonObj().whileTrue(new RunCommand(() -> arm.setTelescopePosition(0.5), arm)).onFalse(new InstantCommand(() -> arm.setShoulder(0.0), arm));
 
     bareMinimum();
   }
@@ -72,7 +73,7 @@ public class RobotContainer {
   private void bareMinimum() {
     pilot
         .getDpadUpButtonObj()
-        .whileTrue(new InstantCommand(() -> arm.setTelescope(0.4), arm))
+        .whileTrue(new InstantCommand(() -> arm.setTelescope(1.0), arm))
         .onFalse(new InstantCommand(() -> arm.setTelescope(0.0), arm));
     pilot
         .getDpadDownButtonObj()
@@ -113,13 +114,14 @@ public class RobotContainer {
             drivetrain));
 
     SmartDashboard.putData(
-        "Set Rot PID",
+        "Set Telescope PID",
         new RunCommand(
             () ->
-                drivetrain.setRotPID(
-                    SmartDashboard.getNumber("Rot kP", 0),
-                    SmartDashboard.getNumber("Rot kI", 0),
-                    SmartDashboard.getNumber("Rot kD", 0))));
+                arm.setTelescopePID(
+                    SmartDashboard.getNumber("Telescope kP", 0.0),
+                    SmartDashboard.getNumber("Telescope kI", 0.0),
+                    SmartDashboard.getNumber("Telescope kD", 0.0),
+                    SmartDashboard.getNumber("Telescope kF", 0.0))));
 
     SmartDashboard.putData(
         "Set Zero", new InstantCommand(() -> drivetrain.zeroPower(), drivetrain));

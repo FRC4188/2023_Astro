@@ -21,11 +21,11 @@ public final class TempManager {
 
   public static void monitor() {
     for (CSP_Motor motor : motorsList) {
-      if (motor.getTemperature() > Constants.robot.MAX_TEMP) {
-        String tempWarning = "Motor " + motor.getID() + " Maximum Temperature Reached";
+      if (motor.getTemperature() > Constants.robot.MAX_TEMP && motor.getTemperature() < Constants.robot.MAX_TEMP + 10) {
+        String tempWarning = "Motor " + motor.getID() + " Maximum Temperature Reached " + motor.getTemperature();
         DriverStation.reportWarning(tempWarning, false);
       } else if (motor.getTemperature() > Constants.robot.MAX_TEMP + 10) {
-        String tempError = "Motor " + motor.getID() + " Critical Temperature Reached";
+        String tempError = "Motor " + motor.getID() + " Critical Temperature Reached " +  motor.getTemperature();
         DriverStation.reportError(tempError, false);
       }
     }

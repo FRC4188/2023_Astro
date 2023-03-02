@@ -10,6 +10,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.util.Units;
 
 /**
@@ -194,17 +195,19 @@ public final class Constants {
       public static final double GEAR_RATIO = 132.741; // 132.741 to 1
       public static final double ROTATIONS_PER_DEGREE = GEAR_RATIO / 360;
 
-      public static final double UPPER_LIMIT = 112.1484375;
-      public static final double LOWER_LIMIT = -112.1484375;
+      public static final double UPPER_LIMIT = 217.9453582763672;
+      public static final double LOWER_LIMIT = 6.0;
 
-      public static final double kP = 0.0;
+      public static final double kP = 0.3;
       public static final double kI = 0.0;
       public static final double kD = 0.0;
       public static final double kF = 0.0;
 
-      public static final double MAX_ACCEL = 0.0;
-      public static final double MAX_VEL = 0.0;
+      public static final double MAX_VEL = 30.0;
+      public static final double MAX_ACCEL = 30;
       public static final double ALLOWED_ERROR = 0.0;
+
+      public static final Constraints CONSTRAINTS = new Constraints(MAX_VEL, MAX_ACCEL);
 
       public static final double kS = -0.011135;
       public static final double kG = 0.50345;
@@ -214,11 +217,11 @@ public final class Constants {
     public static final class telescope {
       public static final double ZERO_CURRENT = 0.0;
 
-      public static final double ROTATIONS_PER_INCH = 57.014; // 57.014 rotations per inch
-      public static final double ROTATIONS_PER_METER = Units.inchesToMeters(ROTATIONS_PER_INCH);
+      // public static final double ROTATIONS_PER_INCH = 62.19; // 57.014 rotations per inch
+      public static final double ROTATIONS_PER_METER = 29.6999 / Units.inchesToMeters(46.85);
 
-      public static final double UPPER_LIMIT = 20.58035659790039;
-      public static final double LOWER_LIMIT = 0.5334;
+      public static final double UPPER_LIMIT = Units.inchesToMeters(40);
+      public static final double LOWER_LIMIT = 0.0;
 
       public static final double kP = 0.0;
       public static final double kI = 0.0;
@@ -229,8 +232,9 @@ public final class Constants {
       public static final double kG = 0.0;
       public static final double kV = 0.0;
 
-      public static final double MAX_VEL = 0.0;
-      public static final double MAX_ACCEL = 0.0;
+      public static final double MAX_VEL = 2.0;
+      public static final double MAX_ACCEL = 4.0;
+      public static final Constraints CONSTRAINTS = new Constraints(MAX_VEL, MAX_ACCEL);
       public static final double ALLOWED_ERROR = 0.0;
     }
 
@@ -245,7 +249,7 @@ public final class Constants {
       public static final double UPPER_LIMIT = 122.91316986083984;
       public static final double LOWER_LIMIT = -122.99888610839844;
 
-      public static final double kP = 0.0;
+      public static final double kP = 0.012;
       public static final double kI = 0.0;
       public static final double kD = 0.0;
       public static final double kF = 0.0;
@@ -254,9 +258,9 @@ public final class Constants {
       public static final double kG = 0.69185;
       public static final double kV = 0.017496;
 
-      public static final double MAX_VEL = 0.0;
-      public static final double MAX_ACCEL = 0.0;
-      public static final double ALLOWED_ERROR = 0.0;
+      public static final double MAX_VEL = 45;
+      public static final double MAX_ACCEL = 30;
+      public static final double ALLOWED_ERROR = 0.1;
     }
   }
 }

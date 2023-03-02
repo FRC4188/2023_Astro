@@ -22,12 +22,18 @@ public class Arm extends SubsystemBase {
   private Wrist wrist = new Wrist();
   private Shoulder shoulder = new Shoulder();
 
-  private Arm() {}
+  private Arm() {
+    SmartDashboard.putNumber("Telescope kP", 0.0);
+    SmartDashboard.putNumber("Telescope kI", 0.0);
+    SmartDashboard.putNumber("Telescope kD", 0.0);
+    SmartDashboard.putNumber("Telescope kF", 0.0);
+  }
 
   @Override
   public void periodic() {
     SmartDashboard.putNumber("Shouler Angle", getShoulderAngle());
     SmartDashboard.putNumber("Shoulder Motor Angle", shoulder.getLeaderAngle());
+    SmartDashboard.putNumber("Wrist Angle", wrist.getAngle());
 
     SmartDashboard.putNumber("Telescope Position", getTelescopeLength());
     SmartDashboard.putNumber("Telescope Current", telescope.getCurrent());
@@ -77,12 +83,20 @@ public class Arm extends SubsystemBase {
     telescope.set(percent);
   }
 
+  public void setTelescopePosition(double position) {
+    telescope.setPosition(position);
+  }
+
   public void setShoulder(double percent) {
     shoulder.set(percent);
   }
 
   public void setWrist(double percent) {
     wrist.set(percent);
+  }
+
+  public void setWristAngle(double angle) {
+    wrist.setAngle(angle);
   }
 
   public void setShoulderPosition(double angle) {
