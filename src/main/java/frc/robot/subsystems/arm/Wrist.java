@@ -3,7 +3,6 @@ package frc.robot.subsystems.arm;
 import com.revrobotics.CANSparkMax.SoftLimitDirection;
 
 import csplib.motors.CSP_SparkMax;
-import csplib.utils.TempManager;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import frc.robot.Constants;
 
@@ -11,11 +10,9 @@ public class Wrist {
 
   private CSP_SparkMax motor = new CSP_SparkMax(Constants.ids.WRIST);
   // private WPI_CANCoder encoder = new WPI_CANCoder(Constants.ids.WRIST_ENCODER);
-  
-  private ArmFeedforward wristFF =
-  new ArmFeedforward(
-      Constants.arm.wrist.kS, Constants.arm.wrist.kG, Constants.arm.wrist.kV);
 
+  private ArmFeedforward wristFF =
+      new ArmFeedforward(Constants.arm.wrist.kS, Constants.arm.wrist.kG, Constants.arm.wrist.kV);
 
   public Wrist() {
     init();

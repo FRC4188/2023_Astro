@@ -10,9 +10,7 @@ import com.revrobotics.CANSparkMax.SoftLimitDirection;
 
 import csplib.motors.CSP_SparkMax;
 import csplib.utils.Conversions;
-import csplib.utils.TempManager;
 import edu.wpi.first.math.controller.ArmFeedforward;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import frc.robot.Constants;
 
@@ -23,7 +21,12 @@ public class Shoulder {
   private CSP_SparkMax follower = new CSP_SparkMax(Constants.ids.SHOULDER_FOLLOWER);
   private WPI_CANCoder encoder = new WPI_CANCoder(Constants.ids.SHOULDER_ENCODER);
 
-  private ProfiledPIDController pid = new ProfiledPIDController(Constants.arm.shoulder.kP, Constants.arm.shoulder.kI, Constants.arm.shoulder.kD, Constants.arm.shoulder.CONSTRAINTS);
+  private ProfiledPIDController pid =
+      new ProfiledPIDController(
+          Constants.arm.shoulder.kP,
+          Constants.arm.shoulder.kI,
+          Constants.arm.shoulder.kD,
+          Constants.arm.shoulder.CONSTRAINTS);
 
   private ArmFeedforward armFF =
       new ArmFeedforward(

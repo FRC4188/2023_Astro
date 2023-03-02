@@ -14,7 +14,12 @@ public class Telescope {
 
   private DigitalInput limitSwitch = new DigitalInput(Constants.ids.TELESCOPE_LIMIT_SWITCH);
 
-  private ProfiledPIDController pid = new ProfiledPIDController(Constants.arm.telescope.kP, Constants.arm.telescope.kI,Constants.arm.telescope.kD, Constants.arm.telescope.CONSTRAINTS);
+  private ProfiledPIDController pid =
+      new ProfiledPIDController(
+          Constants.arm.telescope.kP,
+          Constants.arm.telescope.kI,
+          Constants.arm.telescope.kD,
+          Constants.arm.telescope.CONSTRAINTS);
 
   public Telescope() {
     init();

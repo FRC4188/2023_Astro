@@ -18,7 +18,6 @@ import frc.robot.commands.arm.wrist.ZeroWrist;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.claw.Claw;
 import frc.robot.subsystems.drivetrain.Drivetrain;
-import frc.robot.subsystems.sensors.Sensors;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -57,15 +56,22 @@ public class RobotContainer {
                     pilot.getLeftX(Scale.SQUARED),
                     pilot.getRightX(Scale.SQUARED)),
             drivetrain));
-    arm.setDefaultCommand(new RunCommand(() -> {arm.setWristAngle(0);}, arm));
-    
+    arm.setDefaultCommand(
+        new RunCommand(
+            () -> {
+              arm.setWristAngle(0);
+            },
+            arm));
   }
 
   /** Use this method to define your button->command mappings. */
   private void configureButtonBindings() {
     pilot.getStartButtonObj().onTrue(new ZeroWrist());
     pilot.getLSButtonObj().onTrue(new InstantCommand(() -> drivetrain.resetOdometry(new Pose2d())));
-    pilot.getBackButtonObj().whileTrue(new RunCommand(() -> arm.setTelescopePosition(0.5), arm)).onFalse(new InstantCommand(() -> arm.setShoulder(0.0), arm));
+    pilot
+        .getBackButtonObj()
+        .whileTrue(new RunCommand(() -> arm.setTelescopePosition(0.5), arm))
+        .onFalse(new InstantCommand(() -> arm.setShoulder(0.0), arm));
 
     bareMinimum();
   }
