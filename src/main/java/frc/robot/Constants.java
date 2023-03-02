@@ -24,6 +24,7 @@ import edu.wpi.first.math.util.Units;
 public final class Constants {
   public static class controller {
     public static final int PILOT_PORT = 0;
+    public static final int COPILOT_PORT = 1;
     public static final double DEADBAND = 0.15;
     public static final double TRIGGER_THRESHOLD = 0.6;
   }
