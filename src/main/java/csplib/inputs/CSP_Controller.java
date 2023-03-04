@@ -1,137 +1,130 @@
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
+
 package csplib.inputs;
 
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.POVButton;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
 
-public class CSP_Controller extends XboxController {
-  public enum Scale {
-    LINEAR,
-    SQUARED,
-    CUBED
-  }
+/** Add your docs here. */
+public class CSP_Controller extends CommandXboxController {
+    public enum Scale {
+        LINEAR,
+        SQUARED,
+        CUBED
+      }
 
-  /**
-   * Creates a new CSP_Controller object
-   *
-   * @param port controller input port
-   */
-  public CSP_Controller(int port) {
-    super(port);
-  }
-
-  /**
-   * Calculates joystick output to account for scale and deadband
-   *
-   * @param input input value
-   * @param scale input scale
-   * @return adjusted value
-   */
-  private double getOutput(double input, Scale scale) {
-    if (Math.abs(input) > Constants.controller.DEADBAND) {
-      if (scale == Scale.SQUARED) return Math.signum(input) * Math.pow(input, 2);
-      else if (scale == Scale.CUBED) return Math.pow(input, 3);
-      else return input;
-    } else {
-      return 0;
+    public CSP_Controller(int port) {
+        super(port);
     }
-  }
 
-  public double getRightY(Scale scale) {
-    return -getOutput(getRightY(), scale);
-  }
-
-  public double getRightX(Scale scale) {
-    return getOutput(getRightX(), scale);
-  }
-
-  public double getLeftY(Scale scale) {
-    return -getOutput(getLeftY(), scale);
-  }
-
-  public double getLeftX(Scale scale) {
-    return -getOutput(getLeftX(), scale);
-  }
-
-  public JoystickButton getAButtonObj() {
-    return new JoystickButton(this, Button.kA.value);
-  }
-
-  public JoystickButton getBButtonObj() {
-    return new JoystickButton(this, Button.kB.value);
-  }
-
-  public JoystickButton getXButtonObj() {
-    return new JoystickButton(this, Button.kX.value);
-  }
-
-  public JoystickButton getYButtonObj() {
-    return new JoystickButton(this, Button.kY.value);
-  }
-
-  public JoystickButton getStartButtonObj() {
-    return new JoystickButton(this, Button.kStart.value);
-  }
-
-  public JoystickButton getBackButtonObj() {
-    return new JoystickButton(this, Button.kBack.value);
-  }
-
-  public JoystickButton getLBButtonObj() {
-    return new JoystickButton(this, Button.kLeftBumper.value);
-  }
-
-  public JoystickButton getRBButtonObj() {
-    return new JoystickButton(this, Button.kLeftBumper.value);
-  }
-
-  public JoystickButton getLSButtonObj() {
-    return new JoystickButton(this, Button.kLeftStick.value);
-  }
-
-  public JoystickButton getRSButtonObj() {
-    return new JoystickButton(this, Button.kRightStick.value);
-  }
-
-  public POVButton getDpadUpButtonObj() {
-    return new POVButton(this, 0);
-  }
-
-  public POVButton getDpadDownButtonObj() {
-    return new POVButton(this, 180);
-  }
-
-  public POVButton getDpadRightButtonObj() {
-    return new POVButton(this, 90);
-  }
-
-  public POVButton getDpadLeftButtonObj() {
-    return new POVButton(this, 270);
-  }
-
-  public double getRightT(Scale scale) {
-    return getOutput(
-        getRightTriggerAxis() > Constants.controller.TRIGGER_THRESHOLD
-            ? getRightTriggerAxis()
-            : 0.0,
-        scale);
-  }
-
-  public double getLeftT(Scale scale) {
-    return getOutput(
-        getLeftTriggerAxis() > Constants.controller.TRIGGER_THRESHOLD ? getLeftTriggerAxis() : 0.0,
-        scale);
-  }
-
-  public void setRumble(double intensity) {
-    if (DriverStation.isDisabled()) {
-      setRumble(RumbleType.kRightRumble, 0);
-      setRumble(RumbleType.kLeftRumble, 0);
-    } else {
-      setRumble(RumbleType.kLeftRumble, intensity);
-      setRumble(RumbleType.kRightRumble, intensity);
+    /**
+     * Calculates joystick output to account for scale and deadband
+     *
+     * @param input input value
+     * @param scale input scale
+     * @return adjusted value
+     */
+    private double getOutput(double input, Scale scale) {
+        if (Math.abs(input) > Constants.controller.DEADBAND) {
+            if (scale == Scale.SQUARED) return Math.signum(input) * Math.pow(input, 2);
+            else if (scale == Scale.CUBED) return Math.pow(input, 3);
+            else return input;
+        } else {
+            return 0;
+        }
     }
-  }
+
+    public double getRightY(Scale scale) {
+        return -getOutput(this.getRightY(), scale);
+    }
+
+    public double getRightX(Scale scale) {
+        return getOutput(this.getRightX(), scale);
+    }
+
+    public double getLeftY(Scale scale) {
+        return -getOutput(this.getLeftY(), scale);
+    }
+
+    public double getLeftX(Scale scale) {
+        return -getOutput(this.getLeftX(), scale);
+    }
+
+    public Trigger getLeftS() {
+        return this.leftStick();
+    }
+
+    public Trigger getRightS() {
+        return this.rightStick();
+    }
+
+    public Trigger getXButton() {
+        return this.x();
+    }
+
+    public Trigger getYButton() {
+        return this.y();
+    }
+
+    public Trigger getAButton() {
+        return this.a();
+    }
+
+    public Trigger getBButton() {
+        return this.b();
+    }
+
+    public Trigger getUpButton() {
+        return this.povUp();
+    }
+
+    public Trigger getDownButton() {
+        return this.povDown();
+    }
+
+    public Trigger getRightButton() {
+        return this.povRight();
+    }
+
+    public Trigger getLeftButton() {
+        return this.povLeft();
+    }
+
+    public Trigger getLeftBumperButton() {
+        return this.leftBumper();
+    }
+
+    public Trigger getRightBumperButton() {
+        return this.rightBumper();
+    }
+
+    public Trigger getStartButton() {
+        return this.start();
+    }
+
+    public Trigger getBackButton() {
+        return this.back();
+    }
+
+    public double getRightT(Scale scale) {
+        double triggerVal = getRightTriggerAxis();
+        return (triggerVal > Constants.controller.TRIGGER_THRESHOLD) ? getOutput(triggerVal, scale) : 0.0;
+    }
+
+    public double getLeftT(Scale scale) {
+        double triggerVal = getLeftTriggerAxis();
+        return (triggerVal > Constants.controller.TRIGGER_THRESHOLD) ? getOutput(triggerVal, scale) : 0.0;
+    }
+
+    public Trigger getRightTButton() {
+        return this.rightTrigger();
+    }
+
+    public Trigger getLeftTButton() {
+        return this.leftTrigger();
+    }
+
 }

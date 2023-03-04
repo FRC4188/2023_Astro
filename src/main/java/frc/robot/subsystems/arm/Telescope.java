@@ -1,81 +1,89 @@
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
+
 package frc.robot.subsystems.arm;
 
 import com.revrobotics.CANSparkMax.SoftLimitDirection;
 
 import csplib.motors.CSP_SparkMax;
 import csplib.utils.TempManager;
+import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-public class Telescope {
-
-  private CSP_SparkMax motor = new CSP_SparkMax(Constants.ids.TELESCOPE);
-
-  private DigitalInput limitSwitch = new DigitalInput(Constants.ids.TELESCOPE_LIMIT_SWITCH);
-
-  private ProfiledPIDController pid =
-      new ProfiledPIDController(
-          Constants.arm.telescope.kP,
-          Constants.arm.telescope.kI,
-          Constants.arm.telescope.kD,
-          Constants.arm.telescope.CONSTRAINTS);
-
-  public Telescope() {
-    init();
-    TempManager.addMotor(motor);
-  }
-
-  public void init() {
-    motor.setScalar(1 / Constants.arm.telescope.ROTATIONS_PER_METER);
-    motor.setInverted(true);
-    motor.setBrake(true);
-    motor.setEncoder(Constants.arm.telescope.LOWER_LIMIT);
-    motor.enableSoftLimit(SoftLimitDirection.kForward, false);
-    motor.enableSoftLimit(SoftLimitDirection.kReverse, false);
-    motor.setSoftLimit(SoftLimitDirection.kForward, (float) Constants.arm.telescope.UPPER_LIMIT);
-    motor.setSoftLimit(SoftLimitDirection.kReverse, (float) Constants.arm.telescope.LOWER_LIMIT);
-    motor.setPIDF(
-        Constants.arm.telescope.kP,
-        Constants.arm.telescope.kI,
-        Constants.arm.telescope.kD,
-        Constants.arm.telescope.kF);
-
-    motor.setMotionPlaning(Constants.arm.telescope.MAX_VEL, Constants.arm.telescope.MAX_ACCEL);
-    motor.setError(Constants.arm.telescope.ALLOWED_ERROR);
-  }
-
-  public void zero() {
-    if (motor.getCurrent() < Constants.arm.telescope.ZERO_CURRENT) {
-      motor.enableSoftLimit(SoftLimitDirection.kReverse, false);
-      motor.set(-0.2);
-    } else {
-      motor.setEncoder(Constants.arm.wrist.LOWER_LIMIT);
-      motor.enableSoftLimit(SoftLimitDirection.kReverse, true);
+/** Add your docs here. */
+public class Telescope extends SubsystemBase {
+    private static Telescope instance;
+    public static synchronized Telescope getInstance() {
+        if (instance == null) instance = new Telescope();
+        return instance;
     }
-  }
+    
+    private CSP_SparkMax motor = new CSP_SparkMax(Constants.ids.TELESCOPE);
+    private DigitalInput limitSwitch = new DigitalInput(Constants.ids.TELESCOPE_LIMIT_SWITCH);
 
-  public void set(double percent) {
-    motor.set(percent);
-  }
+    private ProfiledPIDController pid = new ProfiledPIDController(Constants.arm.telescope.kP, Constants.arm.telescope.kI, Constants.arm.telescope.kD, Constants.arm.telescope.CONSTRAINTS);
 
-  public void setPID(double kP, double kI, double kD, double kF) {
-    pid.setPID(kP, kI, kD);
-  }
+    private ElevatorFeedforward ff = new ElevatorFeedforward(Constants.arm.telescope.kS, Constants.arm.telescope.kG, Constants.arm.telescope.kV);
 
-  public void setPosition(double position) {
-    motor.setVoltage(pid.calculate(getPosition(), position));
-  }
+    private Telescope() {
+        init();
+        TempManager.addMotor(motor);
+    }
 
-  public double getPosition() {
-    return motor.getPosition();
-  }
+    @Override
+    public void periodic() {
 
-  public double getCurrent() {
-    return motor.getCurrent();
-  }
+    }
 
-  public boolean getLimitSwitch() {
-    return limitSwitch.get();
-  }
+    public void init() {
+        motor.setScalar(1 / Constants.arm.telescope.ROTATIONS_PER_METER);
+        motor.setInverted(true);
+        motor.setBrake(true);
+        motor.setEncoder(Constants.arm.telescope.LOWER_LIMIT);
+        motor.enableSoftLimit(SoftLimitDirection.kForward, true);
+        motor.enableSoftLimit(SoftLimitDirection.kReverse, true);
+        motor.setSoftLimit(SoftLimitDirection.kForward, (float) Constants.arm.telescope.UPPER_LIMIT);
+        motor.setSoftLimit(SoftLimitDirection.kReverse, (float) Constants.arm.telescope.LOWER_LIMIT);
+
+        pid.enableContinuousInput(-180, 180);
+        pid.setTolerance(0.1);
+    }
+
+    public void zero() {
+        if (!limitSwitch.get()) {
+            motor.enableSoftLimit(SoftLimitDirection.kReverse, false);
+            set(-0.2);
+        } else {
+            motor.setEncoder(Constants.arm.telescope.LOWER_LIMIT);
+            motor.enableSoftLimit(SoftLimitDirection.kForward, true);
+        }
+    }
+
+
+
+    public void disable() {
+        motor.disable();
+    }
+
+    public void set(double percent) {
+        motor.set(percent);
+    }
+
+    public void setPosition(double position) {
+        State setpoint = pid.getSetpoint();
+        motor.setVoltage(pid.calculate(getPosition(), position) + ff.calculate(setpoint.velocity));
+    }
+
+    public void setPID(double kP, double kI, double kD) {
+        pid.setPID(kP, kI, kD);
+    }
+
+    public double getPosition() {
+        return motor.getPosition();
+    }
 }

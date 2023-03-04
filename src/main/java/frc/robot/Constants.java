@@ -191,6 +191,12 @@ public final class Constants {
   }
 
   public static final class arm {
+    public static final class configs {
+      public static final double[] HIGH = {0.0, 0.0, 0.0};
+      public static final double[] MEDIUM = {0.0, 0.0, 0.0};
+      public static final double[] LOW = {0.0, 0.0, 0.0};
+    }
+
     public static final class shoulder {
       public static final double ZERO = 117.7734375;
       public static final double GEAR_RATIO = 132.741; // 132.741 to 1
@@ -261,7 +267,8 @@ public final class Constants {
 
       public static final double MAX_VEL = 45;
       public static final double MAX_ACCEL = 30;
-      public static final double ALLOWED_ERROR = 0.1;
+      public static final Constraints CONSTRAINTS = new Constraints(MAX_VEL, MAX_ACCEL);
+      public static final double ALLOWED_ERROR = 1;
     }
   }
 }

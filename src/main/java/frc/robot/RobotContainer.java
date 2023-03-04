@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.arm.wrist.ZeroWrist;
-import frc.robot.subsystems.arm.Arm;
+import frc.robot.subsystems.arm.Arm1;
 import frc.robot.subsystems.claw.Claw;
 import frc.robot.subsystems.drivetrain.Drivetrain;
 
@@ -28,10 +28,10 @@ import frc.robot.subsystems.drivetrain.Drivetrain;
 public class RobotContainer {
 
   private CSP_Controller pilot = new CSP_Controller(Constants.controller.PILOT_PORT);
-  private CSP_Controller copilot = new CSP_Controller(1);
+  private CSP_Controller copilot = new CSP_Controller(Constants.controller.COPILOT_PORT);
 
   private Drivetrain drivetrain = Drivetrain.getInstance();
-  private Arm arm = Arm.getInstance();
+  private Arm1 arm = Arm1.getInstance();
   private Claw claw = Claw.getInstance();
 
   private SendableChooser<Command> autoChooser = new SendableChooser<Command>();
@@ -57,52 +57,11 @@ public class RobotContainer {
                     pilot.getLeftX(Scale.SQUARED),
                     pilot.getRightX(Scale.SQUARED)),
             drivetrain));
-    arm.setDefaultCommand(
-        new RunCommand(
-            () -> {
-              arm.setWristAngle(copilot.getRightX(Scale.LINEAR) * Constants.arm.wrist.UPPER_LIMIT);
-              arm.setShoulderPosition(copilot.getLeftX(Scale.LINEAR) * 90.0);
-              arm.setTelescope(copilot.getRightTriggerAxis() - copilot.getLeftTriggerAxis());
-            },
-            arm));
   }
 
   /** Use this method to define your button->command mappings. */
   private void configureButtonBindings() {
-    pilot.getLSButtonObj().onTrue(new InstantCommand(() -> drivetrain.resetOdometry(new Pose2d())));
 
-    copilotBindings();
-  }
-
-  private void copilotBindings() {
-    copilot
-        .getRBButtonObj()
-        .whileTrue(new InstantCommand(() -> claw.set(0.7), arm))
-        .onFalse(new InstantCommand(() -> claw.set(0.0), arm));
-    copilot
-        .getLBButtonObj()
-        .whileTrue(new InstantCommand(() -> claw.set(-0.7), arm))
-        .onFalse(new InstantCommand(() -> claw.set(0.0), arm));
-
-    copilot
-        .getYButtonObj()
-        .whileTrue(new InstantCommand(() -> arm.setShoulder(0.3), arm))
-        .onFalse(new InstantCommand(() -> arm.setShoulder(0.0), arm));
-    copilot
-        .getAButtonObj()
-        .whileTrue(new InstantCommand(() -> arm.setShoulder(-0.3), arm))
-        .onFalse(new InstantCommand(() -> arm.setShoulder(0.0), arm));
-    copilot
-        .getXButtonObj()
-        .whileTrue(new InstantCommand(() -> arm.setWrist(0.3), arm))
-        .onFalse(new InstantCommand(() -> arm.setWrist(0.0), arm));
-    copilot
-        .getBButtonObj()
-        .whileTrue(new InstantCommand(() -> arm.setWrist(-0.3), arm))
-        .onFalse(new InstantCommand(() -> arm.setWrist(0.0), arm));
-
-    copilot.getStartButtonObj().onTrue(new ZeroWrist());
-    
   }
 
   private void smartdashboardButtons() {
