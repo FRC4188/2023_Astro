@@ -50,6 +50,13 @@ public class Arm {
         wrist.setAngle(positions[2]);
     }
 
+    public void setToScore(double shoulderAngle, double telescopeLength, boolean isCube) {
+        double cubeWristSet = (Math.abs(shoulderAngle) < 90) ? 90 - shoulderAngle : shoulderAngle - 90;
+        double coneWristSet = 180 - shoulderAngle; 
+        double wristSet = (isCube) ? cubeWristSet : coneWristSet;
+        setPosition(shoulderAngle, telescopeLength, wristSet);
+    }
+
     public boolean validate(double shoulderAngle, double telescopeLength, double wristAngle) {
         boolean shoulderGood = Math.abs(shoulderAngle - shoulder.getAngle()) < 1;
         boolean telescopeGood = Math.abs(telescopeLength - telescope.getPosition()) < 0.1;
@@ -64,5 +71,17 @@ public class Arm {
         boolean wristGood = Math.abs(positions[2] - wrist.getAngle()) < 1;
 
         return shoulderGood && telescopeGood && wristGood; 
+    }
+
+    public Shoulder getShoulder() {
+        return shoulder;
+    }
+
+    public Telescope getTelescope() {
+        return telescope;
+    }
+
+    public Wrist getWrist() {
+        return wrist;
     }
 }

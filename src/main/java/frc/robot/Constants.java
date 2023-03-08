@@ -87,7 +87,7 @@ public final class Constants {
     public static final int WRIST = 24;
     public static final int WRIST_ENCODER = 9;
 
-    public static final int TELESCOPE = 23;
+    public static final int TELESCOPE = 17;
     public static final int TELESCOPE_LIMIT_SWITCH = 9;
 
     public static final int CLAW = 16;
@@ -192,9 +192,9 @@ public final class Constants {
 
   public static final class arm {
     public static final class configs {
-      public static final double[] HIGH = {0.0, 0.0, 0.0};
-      public static final double[] MEDIUM = {0.0, 0.0, 0.0};
-      public static final double[] LOW = {0.0, 0.0, 0.0};
+      public static final double[] HIGH = {0.0, 0.0};
+      public static final double[] MID = {0.0, 0.0};
+      public static final double[] LOW = {0.0, 0.0};
     }
 
     public static final class shoulder {

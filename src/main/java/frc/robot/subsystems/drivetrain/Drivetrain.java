@@ -155,12 +155,6 @@ public class Drivetrain extends SubsystemBase {
     rotPID.setPID(kP, kI, kD);
   }
 
-  public void recalibrate() {
-    if (!sensors.getPose3d().equals(new Pose3d())) {
-      resetOdometry(sensors.getPose3d().toPose2d());
-    }
-  }
-
   public void updateOdometry() {
     odometry.update(
         sensors.getRotation2d(),
@@ -170,10 +164,14 @@ public class Drivetrain extends SubsystemBase {
           backLeft.getModulePosition(),
           backRight.getModulePosition()
         });
+    
+    Pose2d pose = sensors.getPose2d();
+    if (!pose.equals(new Pose2d())) {
+      odometry.addVisionMeasurement(pose, sensors.getLatency());
+    }
   }
 
   public void resetOdometry(Pose2d initPose) {
-    sensors.resetPigeon();
     odometry.resetPosition(
         sensors.getRotation2d(),
         new SwerveModulePosition[] {

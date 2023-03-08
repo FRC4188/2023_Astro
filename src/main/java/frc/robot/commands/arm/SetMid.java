@@ -10,14 +10,14 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.arm.Arm;
 
-public class SetHigh extends CommandBase {
+public class SetMid extends CommandBase {
   private Arm arm = Arm.getInstance();
 
   private BooleanSupplier isCube;
-  private double[] config = Constants.arm.configs.HIGH;
+  private double[] config = Constants.arm.configs.MID;
 
   /** Creates a new SetHigh. */
-  public SetHigh(BooleanSupplier isCube) {
+  public SetMid(BooleanSupplier isCube) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(arm.getShoulder(), arm.getTelescope(), arm.getWrist());
     this.isCube = isCube;

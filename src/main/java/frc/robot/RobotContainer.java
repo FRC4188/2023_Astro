@@ -7,15 +7,14 @@ import com.pathplanner.lib.PathConstraints;
 import csplib.inputs.CSP_Controller;
 import csplib.inputs.CSP_Controller.Scale;
 import csplib.utils.AutoBuilder;
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.commands.arm.wrist.ZeroWrist;
-import frc.robot.subsystems.arm.Arm1;
+import frc.robot.commands.arm.SetHigh;
+import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.claw.Claw;
 import frc.robot.subsystems.drivetrain.Drivetrain;
 
@@ -31,7 +30,7 @@ public class RobotContainer {
   private CSP_Controller copilot = new CSP_Controller(Constants.controller.COPILOT_PORT);
 
   private Drivetrain drivetrain = Drivetrain.getInstance();
-  private Arm1 arm = Arm1.getInstance();
+  private Arm arm = Arm.getInstance();
   private Claw claw = Claw.getInstance();
 
   private SendableChooser<Command> autoChooser = new SendableChooser<Command>();
@@ -61,7 +60,7 @@ public class RobotContainer {
 
   /** Use this method to define your button->command mappings. */
   private void configureButtonBindings() {
-
+    copilot.getAButton().whileTrue(new SetHigh(() -> copilot.getRightBumperButton().getAsBoolean()));
   }
 
   private void smartdashboardButtons() {
@@ -70,16 +69,6 @@ public class RobotContainer {
         new RunCommand(
             () -> drivetrain.setVelocity(SmartDashboard.getNumber("Set Drive Velocity", 0)),
             drivetrain));
-
-    SmartDashboard.putData(
-        "Set Telescope PID",
-        new RunCommand(
-            () ->
-                arm.setTelescopePID(
-                    SmartDashboard.getNumber("Telescope kP", 0.0),
-                    SmartDashboard.getNumber("Telescope kI", 0.0),
-                    SmartDashboard.getNumber("Telescope kD", 0.0),
-                    SmartDashboard.getNumber("Telescope kF", 0.0))));
 
     SmartDashboard.putData(
         "Set Zero", new InstantCommand(() -> drivetrain.zeroPower(), drivetrain));

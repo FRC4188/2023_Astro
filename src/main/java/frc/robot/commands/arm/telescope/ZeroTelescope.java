@@ -2,25 +2,18 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.arm;
-
-import java.util.function.BooleanSupplier;
+package frc.robot.commands.arm.telescope;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
-import frc.robot.subsystems.arm.Arm;
+import frc.robot.subsystems.arm.Telescope;
 
-public class SetHigh extends CommandBase {
-  private Arm arm = Arm.getInstance();
-
-  private BooleanSupplier isCube;
-  private double[] config = Constants.arm.configs.HIGH;
-
-  /** Creates a new SetHigh. */
-  public SetHigh(BooleanSupplier isCube) {
+public class ZeroTelescope extends CommandBase {
+  private Telescope telescope = Telescope.getInstance();
+  /** Creates a new ZeroTelescope. */
+  public ZeroTelescope() {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(arm.getShoulder(), arm.getTelescope(), arm.getWrist());
-    this.isCube = isCube;
+    addRequirements(telescope);
   }
 
   // Called when the command is initially scheduled.
@@ -30,16 +23,18 @@ public class SetHigh extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    arm.setToScore(config[0], config[1], isCube.getAsBoolean());
+    telescope.zero();
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    telescope.disable();
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return Math.abs(telescope.getPosition() - Constants.arm.telescope.LOWER_LIMIT) < 0.1;
   }
 }

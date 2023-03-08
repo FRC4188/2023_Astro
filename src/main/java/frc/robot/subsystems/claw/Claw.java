@@ -22,8 +22,30 @@ public class Claw extends SubsystemBase {
     TempManager.addMotor(motor);
   }
 
+  private void init() {
+    motor.setBrake(true);
+    motor.setInverted(false);
+  }
+
   public void set(double percent) {
     motor.set(percent);
+  }
+
+  private void setInverted(boolean inverted) {
+    if (inverted) motor.setInverted(false);
+    else motor.setInverted(true);
+  }
+
+  public void intake(boolean isCube) {
+    setInverted(isCube);
+
+    motor.set(1.0);
+  }
+
+  public void outtake(boolean isCube) {
+    setInverted(isCube);
+
+    motor.set(-1.0);
   }
 
   public double getDistance() {
