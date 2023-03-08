@@ -16,14 +16,13 @@ import frc.robot.subsystems.claw.Claw;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class ScoreHigh extends SequentialCommandGroup {
   private Claw claw = Claw.getInstance();
-  
+
   /** Creates a new ScoreHigh. */
   public ScoreHigh(BooleanSupplier isCube) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new SetHigh(isCube),
-      new RunCommand(() -> claw.intake(isCube.getAsBoolean()), claw).withTimeout(2.0)
-    );
+        new SetHigh(isCube),
+        new RunCommand(() -> claw.intake(isCube.getAsBoolean()), claw).withTimeout(2.0));
   }
 }

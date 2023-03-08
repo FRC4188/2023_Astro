@@ -60,7 +60,9 @@ public class RobotContainer {
 
   /** Use this method to define your button->command mappings. */
   private void configureButtonBindings() {
-    copilot.getAButton().whileTrue(new SetHigh(() -> copilot.getRightBumperButton().getAsBoolean()));
+    copilot
+        .getAButton()
+        .whileTrue(new SetHigh(() -> copilot.getRightBumperButton().getAsBoolean()));
   }
 
   private void smartdashboardButtons() {

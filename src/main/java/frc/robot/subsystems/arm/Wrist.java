@@ -18,6 +18,7 @@ import frc.robot.Constants;
 
 public class Wrist extends SubsystemBase {
   private static Wrist instance;
+
   public static synchronized Wrist getInstance() {
     if (instance == null) instance = new Wrist();
     return instance;
@@ -26,8 +27,14 @@ public class Wrist extends SubsystemBase {
   private CSP_SparkMax motor = new CSP_SparkMax(Constants.ids.WRIST);
   private WPI_CANCoder encoder = new WPI_CANCoder(Constants.ids.WRIST_ENCODER);
 
-  private ProfiledPIDController pid = new ProfiledPIDController(Constants.arm.wrist.kP, Constants.arm.wrist.kI, Constants.arm.wrist.kD, Constants.arm.wrist.CONSTRAINTS);
-  private ArmFeedforward ff = new ArmFeedforward(Constants.arm.wrist.kS, Constants.arm.wrist.kG, Constants.arm.wrist.kV);
+  private ProfiledPIDController pid =
+      new ProfiledPIDController(
+          Constants.arm.wrist.kP,
+          Constants.arm.wrist.kI,
+          Constants.arm.wrist.kD,
+          Constants.arm.wrist.CONSTRAINTS);
+  private ArmFeedforward ff =
+      new ArmFeedforward(Constants.arm.wrist.kS, Constants.arm.wrist.kG, Constants.arm.wrist.kV);
 
   /** Creates a new Wrist. */
   private Wrist() {
@@ -70,7 +77,8 @@ public class Wrist extends SubsystemBase {
 
   public void setAngle(double angle) {
     State setpoint = pid.getSetpoint();
-    motor.setVoltage(pid.calculate(getAngle(), angle) + ff.calculate(setpoint.position, setpoint.velocity));
+    motor.setVoltage(
+        pid.calculate(getAngle(), angle) + ff.calculate(setpoint.position, setpoint.velocity));
   }
 
   public void setPID(double kP, double kI, double kD) {

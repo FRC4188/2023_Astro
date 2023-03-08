@@ -18,19 +18,26 @@ import frc.robot.Constants;
 
 public class Shoulder extends SubsystemBase {
   private static Shoulder instance;
+
   public static synchronized Shoulder getInstance() {
-      if (instance == null) instance = new Shoulder();
-      return instance;
+    if (instance == null) instance = new Shoulder();
+    return instance;
   }
 
   private CSP_SparkMax leader = new CSP_SparkMax(Constants.ids.SHOULDER_LEADER);
   private CSP_SparkMax follower = new CSP_SparkMax(Constants.ids.SHOULDER_FOLLOWER);
   private WPI_CANCoder encoder = new WPI_CANCoder(Constants.ids.SHOULDER_ENCODER);
 
-  private ProfiledPIDController pid = new ProfiledPIDController(Constants.arm.telescope.kP, Constants.arm.shoulder.kI, Constants.arm.shoulder.kD, Constants.arm.shoulder.CONSTRAINTS);
+  private ProfiledPIDController pid =
+      new ProfiledPIDController(
+          Constants.arm.telescope.kP,
+          Constants.arm.shoulder.kI,
+          Constants.arm.shoulder.kD,
+          Constants.arm.shoulder.CONSTRAINTS);
 
-  private ArmFeedforward ff = new ArmFeedforward(Constants.arm.shoulder.kS, Constants.arm.shoulder.kG, Constants.arm.shoulder.kV);
-
+  private ArmFeedforward ff =
+      new ArmFeedforward(
+          Constants.arm.shoulder.kS, Constants.arm.shoulder.kG, Constants.arm.shoulder.kV);
 
   /** Creates a new Shoulder. */
   public Shoulder() {
@@ -76,7 +83,8 @@ public class Shoulder extends SubsystemBase {
 
   public void setAngle(double angle) {
     State setpoint = pid.getSetpoint();
-    leader.setVoltage(pid.calculate(getAngle(), angle) + ff.calculate(90 - setpoint.position, setpoint.velocity));
+    leader.setVoltage(
+        pid.calculate(getAngle(), angle) + ff.calculate(90 - setpoint.position, setpoint.velocity));
   }
 
   public double getAngle() {

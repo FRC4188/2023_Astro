@@ -5,7 +5,6 @@ import com.pathplanner.lib.auto.PIDConstants;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -164,7 +163,7 @@ public class Drivetrain extends SubsystemBase {
           backLeft.getModulePosition(),
           backRight.getModulePosition()
         });
-    
+
     Pose2d pose = sensors.getPose2d();
     if (!pose.equals(new Pose2d())) {
       odometry.addVisionMeasurement(pose, sensors.getLatency());
