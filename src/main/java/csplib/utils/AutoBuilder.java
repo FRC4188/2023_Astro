@@ -12,7 +12,10 @@ import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.auto.SwerveAutoBuilder;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Constants;
 import frc.robot.subsystems.drivetrain.Drivetrain;
 
 /** Add your docs here. */
@@ -33,23 +36,16 @@ public class AutoBuilder {
             eventMap,
             true,
             drivetrain);
-    return autoBuilder.fullAuto(paths);
+    try {
+      return autoBuilder.fullAuto(paths);
+    } catch (Exception e) {
+      // TODO: handle exception
+      DriverStation.reportError(e.getMessage(), null);
+      return new SequentialCommandGroup();
+    }
   }
 
   public static Command buildAuto(String pathName, HashMap<String, Command> eventMap) {
-    List<PathPlannerTrajectory> paths =
-        PathPlanner.loadPathGroup(pathName, new PathConstraints(0, 0));
-    SwerveAutoBuilder autoBuilder =
-        new SwerveAutoBuilder(
-            drivetrain::getPose2d,
-            drivetrain::resetOdometry,
-            drivetrain.getKinematics(),
-            drivetrain.getTransValues(),
-            drivetrain.getRotValues(),
-            drivetrain::setModuleStates,
-            eventMap,
-            true,
-            drivetrain);
-    return autoBuilder.fullAuto(paths);
+    return buildAuto(pathName, eventMap, new PathConstraints(Constants.drivetrain.MAX_VELOCITY, Constants.drivetrain.MAX_ACCEL));
   }
 }
