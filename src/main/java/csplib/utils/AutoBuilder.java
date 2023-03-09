@@ -46,6 +46,9 @@ public class AutoBuilder {
   }
 
   public static Command buildAuto(String pathName, HashMap<String, Command> eventMap) {
-    return buildAuto(pathName, eventMap, new PathConstraints(Constants.drivetrain.MAX_VELOCITY, Constants.drivetrain.MAX_ACCEL));
+    return buildAuto(
+        pathName,
+        eventMap,
+        new PathConstraints(Constants.drivetrain.MAX_VELOCITY, Constants.drivetrain.MAX_ACCEL));
   }
 }

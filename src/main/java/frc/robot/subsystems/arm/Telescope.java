@@ -4,7 +4,6 @@
 
 package frc.robot.subsystems.arm;
 
-
 import csplib.motors.CSP_Talon;
 import csplib.utils.TempManager;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
