@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.commands.AutoEventMaps;
 import frc.robot.commands.arm.SetHigh;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.claw.Claw;
@@ -81,7 +82,8 @@ public class RobotContainer {
     autoChooser.addOption(
         "Test", AutoBuilder.buildAuto("New Path", new HashMap<>(), new PathConstraints(5.0, 1)));
     autoChooser.addOption(
-        "B21", AutoBuilder.buildAuto("B21", new HashMap<>(), new PathConstraints(5.0, 2)));
+        "B21", AutoBuilder.buildAuto("B21", AutoEventMaps.b1Map, new PathConstraints(5.0, 2)));
+    
 
     SmartDashboard.putData("Auto Chooser", autoChooser);
   }

@@ -6,15 +6,13 @@ package frc.robot.commands;
 
 import java.util.HashMap;
 import java.util.Map;
-import static java.util.Map.entry;    
-
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 /** Add your docs here. */
 public class AutoEventMaps {
-    public Map<String, Command> b1Map = Map.ofEntries(
-        entry("Command", new SequentialCommandGroup())
-    );
+    public static HashMap<String, Command> b1Map = new HashMap<>(Map.ofEntries(
+        Map.entry("Command", new SequentialCommandGroup())
+    ));
 }
