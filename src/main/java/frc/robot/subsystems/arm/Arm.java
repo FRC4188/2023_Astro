@@ -71,9 +71,19 @@ public class Arm {
 
     double radius = Math.hypot(x, y);
 
-    double teleLen =  Math.sqrt(Math.pow(radius, 2) + Math.pow(z, 2) + Math.pow(clawLen, 2) - 2 * radius * clawLen * Math.cos(wristPAng) - 2 * z * clawLen * Math.sin(wristPAng));
-    double sAng = Math.PI / 2 - Math.atan2(z - clawLen * Math.sin(wristPAng), x - clawLen * Math.cos(wristPAng));
-    double wAngle =  wristPAng - Math.atan2(z - clawLen * Math.sin(wristPAng), x - clawLen * Math.cos(wristPAng));
+    double teleLen =
+        Math.sqrt(
+            Math.pow(radius, 2)
+                + Math.pow(z, 2)
+                + Math.pow(clawLen, 2)
+                - 2 * radius * clawLen * Math.cos(wristPAng)
+                - 2 * z * clawLen * Math.sin(wristPAng));
+    double sAng =
+        Math.PI / 2
+            - Math.atan2(z - clawLen * Math.sin(wristPAng), x - clawLen * Math.cos(wristPAng));
+    double wAngle =
+        wristPAng
+            - Math.atan2(z - clawLen * Math.sin(wristPAng), x - clawLen * Math.cos(wristPAng));
     double pigeonAngle = Math.atan2(y, x);
 
     return new double[] {sAng, teleLen, wAngle, pigeonAngle};
@@ -102,8 +112,12 @@ public class Arm {
     double clawLen = claw.getClawLength();
 
     double wristPAngle = Math.PI - sAng - wAng;
-    double x = (teleLen * Math.sin(sAng) + clawLen * Math.sin(sAng - wAng)) * Math.cos(sensors.getRotation2d().getDegrees());
-    double y = (teleLen * Math.sin(sAng) + clawLen * Math.sin(sAng - wAng)) * Math.sin(sensors.getRotation2d().getDegrees());
+    double x =
+        (teleLen * Math.sin(sAng) + clawLen * Math.sin(sAng - wAng))
+            * Math.cos(sensors.getRotation2d().getDegrees());
+    double y =
+        (teleLen * Math.sin(sAng) + clawLen * Math.sin(sAng - wAng))
+            * Math.sin(sensors.getRotation2d().getDegrees());
     double z = (teleLen * Math.cos(sAng) + clawLen * Math.cos(sAng - wAng));
 
     return new Pose3d(x, y, z, new Rotation3d(0, wristPAngle, 0));

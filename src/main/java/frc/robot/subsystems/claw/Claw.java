@@ -17,7 +17,7 @@ public class Claw extends SubsystemBase {
   private CSP_Talon motor = new CSP_Talon(Constants.ids.CLAW);
   private AnalogPotentiometer sensor =
       new AnalogPotentiometer(Constants.ids.ULTRASONIC_SENSOR, Constants.claw.SENSOR_SCALE);
-  
+
   private boolean isCube;
 
   private Claw() {
