@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 /** Add your docs here. */
 public class AutoEventMaps {
-    public static HashMap<String, Command> b1Map = new HashMap<>(Map.ofEntries(
-        Map.entry("Command", new SequentialCommandGroup())
-    ));
+  public static HashMap<String, Command> b1Map =
+      new HashMap<>(Map.ofEntries(Map.entry("Command", new SequentialCommandGroup())));
 }

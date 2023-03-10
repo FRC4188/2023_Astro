@@ -85,7 +85,6 @@ public class RobotContainer {
         "Test", AutoBuilder.buildAuto("New Path", new HashMap<>(), new PathConstraints(5.0, 1)));
     autoChooser.addOption(
         "B21", AutoBuilder.buildAuto("B21", AutoEventMaps.b1Map, new PathConstraints(5.0, 2)));
-    
 
     SmartDashboard.putData("Auto Chooser", autoChooser);
   }
