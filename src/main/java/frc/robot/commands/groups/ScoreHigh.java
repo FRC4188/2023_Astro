@@ -18,11 +18,11 @@ public class ScoreHigh extends SequentialCommandGroup {
   private Claw claw = Claw.getInstance();
 
   /** Creates a new ScoreHigh. */
-  public ScoreHigh(BooleanSupplier isCube) {
+  public ScoreHigh() {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-        new SetHigh(isCube),
-        new RunCommand(() -> claw.intake(isCube.getAsBoolean()), claw).withTimeout(2.0));
+        new SetHigh(),
+        new RunCommand(() -> claw.intake(), claw).withTimeout(2.0));
   }
 }

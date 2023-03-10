@@ -61,9 +61,11 @@ public class RobotContainer {
 
   /** Use this method to define your button->command mappings. */
   private void configureButtonBindings() {
+    claw.setIsCube(copilot.getRightBumperButton().getAsBoolean());
+
     copilot
         .getAButton()
-        .whileTrue(new SetHigh(() -> copilot.getRightBumperButton().getAsBoolean()));
+        .whileTrue(new SetHigh());
   }
 
   private void smartdashboardButtons() {

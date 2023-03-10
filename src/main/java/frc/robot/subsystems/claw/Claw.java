@@ -17,6 +17,8 @@ public class Claw extends SubsystemBase {
   private CSP_Talon motor = new CSP_Talon(Constants.ids.CLAW);
   private AnalogPotentiometer sensor =
       new AnalogPotentiometer(Constants.ids.ULTRASONIC_SENSOR, Constants.claw.SENSOR_SCALE);
+  
+  private boolean isCube;
 
   private Claw() {
     TempManager.addMotor(motor);
@@ -36,13 +38,17 @@ public class Claw extends SubsystemBase {
     else motor.setInverted(true);
   }
 
-  public void intake(boolean isCube) {
+  public void setIsCube(boolean isCube) {
+    this.isCube = isCube;
+  }
+
+  public void intake() {
     setInverted(isCube);
 
     motor.set(1.0);
   }
 
-  public void outtake(boolean isCube) {
+  public void outtake() {
     setInverted(isCube);
 
     motor.set(-1.0);
@@ -50,5 +56,13 @@ public class Claw extends SubsystemBase {
 
   public double getDistance() {
     return sensor.get();
+  }
+
+  public double getClawLength() {
+    return (isCube) ? Constants.robot.CUBE_DISTANCE : Constants.robot.TOTAL_DISTANCE;
+  }
+
+  public boolean getIsCube() {
+    return isCube;
   }
 }

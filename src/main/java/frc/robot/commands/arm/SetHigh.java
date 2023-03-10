@@ -13,14 +13,12 @@ import frc.robot.subsystems.arm.Arm;
 public class SetHigh extends CommandBase {
   private Arm arm = Arm.getInstance();
 
-  private BooleanSupplier isCube;
   private double[] config = Constants.arm.configs.HIGH;
 
   /** Creates a new SetHigh. */
-  public SetHigh(BooleanSupplier isCube) {
+  public SetHigh() {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(arm.getShoulder(), arm.getTelescope(), arm.getWrist());
-    this.isCube = isCube;
   }
 
   // Called when the command is initially scheduled.
@@ -30,7 +28,7 @@ public class SetHigh extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    arm.setToScore(config[0], config[1], isCube.getAsBoolean());
+    arm.setToScore(config[0], config[1]);
   }
 
   // Called once the command ends or is interrupted.
