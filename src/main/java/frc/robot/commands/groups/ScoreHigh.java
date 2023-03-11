@@ -4,7 +4,6 @@
 
 package frc.robot.commands.groups;
 
-
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.arm.SetHigh;
@@ -20,8 +19,6 @@ public class ScoreHigh extends SequentialCommandGroup {
   public ScoreHigh() {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(
-        new SetHigh(),
-        new RunCommand(() -> claw.outtake(), claw).withTimeout(2.0));
+    addCommands(new SetHigh(), new RunCommand(() -> claw.outtake(), claw).withTimeout(2.0));
   }
 }

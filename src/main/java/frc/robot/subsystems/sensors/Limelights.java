@@ -56,9 +56,9 @@ public class Limelights {
 
   public Pose3d getPose3d() {
     if (LimelightHelpers.getTV(frontLLName)) {
-      return (DriverStation.getAlliance() == Alliance.Blue) ? 
-      filterPose(LimelightHelpers.getBotPose3d_wpiBlue(frontLLName)) :
-      filterPose(LimelightHelpers.getBotPose3d_wpiRed(frontLLName).relativeTo(getPose3d()));
+      return (DriverStation.getAlliance() == Alliance.Blue)
+          ? filterPose(LimelightHelpers.getBotPose3d_wpiBlue(frontLLName))
+          : filterPose(LimelightHelpers.getBotPose3d_wpiRed(frontLLName).relativeTo(getPose3d()));
     } else if (LimelightHelpers.getTV(backLLName)) {
       return filterPose(LimelightHelpers.getBotPose3d_wpiBlue(backLLName));
     } else return new Pose3d();
@@ -67,9 +67,13 @@ public class Limelights {
   public double getLatency() {
     double time = Timer.getFPGATimestamp();
     if (LimelightHelpers.getTV(frontLLName)) {
-      return time - (LimelightHelpers.getLatency_Capture(frontLLName) / 1000) - (LimelightHelpers.getLatency_Pipeline(frontLLName) / 1000);
+      return time
+          - (LimelightHelpers.getLatency_Capture(frontLLName) / 1000)
+          - (LimelightHelpers.getLatency_Pipeline(frontLLName) / 1000);
     } else if (LimelightHelpers.getTV(backLLName)) {
-      return time - (LimelightHelpers.getLatency_Capture(backLLName) / 1000) - (LimelightHelpers.getLatency_Pipeline(backLLName) / 1000);
+      return time
+          - (LimelightHelpers.getLatency_Capture(backLLName) / 1000)
+          - (LimelightHelpers.getLatency_Pipeline(backLLName) / 1000);
     } else return 0.0;
   }
 }
