@@ -186,7 +186,7 @@ public final class Constants {
   }
 
   public static final class claw {
-    
+
     public static final double SENSOR_SCALE = 0.195;
   }
 
@@ -224,13 +224,13 @@ public final class Constants {
     public static final class telescope {
       public static final double ZERO_CURRENT = 0.0;
 
-      // public static final double ROTATIONS_PER_INCH = 62.19; // 57.014 rotations per inch
-      public static final double ROTATIONS_PER_METER = 29.6999 / Units.inchesToMeters(46.85);
+      public static final double TICKS_PER_INCH = 2048; // 57.014 rotations per inch
+      public static final double TICKS_PER_METER = 2048 / 0.025;
 
-      public static final double UPPER_LIMIT = Units.inchesToMeters(40);
-      public static final double LOWER_LIMIT = 0.0;
+      public static final double UPPER_LIMIT = Units.metersToInches(1.4) * 2048; 
+      public static final double LOWER_LIMIT = 7.5 * 2048;
 
-      public static final double kP = 0.0;
+      public static final double kP = 70.0;
       public static final double kI = 0.0;
       public static final double kD = 0.0;
       public static final double kF = 0.0;
@@ -239,8 +239,8 @@ public final class Constants {
       public static final double kG = 0.0;
       public static final double kV = 0.0;
 
-      public static final double MAX_VEL = 2.0;
-      public static final double MAX_ACCEL = 4.0;
+      public static final double MAX_VEL = 10.0;
+      public static final double MAX_ACCEL = 20.0;
       public static final Constraints CONSTRAINTS = new Constraints(MAX_VEL, MAX_ACCEL);
       public static final double ALLOWED_ERROR = 0.0;
     }

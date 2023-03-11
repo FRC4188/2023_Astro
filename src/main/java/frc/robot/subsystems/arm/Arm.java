@@ -6,6 +6,8 @@ package frc.robot.subsystems.arm;
 
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation3d;
 import frc.robot.Constants;
 import frc.robot.subsystems.claw.Claw;
 import frc.robot.subsystems.sensors.Sensors;
@@ -102,11 +104,12 @@ public class Arm {
     double clawLen = claw.getClawLength();
 
     double wristPAngle = Math.PI - sAng - wAng;
-    double x = (teleLen * Math.sin(sAng) + clawLen * Math.sin(sAng - wAng)) * Math.cos(sensors.getRotation2d().getDegrees());
-    double y = (teleLen * Math.sin(sAng) + clawLen * Math.sin(sAng - wAng)) * Math.sin(sensors.getRotation2d().getDegrees());
+    double x = (teleLen * Math.sin(sAng) + clawLen * Math.sin(sAng - wAng)) * Math.cos(sensors.getRotation2d().getRadians());
+    double y = (teleLen * Math.sin(sAng) + clawLen * Math.sin(sAng - wAng)) * Math.sin(sensors.getRotation2d().getRadians());
     double z = (teleLen * Math.cos(sAng) + clawLen * Math.cos(sAng - wAng));
 
-    return new Pose3d(x, y, z, new Rotation3d(0, wristPAngle, 0));
+    return new Pose3d(x, y, z, new Rotation3d(0, wristPAngle, 0))
+      .relativeTo(new Pose3d(0, 0, Constants.robot.SHOULDER_HEIGHT, new Rotation3d()));
   }
 
   public Shoulder getShoulder() {

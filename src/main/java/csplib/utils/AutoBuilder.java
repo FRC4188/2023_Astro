@@ -4,6 +4,7 @@
 
 package csplib.utils;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -16,6 +17,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
+import frc.robot.commands.AutoEventMaps;
 import frc.robot.subsystems.drivetrain.Drivetrain;
 
 /** Add your docs here. */
@@ -23,8 +25,9 @@ public class AutoBuilder {
   private static Drivetrain drivetrain = Drivetrain.getInstance();
 
   public static Command buildAuto(
-      String pathName, HashMap<String, Command> eventMap, PathConstraints constraints) {
-    List<PathPlannerTrajectory> paths = PathPlanner.loadPathGroup(pathName, constraints);
+      String pathName, HashMap<String, Command> eventMap, PathConstraints... constraints) {
+    PathConstraints[] others = Arrays.copyOfRange(constraints, 1, constraints.length);
+    List<PathPlannerTrajectory> paths = PathPlanner.loadPathGroup(pathName, constraints[0], others);
     SwerveAutoBuilder autoBuilder =
         new SwerveAutoBuilder(
             drivetrain::getPose2d,
@@ -40,7 +43,7 @@ public class AutoBuilder {
       return autoBuilder.fullAuto(paths);
     } catch (Exception e) {
       // TODO: handle exception
-      DriverStation.reportError(e.getMessage(), null);
+      DriverStation.reportError(e.getMessage(), false);
       return new SequentialCommandGroup();
     }
   }
@@ -49,6 +52,6 @@ public class AutoBuilder {
     return buildAuto(
         pathName,
         eventMap,
-        new PathConstraints(Constants.drivetrain.MAX_VELOCITY, Constants.drivetrain.MAX_ACCEL));
+        AutoEventMaps.DEFAULT_CONSTRAINTS);
   }
 }

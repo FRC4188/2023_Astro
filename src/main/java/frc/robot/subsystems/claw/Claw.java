@@ -21,6 +21,7 @@ public class Claw extends SubsystemBase {
   private boolean isCube;
 
   private Claw() {
+    init();
     TempManager.addMotor(motor);
   }
 
@@ -33,8 +34,8 @@ public class Claw extends SubsystemBase {
     motor.set(percent);
   }
 
-  private void setInverted(boolean inverted) {
-    if (inverted) motor.setInverted(false);
+  private void setInverted() {
+    if (isCube) motor.setInverted(false);
     else motor.setInverted(true);
   }
 
@@ -43,13 +44,13 @@ public class Claw extends SubsystemBase {
   }
 
   public void intake() {
-    setInverted(isCube);
+    setInverted();
 
     motor.set(1.0);
   }
 
   public void outtake() {
-    setInverted(isCube);
+    setInverted();
 
     motor.set(-1.0);
   }

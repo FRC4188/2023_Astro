@@ -23,6 +23,6 @@ public class ScoreHigh extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
         new SetHigh(),
-        new RunCommand(() -> claw.intake(), claw).withTimeout(2.0));
+        new RunCommand(() -> claw.outtake(), claw).withTimeout(2.0));
   }
 }

@@ -4,12 +4,14 @@
 
 package frc.robot.subsystems.arm;
 
+import csplib.motors.CSP_Falcon;
 import csplib.motors.CSP_Talon;
 import csplib.utils.TempManager;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -22,7 +24,7 @@ public class Telescope extends SubsystemBase {
     return instance;
   }
 
-  private CSP_Talon motor = new CSP_Talon(Constants.ids.TELESCOPE);
+  private CSP_Falcon motor = new CSP_Falcon(Constants.ids.TELESCOPE);
   private DigitalInput limitSwitch = new DigitalInput(Constants.ids.TELESCOPE_LIMIT_SWITCH);
 
   private ProfiledPIDController pid =
@@ -39,13 +41,23 @@ public class Telescope extends SubsystemBase {
   private Telescope() {
     init();
     TempManager.addMotor(motor);
+    SmartDashboard.putNumber("Telescope P", 0);
+    SmartDashboard.putNumber("Telescope I", 0);
+    SmartDashboard.putNumber("Telescope D", 0);
   }
 
   @Override
-  public void periodic() {}
+  public void periodic() {
+    SmartDashboard.putNumber("Telescope Len", getPosition());
+    SmartDashboard.putBoolean("Telescope Limit", getLimitSwitch());
+
+    if (getLimitSwitch()) {
+      motor.disable();
+      motor.setEncoder(Constants.arm.telescope.LOWER_LIMIT);
+    }
+  }
 
   public void init() {
-    motor.setScalar(1 / Constants.arm.telescope.ROTATIONS_PER_METER);
     motor.setInverted(true);
     motor.setBrake(true);
     motor.setEncoder(Constants.arm.telescope.LOWER_LIMIT);
@@ -61,7 +73,7 @@ public class Telescope extends SubsystemBase {
   public void zero() {
     if (!getLimitSwitch()) {
       motor.configReverseSoftLimitEnable(false);
-      set(-0.2);
+      set(-0.7);
     } else {
       motor.configReverseSoftLimitThreshold(Constants.arm.telescope.LOWER_LIMIT);
       motor.configReverseSoftLimitEnable(true);
@@ -86,7 +98,7 @@ public class Telescope extends SubsystemBase {
   }
 
   public double getPosition() {
-    return motor.getPosition();
+    return motor.getPosition() * 1 / Constants.arm.telescope.TICKS_PER_METER;
   }
 
   public boolean getLimitSwitch() {
