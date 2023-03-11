@@ -1,7 +1,5 @@
 package frc.robot;
 
-
-
 import csplib.inputs.CSP_Controller;
 import csplib.inputs.CSP_Controller.Scale;
 import csplib.utils.AutoBuilder;
@@ -80,32 +78,37 @@ public class RobotContainer {
     copilot
         .getYButton()
         .whileTrue(new InstantCommand(() -> shoulder.set(0.3), shoulder))
-        .onFalse(new InstantCommand(() ->  shoulder.set(0.0), shoulder));
+        .onFalse(new InstantCommand(() -> shoulder.set(0.0), shoulder));
     copilot
         .getAButton()
-        .whileTrue(new InstantCommand(() ->  shoulder.set(-0.3), shoulder))
-        .onFalse(new InstantCommand(() ->  shoulder.set(0.0), shoulder));
+        .whileTrue(new InstantCommand(() -> shoulder.set(-0.3), shoulder))
+        .onFalse(new InstantCommand(() -> shoulder.set(0.0), shoulder));
     copilot
         .getXButton()
-        .whileTrue(new InstantCommand(() ->  wrist.set(0.3), wrist))
-        .onFalse(new InstantCommand(() ->  wrist.set(0.0), wrist));
+        .whileTrue(new InstantCommand(() -> wrist.set(0.3), wrist))
+        .onFalse(new InstantCommand(() -> wrist.set(0.0), wrist));
     copilot
         .getBButton()
-        .whileTrue(new InstantCommand(() ->  wrist.set(-0.3), wrist))
-        .onFalse(new InstantCommand(() ->  wrist.set(0.0), wrist));
+        .whileTrue(new InstantCommand(() -> wrist.set(-0.3), wrist))
+        .onFalse(new InstantCommand(() -> wrist.set(0.0), wrist));
     copilot
         .getUpButton()
-        .whileTrue(new InstantCommand(() ->  telescope.set(0.3), telescope))
-        .onFalse(new InstantCommand(() ->  telescope.set(0.0), telescope));
+        .whileTrue(new InstantCommand(() -> telescope.set(0.3), telescope))
+        .onFalse(new InstantCommand(() -> telescope.set(0.0), telescope));
     copilot
         .getDownButton()
-        .whileTrue(new InstantCommand(() ->  telescope.set(-0.3)
-        , telescope))
-        .onFalse(new InstantCommand(() ->  telescope.set(0.0), telescope));
+        .whileTrue(new InstantCommand(() -> telescope.set(-0.3), telescope))
+        .onFalse(new InstantCommand(() -> telescope.set(0.0), telescope));
 
     copilot.getStartButton().onTrue(new ZeroTelescope());
-    copilot.getBackButton().onTrue(new RunCommand(() -> telescope.setPosition(0.75), telescope)).onFalse(new InstantCommand(() -> telescope.disable(), telescope));
-    copilot.getRightButton().onTrue(new RunCommand(() -> telescope.setPosition(0.4), telescope)).onFalse(new InstantCommand(() -> telescope.disable(), telescope));
+    copilot
+        .getBackButton()
+        .onTrue(new RunCommand(() -> telescope.setPosition(0.75), telescope))
+        .onFalse(new InstantCommand(() -> telescope.disable(), telescope));
+    copilot
+        .getRightButton()
+        .onTrue(new RunCommand(() -> telescope.setPosition(0.4), telescope))
+        .onFalse(new InstantCommand(() -> telescope.disable(), telescope));
   }
 
   private void smartdashboardButtons() {
