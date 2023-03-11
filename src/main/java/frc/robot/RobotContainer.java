@@ -66,7 +66,6 @@ public class RobotContainer {
 
   /** Use this method to define your button->command mappings. */
   private void configureButtonBindings() {
-  private void configureButtonBindings() {
     claw.setIsCube(copilot.getRightBumperButton().getAsBoolean());
 
     copilot
