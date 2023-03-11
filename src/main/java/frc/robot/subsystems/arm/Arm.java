@@ -73,9 +73,19 @@ public class Arm {
 
     double radius = Math.hypot(x, y);
 
-    double teleLen =  Math.sqrt(Math.pow(radius, 2) + Math.pow(z, 2) + Math.pow(clawLen, 2) - 2 * radius * clawLen * Math.cos(wristPAng) - 2 * z * clawLen * Math.sin(wristPAng));
-    double sAng = Math.PI / 2 - Math.atan2(z - clawLen * Math.sin(wristPAng), x - clawLen * Math.cos(wristPAng));
-    double wAngle =  wristPAng - Math.atan2(z - clawLen * Math.sin(wristPAng), x - clawLen * Math.cos(wristPAng));
+    double teleLen =
+        Math.sqrt(
+            Math.pow(radius, 2)
+                + Math.pow(z, 2)
+                + Math.pow(clawLen, 2)
+                - 2 * radius * clawLen * Math.cos(wristPAng)
+                - 2 * z * clawLen * Math.sin(wristPAng));
+    double sAng =
+        Math.PI / 2
+            - Math.atan2(z - clawLen * Math.sin(wristPAng), x - clawLen * Math.cos(wristPAng));
+    double wAngle =
+        wristPAng
+            - Math.atan2(z - clawLen * Math.sin(wristPAng), x - clawLen * Math.cos(wristPAng));
     double pigeonAngle = Math.atan2(y, x);
 
     return new double[] {sAng, teleLen, wAngle, pigeonAngle};
