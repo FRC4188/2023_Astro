@@ -82,10 +82,10 @@ public final class Constants {
 
     public static final int SHOULDER_LEADER = 21;
     public static final int SHOULDER_FOLLOWER = 22;
-    public static final int SHOULDER_ENCODER = 10;
+    public static final int SHOULDER_ENCODER = 9;
 
     public static final int WRIST = 24;
-    public static final int WRIST_ENCODER = 9;
+    public static final int WRIST_ENCODER = 10;
 
     public static final int TELESCOPE = 17;
     public static final int TELESCOPE_LIMIT_SWITCH = 9;
@@ -198,20 +198,21 @@ public final class Constants {
     }
 
     public static final class shoulder {
-      public static final double ZERO = 117.7734375;
+      public static final double ZERO = 119.70703125;
       public static final double GEAR_RATIO = 132.741; // 132.741 to 1
       public static final double ROTATIONS_PER_DEGREE = GEAR_RATIO / 360;
 
-      public static final double UPPER_LIMIT = 217.9453582763672;
-      public static final double LOWER_LIMIT = 6.0;
+      public static final double UPPER_LIMIT = 98.0;
+      public static final double LOWER_LIMIT = -107.0;
 
-      public static final double kP = 0.3;
+      public static final double kP = 0.0;
       public static final double kI = 0.0;
       public static final double kD = 0.0;
       public static final double kF = 0.0;
 
-      public static final double MAX_VEL = 30.0;
-      public static final double MAX_ACCEL = 30;
+      //raymond here, reducing these for shoulder PID testing
+      public static final double MAX_VEL = 10.0;
+      public static final double MAX_ACCEL = 5.0;
       public static final double ALLOWED_ERROR = 0.0;
 
       public static final Constraints CONSTRAINTS = new Constraints(MAX_VEL, MAX_ACCEL);

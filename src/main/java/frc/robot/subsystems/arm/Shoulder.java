@@ -44,6 +44,9 @@ public class Shoulder extends SubsystemBase {
   public Shoulder() {
     init();
     TempManager.addMotor(leader, follower);
+    SmartDashboard.putNumber("Shoulder P", 0);
+    SmartDashboard.putNumber("Shoulder I", 0);
+    SmartDashboard.putNumber("Shoulder D", 0);
   }
 
   @Override
@@ -82,6 +85,10 @@ public class Shoulder extends SubsystemBase {
 
   public void set(double percent) {
     leader.set(percent);
+  }
+
+  public void setPID(double kP, double kI, double kD) {
+    pid.setPID(kP, kI, kD);
   }
 
   public void setAngle(double angle) {

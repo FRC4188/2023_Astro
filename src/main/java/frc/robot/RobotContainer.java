@@ -103,12 +103,12 @@ public class RobotContainer {
     copilot.getStartButton().onTrue(new ZeroTelescope());
     copilot
         .getBackButton()
-        .onTrue(new RunCommand(() -> telescope.setPosition(0.75), telescope))
-        .onFalse(new InstantCommand(() -> telescope.disable(), telescope));
+        .onTrue(new RunCommand(() -> shoulder.setAngle(30.0), shoulder))
+        .onFalse(new InstantCommand(() -> shoulder.disable(), shoulder));
     copilot
         .getRightButton()
-        .onTrue(new RunCommand(() -> telescope.setPosition(0.4), telescope))
-        .onFalse(new InstantCommand(() -> telescope.disable(), telescope));
+        .onTrue(new RunCommand(() -> shoulder.setAngle(0.0), shoulder))
+        .onFalse(new InstantCommand(() -> shoulder.disable(), shoulder));
   }
 
   private void smartdashboardButtons() {
@@ -130,6 +130,17 @@ public class RobotContainer {
                         SmartDashboard.getNumber("Telescope P", 0),
                         SmartDashboard.getNumber("Telescope I", 0),
                         SmartDashboard.getNumber("Telescope D", 0))));
+
+    SmartDashboard.putData(
+        "Set Shoulder PID",
+        new InstantCommand(
+            () ->
+                Shoulder.getInstance()
+                    .setPID(
+                        SmartDashboard.getNumber("Shoulder P", 0),
+                        SmartDashboard.getNumber("Shoulder I", 0),
+                        SmartDashboard.getNumber("Shoulder D", 0))));
+                        
 
     SmartDashboard.putData(
         "Set Drive Rot",
