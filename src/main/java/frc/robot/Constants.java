@@ -87,7 +87,7 @@ public final class Constants {
     public static final int WRIST = 24;
     public static final int WRIST_ENCODER = 9;
 
-    public static final int TELESCOPE = 23;
+    public static final int TELESCOPE = 17;
     public static final int TELESCOPE_LIMIT_SWITCH = 9;
 
     public static final int CLAW = 16;
@@ -191,6 +191,12 @@ public final class Constants {
   }
 
   public static final class arm {
+    public static final class configs {
+      public static final double[] HIGH = {0.0, 0.0};
+      public static final double[] MID = {0.0, 0.0};
+      public static final double[] LOW = {0.0, 0.0};
+    }
+
     public static final class shoulder {
       public static final double ZERO = 117.7734375;
       public static final double GEAR_RATIO = 132.741; // 132.741 to 1
@@ -218,13 +224,13 @@ public final class Constants {
     public static final class telescope {
       public static final double ZERO_CURRENT = 0.0;
 
-      // public static final double ROTATIONS_PER_INCH = 62.19; // 57.014 rotations per inch
-      public static final double ROTATIONS_PER_METER = 29.6999 / Units.inchesToMeters(46.85);
+      public static final double TICKS_PER_INCH = 2048; // 57.014 rotations per inch
+      public static final double TICKS_PER_METER = 2048 / 0.025;
 
-      public static final double UPPER_LIMIT = Units.inchesToMeters(40);
-      public static final double LOWER_LIMIT = 0.0;
+      public static final double UPPER_LIMIT = Units.metersToInches(1.4) * 2048;
+      public static final double LOWER_LIMIT = 7.5 * 2048;
 
-      public static final double kP = 0.0;
+      public static final double kP = 70.0;
       public static final double kI = 0.0;
       public static final double kD = 0.0;
       public static final double kF = 0.0;
@@ -233,8 +239,8 @@ public final class Constants {
       public static final double kG = 0.0;
       public static final double kV = 0.0;
 
-      public static final double MAX_VEL = 2.0;
-      public static final double MAX_ACCEL = 4.0;
+      public static final double MAX_VEL = 10.0;
+      public static final double MAX_ACCEL = 20.0;
       public static final Constraints CONSTRAINTS = new Constraints(MAX_VEL, MAX_ACCEL);
       public static final double ALLOWED_ERROR = 0.0;
     }
@@ -261,7 +267,8 @@ public final class Constants {
 
       public static final double MAX_VEL = 45;
       public static final double MAX_ACCEL = 30;
-      public static final double ALLOWED_ERROR = 0.1;
+      public static final Constraints CONSTRAINTS = new Constraints(MAX_VEL, MAX_ACCEL);
+      public static final double ALLOWED_ERROR = 1;
     }
   }
 }

@@ -5,7 +5,6 @@ import com.pathplanner.lib.auto.PIDConstants;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -106,16 +105,18 @@ public class Drivetrain extends SubsystemBase {
     updateOdometry();
     SmartDashboard.putString("Position", getPose2d().toString());
 
-    SmartDashboard.putNumber("FL Angle", frontLeft.getModulePosition().angle.getDegrees());
-    SmartDashboard.putNumber("BL Angle", backLeft.getModulePosition().angle.getDegrees());
-    SmartDashboard.putNumber("BR Angle", backRight.getModulePosition().angle.getDegrees());
-    SmartDashboard.putNumber("FR Angle", frontRight.getModulePosition().angle.getDegrees());
+    // SmartDashboard.putNumber("FL Angle", frontLeft.getModulePosition().angle.getDegrees());
+    // SmartDashboard.putNumber("BL Angle", backLeft.getModulePosition().angle.getDegrees());
+    // SmartDashboard.putNumber("BR Angle", backRight.getModulePosition().angle.getDegrees());
+    // SmartDashboard.putNumber("FR Angle", frontRight.getModulePosition().angle.getDegrees());
   }
 
   public void putDashboard() {
     SmartDashboard.putNumber("Rot kP", 0);
     SmartDashboard.putNumber("Rot kI", 0);
     SmartDashboard.putNumber("Rot kD", 0);
+
+    SmartDashboard.putNumber("Set Drive Rotation", 0);
   }
 
   public void drive(double x, double y, double rot) {
@@ -128,11 +129,6 @@ public class Drivetrain extends SubsystemBase {
     lastAngle = pigeonAngle.getDegrees();
 
     boolean noInput = xSpeed == 0 && ySpeed == 0 && rotSpeed == 0;
-
-    rotSpeed =
-        (rotSpeed == 0 /* && (xSpeed != 0.0 || ySpeed != 0.0)*/)
-            ? rotPID.calculate(lastAngle, pigeonAngle.getDegrees())
-            : rotSpeed;
 
     rotSpeed = (rotSpeed == 0) ? rotPID.calculate(lastAngle, pigeonAngle.getDegrees()) : rotSpeed;
 
@@ -155,13 +151,16 @@ public class Drivetrain extends SubsystemBase {
     rotPID.setPID(kP, kI, kD);
   }
 
-  public void recalibrate() {
-    if (!sensors.getPose3d().equals(new Pose3d())) {
-      resetOdometry(sensors.getPose3d().toPose2d());
-    }
+  public void setRotation(double rotation) {
+    rotPID.calculate(sensors.getRotation2d().getDegrees(), rotation);
   }
 
   public void updateOdometry() {
+    Pose2d pose = sensors.getPose2d();
+    if (!pose.equals(new Pose2d())) {
+      odometry.addVisionMeasurement(pose, sensors.getLatency());
+    }
+
     odometry.update(
         sensors.getRotation2d(),
         new SwerveModulePosition[] {
@@ -173,7 +172,6 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public void resetOdometry(Pose2d initPose) {
-    sensors.resetPigeon();
     odometry.resetPosition(
         sensors.getRotation2d(),
         new SwerveModulePosition[] {

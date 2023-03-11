@@ -1,16 +1,17 @@
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
+
 package frc.robot.subsystems.arm;
 
-import csplib.utils.Conversions;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import frc.robot.Constants;
+import frc.robot.subsystems.claw.Claw;
+import frc.robot.subsystems.sensors.Sensors;
 
-public class Arm extends SubsystemBase {
-
+/** Add your docs here. */
+public class Arm {
   private static Arm instance;
 
   public static synchronized Arm getInstance() {
@@ -18,146 +19,120 @@ public class Arm extends SubsystemBase {
     return instance;
   }
 
-  private Telescope telescope = new Telescope();
-  private Wrist wrist = new Wrist();
-  private Shoulder shoulder = new Shoulder();
+  private Shoulder shoulder = Shoulder.getInstance();
+  private Telescope telescope = Telescope.getInstance();
+  private Wrist wrist = Wrist.getInstance();
+  private Claw claw = Claw.getInstance();
+  private Sensors sensors = Sensors.getInstance();
 
-  private Arm() {
-    SmartDashboard.putNumber("Telescope kP", 0.0);
-    SmartDashboard.putNumber("Telescope kI", 0.0);
-    SmartDashboard.putNumber("Telescope kD", 0.0);
-    SmartDashboard.putNumber("Telescope kF", 0.0);
-  }
-
-  @Override
-  public void periodic() {
-    SmartDashboard.putNumber("Shouler Angle", getShoulderAngle());
-    SmartDashboard.putNumber("Shoulder Motor Angle", shoulder.getLeaderAngle());
-    SmartDashboard.putNumber("Wrist Angle", wrist.getAngle());
-
-    SmartDashboard.putNumber("Telescope Position", getTelescopeLength());
-    SmartDashboard.putNumber("Telescope Current", telescope.getCurrent());
-  }
-
-  public void setPosition(Pose2d pose) {
-    double[] iKinematic = getInverseKinematics(pose);
-    telescope.setPosition(iKinematic[0]);
-    shoulder.setAngle(iKinematic[1]);
-    wrist.setAngle(iKinematic[2]);
-  }
+  private Arm() {}
 
   public void stow() {
-    shoulder.setAngle(0);
-    telescope.zero();
-    wrist.zero();
+    setPosition(0, Constants.arm.telescope.LOWER_LIMIT, Constants.arm.wrist.LOWER_LIMIT);
   }
 
-  public void zeroWrist() {
-    wrist.zero();
+  public void disable() {
+    shoulder.disable();
+    telescope.disable();
+    wrist.disable();
   }
 
-  public void zeroTelescope() {
-    telescope.zero();
+  public void set(double shoulderPercent, double telescopePercent, double wristPercent) {
+    shoulder.set(shoulderPercent);
+    telescope.set(telescopePercent);
+    wrist.set(wristPercent);
   }
 
-  public Pose2d getPosition() {
-    double telescopeLength = telescope.getPosition();
-    double shoulderAngle = Math.toRadians(shoulder.getAngle());
-    double wristAngle = Math.toRadians(wrist.getAngle());
-    double wristLength = 0;
-
-    double x =
-        telescopeLength * Math.sin(shoulderAngle)
-            + wristLength * Math.sin(shoulderAngle - wristAngle);
-    double z =
-        telescopeLength * Math.cos(shoulderAngle)
-            + wristLength * Math.cos(shoulderAngle - wristAngle);
-    double pickUpAngle = Math.PI / 2 - shoulderAngle + wristAngle;
-
-    Transform2d transform =
-        new Transform2d(new Translation2d(0, Constants.robot.SHOULDER_HEIGHT), new Rotation2d());
-    return new Pose2d(x, z, new Rotation2d(pickUpAngle)).transformBy(transform);
+  public void setPosition(double shoulderAngle, double telescopeLength, double wristAngle) {
+    shoulder.setAngle(shoulderAngle);
+    telescope.setPosition(telescopeLength);
+    wrist.setAngle(wristAngle);
   }
 
-  public void setTelescope(double percent) {
-    telescope.set(percent);
+  public void setPosition(double[] positions) {
+    shoulder.setAngle(positions[0]);
+    telescope.setPosition(positions[1]);
+    wrist.setAngle(positions[2]);
   }
 
-  public void setTelescopePosition(double position) {
-    telescope.setPosition(position);
+  public void setToScore(double shoulderAngle, double telescopeLength) {
+    double cubeWristSet = (Math.abs(shoulderAngle) < 90) ? 90 - shoulderAngle : shoulderAngle - 90;
+    double coneWristSet = 180 - shoulderAngle;
+    double wristSet = (claw.getIsCube()) ? cubeWristSet : coneWristSet;
+    setPosition(shoulderAngle, telescopeLength, wristSet);
   }
 
-  public void setShoulder(double percent) {
-    shoulder.set(percent);
-  }
+  public double[] getInverseKinematics(Pose3d pose) {
+    double x = pose.getX();
+    double y = pose.getY();
+    double z = pose.getZ();
+    double wristPAng = pose.getRotation().getAngle();
+    double clawLen = claw.getClawLength();
 
-  public void setWrist(double percent) {
-    wrist.set(percent);
-  }
+    double radius = Math.hypot(x, y);
 
-  public void setWristAngle(double angle) {
-    wrist.setAngle(angle);
-  }
-
-  public void setShoulderPosition(double angle) {
-    shoulder.setAngle(angle);
-  }
-
-  public void setTelescopePID(double kP, double kI, double kD, double kF) {
-    telescope.setPID(kP, kI, kD, kF);
-  }
-
-  public void setShoulderPID(double kP, double kI, double kD, double kF) {
-    shoulder.setPID(kP, kI, kD, kF);
-  }
-
-  public void setWristPID(double kP, double kI, double kD, double kF) {
-    wrist.setPID(kP, kI, kD, kF);
-  }
-
-  public double[] getInverseKinematics(Pose2d pose) {
-    double x =
-        (pose.getX() > Constants.robot.MAX_EXTENSION) ? Constants.robot.MAX_EXTENSION : pose.getX();
-    double z = pose.getY();
-    double pickUpAngle = pose.getRotation().getDegrees();
-    double wristLength = 0;
-
-    double telescopeLength =
+    double teleLen =
         Math.sqrt(
-            Math.pow(x, 2)
+            Math.pow(radius, 2)
                 + Math.pow(z, 2)
-                + Math.pow(wristLength, 2)
-                - 2 * x * wristLength * Math.cos(pickUpAngle)
-                - 2 * z * wristLength * Math.sin(pickUpAngle));
-    double shoulderAngle =
-        90
-            - Math.toDegrees(
-                Math.atan2(
-                    (z - wristLength * Math.sin(pickUpAngle)),
-                    (x - wristLength * Math.cos(pickUpAngle))));
-    double wristAngle =
-        0
-            - Math.toDegrees(
-                Math.atan2(
-                    (z - wristLength * Math.sin(pickUpAngle)),
-                    (x - wristLength * Math.cos(pickUpAngle))));
+                + Math.pow(clawLen, 2)
+                - 2 * radius * clawLen * Math.cos(wristPAng)
+                - 2 * z * clawLen * Math.sin(wristPAng));
+    double sAng =
+        Math.PI / 2
+            - Math.atan2(z - clawLen * Math.sin(wristPAng), x - clawLen * Math.cos(wristPAng));
+    double wAngle =
+        wristPAng
+            - Math.atan2(z - clawLen * Math.sin(wristPAng), x - clawLen * Math.cos(wristPAng));
+    double pigeonAngle = Math.atan2(y, x);
 
-    return new double[] {
-      telescopeLength,
-      Conversions.degreesUnsignedToSigned(shoulderAngle),
-      Conversions.degreesUnsignedToSigned(wristAngle)
-    };
+    return new double[] {sAng, teleLen, wAngle, pigeonAngle};
   }
 
-  public double getTelescopeLength() {
-    return telescope.getPosition();
+  public boolean validate(double shoulderAngle, double telescopeLength, double wristAngle) {
+    boolean shoulderGood = Math.abs(shoulderAngle - shoulder.getAngle()) < 1;
+    boolean telescopeGood = Math.abs(telescopeLength - telescope.getPosition()) < 0.1;
+    boolean wristGood = Math.abs(wristAngle - wrist.getAngle()) < 1;
+
+    return shoulderGood && telescopeGood && wristGood;
   }
 
-  public double getShoulderAngle() {
-    return shoulder.getAngle();
+  public boolean validate(double[] positions) {
+    boolean shoulderGood = Math.abs(positions[0] - shoulder.getAngle()) < 1;
+    boolean telescopeGood = Math.abs(positions[1] - telescope.getPosition()) < 0.1;
+    boolean wristGood = Math.abs(positions[2] - wrist.getAngle()) < 1;
+
+    return shoulderGood && telescopeGood && wristGood;
   }
 
-  public double getWristAngle() {
-    return wrist.getAngle();
+  public Pose3d getPosition() {
+    double sAng = Math.toRadians(shoulder.getAngle());
+    double teleLen = telescope.getPosition();
+    double wAng = Math.toRadians(wrist.getAngle());
+    double clawLen = claw.getClawLength();
+
+    double wristPAngle = Math.PI - sAng - wAng;
+    double x =
+        (teleLen * Math.sin(sAng) + clawLen * Math.sin(sAng - wAng))
+            * Math.cos(sensors.getRotation2d().getRadians());
+    double y =
+        (teleLen * Math.sin(sAng) + clawLen * Math.sin(sAng - wAng))
+            * Math.sin(sensors.getRotation2d().getRadians());
+    double z = (teleLen * Math.cos(sAng) + clawLen * Math.cos(sAng - wAng));
+
+    return new Pose3d(x, y, z, new Rotation3d(0, wristPAngle, 0))
+        .relativeTo(new Pose3d(0, 0, Constants.robot.SHOULDER_HEIGHT, new Rotation3d()));
+  }
+
+  public Shoulder getShoulder() {
+    return shoulder;
+  }
+
+  public Telescope getTelescope() {
+    return telescope;
+  }
+
+  public Wrist getWrist() {
+    return wrist;
   }
 }

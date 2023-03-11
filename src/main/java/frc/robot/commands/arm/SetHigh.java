@@ -2,18 +2,21 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.arm.wrist;
+package frc.robot.commands.arm;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.arm.Arm;
 
-public class ZeroWrist extends CommandBase {
+public class SetHigh extends CommandBase {
   private Arm arm = Arm.getInstance();
-  /** Creates a new ZeroWrist. */
-  public ZeroWrist() {
+
+  private double[] config = Constants.arm.configs.HIGH;
+
+  /** Creates a new SetHigh. */
+  public SetHigh() {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(arm);
+    addRequirements(arm.getShoulder(), arm.getTelescope(), arm.getWrist());
   }
 
   // Called when the command is initially scheduled.
@@ -23,18 +26,16 @@ public class ZeroWrist extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    arm.zeroWrist();
+    arm.setToScore(config[0], config[1]);
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    arm.setWrist(0.0);
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Math.abs(arm.getWristAngle() - Constants.arm.wrist.LOWER_LIMIT) < 0.5;
+    return false;
   }
 }

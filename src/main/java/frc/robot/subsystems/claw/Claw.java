@@ -18,15 +18,52 @@ public class Claw extends SubsystemBase {
   private AnalogPotentiometer sensor =
       new AnalogPotentiometer(Constants.ids.ULTRASONIC_SENSOR, Constants.claw.SENSOR_SCALE);
 
+  private boolean isCube;
+
   private Claw() {
+    init();
     TempManager.addMotor(motor);
+  }
+
+  private void init() {
+    motor.setBrake(true);
+    motor.setInverted(false);
   }
 
   public void set(double percent) {
     motor.set(percent);
   }
 
+  private void setInverted() {
+    if (isCube) motor.setInverted(false);
+    else motor.setInverted(true);
+  }
+
+  public void setIsCube(boolean isCube) {
+    this.isCube = isCube;
+  }
+
+  public void intake() {
+    setInverted();
+
+    motor.set(1.0);
+  }
+
+  public void outtake() {
+    setInverted();
+
+    motor.set(-1.0);
+  }
+
   public double getDistance() {
     return sensor.get();
+  }
+
+  public double getClawLength() {
+    return (isCube) ? Constants.robot.CUBE_DISTANCE : Constants.robot.TOTAL_DISTANCE;
+  }
+
+  public boolean getIsCube() {
+    return isCube;
   }
 }

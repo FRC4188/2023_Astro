@@ -35,7 +35,7 @@ public class Grid {
       new Node(NodeType.CONE, new Translation3d(middleX, 3.30, middleZ)),
       new Node(NodeType.CONE, new Translation3d(middleX, 3.85, middleZ)),
       new Node(NodeType.CUBE, new Translation3d(middleX, 4.40, middleZ)),
-      new Node(NodeType.CONE, new Translation3d(middleX, 5.0, middleX))
+      new Node(NodeType.CONE, new Translation3d(middleX, 5.0, middleZ))
     },
     {
       new Node(NodeType.CONE, new Translation3d(bottomX, 0.5, bottomZ)),

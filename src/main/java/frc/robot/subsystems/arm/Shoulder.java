@@ -9,13 +9,21 @@ import com.ctre.phoenix.sensors.WPI_CANCoder;
 import com.revrobotics.CANSparkMax.SoftLimitDirection;
 
 import csplib.motors.CSP_SparkMax;
-import csplib.utils.Conversions;
+import csplib.utils.TempManager;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-/** Add your docs here. */
-public class Shoulder {
+public class Shoulder extends SubsystemBase {
+  private static Shoulder instance;
+
+  public static synchronized Shoulder getInstance() {
+    if (instance == null) instance = new Shoulder();
+    return instance;
+  }
 
   private CSP_SparkMax leader = new CSP_SparkMax(Constants.ids.SHOULDER_LEADER);
   private CSP_SparkMax follower = new CSP_SparkMax(Constants.ids.SHOULDER_FOLLOWER);
@@ -23,21 +31,29 @@ public class Shoulder {
 
   private ProfiledPIDController pid =
       new ProfiledPIDController(
-          Constants.arm.shoulder.kP,
+          Constants.arm.telescope.kP,
           Constants.arm.shoulder.kI,
           Constants.arm.shoulder.kD,
           Constants.arm.shoulder.CONSTRAINTS);
 
-  private ArmFeedforward armFF =
+  private ArmFeedforward ff =
       new ArmFeedforward(
           Constants.arm.shoulder.kS, Constants.arm.shoulder.kG, Constants.arm.shoulder.kV);
 
+  /** Creates a new Shoulder. */
   public Shoulder() {
     init();
-    // TempManager.addMotor(leader, follower);
+    TempManager.addMotor(leader, follower);
   }
 
-  private void init() {
+  @Override
+  public void periodic() {
+    // This method will be called once per scheduler run
+    SmartDashboard.putNumber("Shoulder Encoder Angle", getAngle());
+    SmartDashboard.putNumber("Shoulder Motor Angle", getMotorAngle());
+  }
+
+  public void init() {
     encoder.configFactoryDefault();
     encoder.clearStickyFaults();
     encoder.configAbsoluteSensorRange(AbsoluteSensorRange.Signed_PlusMinus180);
@@ -48,25 +64,20 @@ public class Shoulder {
     leader.setScalar(1 / Constants.arm.shoulder.ROTATIONS_PER_DEGREE);
     leader.setInverted(true);
     leader.setBrake(true);
-    leader.setEncoder(Conversions.degreesSignedToUnsigned(encoder.getAbsolutePosition()));
-    leader.enableSoftLimit(SoftLimitDirection.kForward, false);
-    leader.enableSoftLimit(SoftLimitDirection.kReverse, false);
+    leader.setEncoder(encoder.getAbsolutePosition());
+    leader.enableSoftLimit(SoftLimitDirection.kForward, true);
+    leader.enableSoftLimit(SoftLimitDirection.kReverse, true);
     leader.setSoftLimit(SoftLimitDirection.kForward, (float) Constants.arm.shoulder.UPPER_LIMIT);
     leader.setSoftLimit(SoftLimitDirection.kReverse, (float) Constants.arm.shoulder.LOWER_LIMIT);
 
-    // leader.setPIDF(
-    //     Constants.arm.shoulder.kP,
-    //     Constants.arm.shoulder.kI,
-    //     Constants.arm.shoulder.kD,
-    //     Constants.arm.shoulder.kF);
-
-    pid.enableContinuousInput(-180, 180);
-
     follower.follow(leader);
 
-    leader.setMotionPlaning(Constants.arm.shoulder.MAX_VEL, Constants.arm.shoulder.MAX_ACCEL);
-    leader.setContinousInputWrap(-180, 180);
-    leader.setError(Constants.arm.shoulder.ALLOWED_ERROR);
+    pid.enableContinuousInput(-180, 180);
+    pid.setTolerance(Constants.arm.shoulder.ALLOWED_ERROR);
+  }
+
+  public void disable() {
+    leader.disable();
   }
 
   public void set(double percent) {
@@ -74,20 +85,16 @@ public class Shoulder {
   }
 
   public void setAngle(double angle) {
-    // leader.setPosition(angle, armFF.calculate(angle, 0));
-
-    leader.setVoltage(pid.calculate(getAngle(), angle));
-  }
-
-  public void setPID(double kP, double kI, double kD, double kF) {
-    pid.setPID(kP, kI, kD);
+    State setpoint = pid.getSetpoint();
+    leader.setVoltage(
+        pid.calculate(getAngle(), angle) + ff.calculate(90 - setpoint.position, setpoint.velocity));
   }
 
   public double getAngle() {
     return encoder.getAbsolutePosition();
   }
 
-  public double getLeaderAngle() {
+  public double getMotorAngle() {
     return leader.getPosition();
   }
 }
