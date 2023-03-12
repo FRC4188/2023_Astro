@@ -35,6 +35,6 @@ public class ZeroTelescope extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Math.abs(telescope.getPosition() - Constants.arm.telescope.LOWER_LIMIT) < 0.1;
+    return telescope.getLimitSwitch();
   }
 }

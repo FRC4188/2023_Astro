@@ -10,6 +10,11 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.AutoEventMaps;
+import frc.robot.commands.arm.SetHigh;
+import frc.robot.commands.arm.SetMid;
+import frc.robot.commands.arm.SetPosition;
+import frc.robot.commands.arm.Stow;
+import frc.robot.commands.arm.telescope.SetTelescopePosition;
 import frc.robot.commands.arm.telescope.ZeroTelescope;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.arm.Shoulder;
@@ -17,6 +22,7 @@ import frc.robot.subsystems.arm.Telescope;
 import frc.robot.subsystems.arm.Wrist;
 import frc.robot.subsystems.claw.Claw;
 import frc.robot.subsystems.drivetrain.Drivetrain;
+import frc.robot.subsystems.sensors.Sensors;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -60,11 +66,22 @@ public class RobotContainer {
                     pilot.getLeftX(Scale.SQUARED),
                     pilot.getRightX(Scale.SQUARED)),
             drivetrain));
+
+    // shoulder.setDefaultCommand(new Stow());
+    shoulder.setDefaultCommand(
+        new RunCommand(
+            () -> 
+                shoulder.setAngle(copilot.getRightY() * 110), 
+            shoulder));
+    claw.setDefaultCommand(new InstantCommand(() -> claw.setIsCube(copilot.getLeftButton().getAsBoolean()), claw));
   }
 
   /** Use this method to define your button->command mappings. */
   private void configureButtonBindings() {
-    claw.setIsCube(copilot.getRightBumperButton().getAsBoolean());
+    pilot.getAButton().onTrue(new InstantCommand(() -> Sensors.getInstance().resetPigeon(), Sensors.getInstance()));
+
+
+    copilot.getRightTButton().whileTrue(new SetPosition(77, 0.1875, 57)).onFalse(new Stow());
 
     copilot
         .getRightBumperButton()
@@ -85,30 +102,32 @@ public class RobotContainer {
         .onFalse(new InstantCommand(() -> shoulder.set(0.0), shoulder));
     copilot
         .getXButton()
-        .whileTrue(new InstantCommand(() -> wrist.set(0.3), wrist))
-        .onFalse(new InstantCommand(() -> wrist.set(0.0), wrist));
+        .whileTrue(new RunCommand(() -> wrist.set(0.3), wrist))
+        .onFalse(new RunCommand(() -> wrist.set(0.0), wrist));
     copilot
         .getBButton()
         .whileTrue(new InstantCommand(() -> wrist.set(-0.3), wrist))
         .onFalse(new InstantCommand(() -> wrist.set(0.0), wrist));
     copilot
         .getUpButton()
-        .whileTrue(new InstantCommand(() -> telescope.set(0.3), telescope))
+        .onTrue(new RunCommand(() -> telescope.set(0.3), telescope))
         .onFalse(new InstantCommand(() -> telescope.set(0.0), telescope));
     copilot
         .getDownButton()
-        .whileTrue(new InstantCommand(() -> telescope.set(-0.3), telescope))
+        .onTrue(new RunCommand(() -> telescope.set(-0.3), telescope))
         .onFalse(new InstantCommand(() -> telescope.set(0.0), telescope));
-
+    
     copilot.getStartButton().onTrue(new ZeroTelescope());
-    copilot
-        .getBackButton()
-        .onTrue(new RunCommand(() -> shoulder.setAngle(30.0), shoulder))
-        .onFalse(new InstantCommand(() -> shoulder.disable(), shoulder));
-    copilot
-        .getRightButton()
-        .onTrue(new RunCommand(() -> shoulder.setAngle(0.0), shoulder))
-        .onFalse(new InstantCommand(() -> shoulder.disable(), shoulder));
+
+
+    // copilot
+    //     .getBackButton()
+    //     .onTrue(new RunCommand(() -> shoulder.setAngle(30.0), shoulder))
+    //     .onFalse(new InstantCommand(() -> shoulder.disable(), shoulder));
+    // copilot
+    //     .getRightButton()
+    //     .onTrue(new RunCommand(() -> shoulder.setAngle(0.0), shoulder))
+    //     .onFalse(new InstantCommand(() -> shoulder.disable(), shoulder));
   }
 
   private void smartdashboardButtons() {
@@ -122,24 +141,14 @@ public class RobotContainer {
                     SmartDashboard.getNumber("Rot D", 0))));
 
     SmartDashboard.putData(
-        "Set Telescope PID",
+        "Set Wrist PID",
         new InstantCommand(
             () ->
-                Telescope.getInstance()
+                Wrist.getInstance()
                     .setPID(
-                        SmartDashboard.getNumber("Telescope P", 0),
-                        SmartDashboard.getNumber("Telescope I", 0),
-                        SmartDashboard.getNumber("Telescope D", 0))));
-
-    SmartDashboard.putData(
-        "Set Shoulder PID",
-        new InstantCommand(
-            () ->
-                Shoulder.getInstance()
-                    .setPID(
-                        SmartDashboard.getNumber("Shoulder P", 0),
-                        SmartDashboard.getNumber("Shoulder I", 0),
-                        SmartDashboard.getNumber("Shoulder D", 0))));
+                        SmartDashboard.getNumber("Wrist P", 0),
+                        SmartDashboard.getNumber("Wrist I", 0),
+                        SmartDashboard.getNumber("Wrist D", 0))));
                         
 
     SmartDashboard.putData(
@@ -149,6 +158,7 @@ public class RobotContainer {
 
     SmartDashboard.putData(
         "Set Zero", new InstantCommand(() -> drivetrain.zeroPower(), drivetrain));
+
   }
 
   private void addChooser() {

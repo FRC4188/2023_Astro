@@ -91,7 +91,7 @@ public final class Constants {
     public static final int TELESCOPE_LIMIT_SWITCH = 9;
 
     public static final int CLAW = 16;
-    public static final int ULTRASONIC_SENSOR = 4;
+    public static final int ULTRASONIC_SENSOR = 0;
   }
 
   public static class drivetrain {
@@ -186,14 +186,14 @@ public final class Constants {
   }
 
   public static final class claw {
-
-    public static final double SENSOR_SCALE = 0.195;
+    public static final double CUBE_TRIGGER = 0.009;
+    public static final double SENSOR_SCALE = 1.984;
   }
 
   public static final class arm {
     public static final class configs {
-      public static final double[] HIGH = {0.0, 0.0};
-      public static final double[] MID = {0.0, 0.0};
+      public static final double[] HIGH = {45.0, 1.4, 110};
+      public static final double[] MID = {45.0, 1.0};
       public static final double[] LOW = {0.0, 0.0};
     }
 
@@ -202,24 +202,27 @@ public final class Constants {
       public static final double GEAR_RATIO = 132.741; // 132.741 to 1
       public static final double ROTATIONS_PER_DEGREE = GEAR_RATIO / 360;
 
-      public static final double UPPER_LIMIT = 98.0;
-      public static final double LOWER_LIMIT = -107.0;
+      // public static final double UPPER_LIMIT = 98.0;
+      // public static final double LOWER_LIMIT = -107.0;
 
-      public static final double kP = 0.0;
+      public static final double UPPER_LIMIT = 110.0;
+      public static final double LOWER_LIMIT = -110.0;
+
+      public static final double kP = 0.04;
       public static final double kI = 0.0;
-      public static final double kD = 0.0;
+      public static final double kD = 0.00;
       public static final double kF = 0.0;
 
       //raymond here, reducing these for shoulder PID testing
-      public static final double MAX_VEL = 10.0;
-      public static final double MAX_ACCEL = 5.0;
-      public static final double ALLOWED_ERROR = 0.0;
+      public static final double MAX_VEL = 1000.0;
+      public static final double MAX_ACCEL = 90.0;
+      public static final double ALLOWED_ERROR = 5;
 
       public static final Constraints CONSTRAINTS = new Constraints(MAX_VEL, MAX_ACCEL);
 
-      public static final double kS = -0.011135;
-      public static final double kG = 0.50345;
-      public static final double kV = 6.5364;
+      public static final double kS = 0.0;
+      public static final double kG = 0.0;
+      public static final double kV = 0.0;
     }
 
     public static final class telescope {
@@ -228,10 +231,10 @@ public final class Constants {
       public static final double TICKS_PER_INCH = 2048; // 57.014 rotations per inch
       public static final double TICKS_PER_METER = 2048 / 0.025;
 
-      public static final double UPPER_LIMIT = Units.metersToInches(1.4) * 2048;
+      public static final double UPPER_LIMIT = Units.metersToInches(1) * 2048;
       public static final double LOWER_LIMIT = 7.5 * 2048;
 
-      public static final double kP = 70.0;
+      public static final double kP = 30.0;
       public static final double kI = 0.0;
       public static final double kD = 0.0;
       public static final double kF = 0.0;
@@ -240,36 +243,34 @@ public final class Constants {
       public static final double kG = 0.0;
       public static final double kV = 0.0;
 
-      public static final double MAX_VEL = 10.0;
-      public static final double MAX_ACCEL = 20.0;
+      public static final double MAX_VEL = 0.75;
+      public static final double MAX_ACCEL = 0.1;
       public static final Constraints CONSTRAINTS = new Constraints(MAX_VEL, MAX_ACCEL);
-      public static final double ALLOWED_ERROR = 0.0;
+      public static final double ALLOWED_ERROR = 0.1;
     }
 
     public static final class wrist {
-      public static final double ZERO = 0.0;
-
-      public static final double ZERO_CURRENT = 25.0;
+      public static final double ZERO = -181.826171875;
 
       public static final double GEAR_RATIO = 100; // 100 to 1
       public static final double ROTATIONS_PER_DEGREE = GEAR_RATIO / 360;
 
-      public static final double UPPER_LIMIT = 122.91316986083984 + 1.7;
-      public static final double LOWER_LIMIT = -122.99888610839844 - 1.7;
+      public static final double UPPER_LIMIT = 90;
+      public static final double LOWER_LIMIT = -90; 
 
-      public static final double kP = 0.012;
+      public static final double kP = 0.03;
       public static final double kI = 0.0;
-      public static final double kD = 0.0;
-      public static final double kF = 0.0;
+      public static final double kD = 0.000;
+      public static final double kF = 0.000;
 
-      public static final double kS = 0.080142;
-      public static final double kG = 0.69185;
-      public static final double kV = 0.017496;
+      public static final double kS = 0;
+      public static final double kG = 0;
+      public static final double kV = 0;
 
-      public static final double MAX_VEL = 45;
-      public static final double MAX_ACCEL = 30;
+      public static final double MAX_VEL = 100.0;
+      public static final double MAX_ACCEL = 10.0;
       public static final Constraints CONSTRAINTS = new Constraints(MAX_VEL, MAX_ACCEL);
-      public static final double ALLOWED_ERROR = 1;
+      public static final double ALLOWED_ERROR = 0.5;
     }
   }
 }

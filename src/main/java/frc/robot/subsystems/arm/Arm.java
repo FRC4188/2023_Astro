@@ -7,6 +7,7 @@ package frc.robot.subsystems.arm;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import frc.robot.Constants;
+import frc.robot.Constants.arm.wrist;
 import frc.robot.subsystems.claw.Claw;
 import frc.robot.subsystems.sensors.Sensors;
 
@@ -55,11 +56,18 @@ public class Arm {
     wrist.setAngle(positions[2]);
   }
 
+  public void setToScore(double shoulderAngle, double telescopeLength, double wristAngle) {
+    // double cubeWristSet = (Math.abs(shoulderAngle) < 90) ? 90 - shoulderAngle : shoulderAngle - 90;
+    // double coneWristSet = 180 - shoulderAngle;
+    // double wristSet = (claw.getIsCube()) ? cubeWristSet : coneWristSet;
+    setPosition(shoulderAngle, telescopeLength, wristAngle);
+  }
+
   public void setToScore(double shoulderAngle, double telescopeLength) {
     double cubeWristSet = (Math.abs(shoulderAngle) < 90) ? 90 - shoulderAngle : shoulderAngle - 90;
     double coneWristSet = 180 - shoulderAngle;
-    double wristSet = (claw.getIsCube()) ? cubeWristSet : coneWristSet;
-    setPosition(shoulderAngle, telescopeLength, wristSet);
+    double wristAngle = (claw.getIsCube()) ? cubeWristSet : coneWristSet;
+    setPosition(shoulderAngle, telescopeLength, wristAngle);
   }
 
   public double[] getInverseKinematics(Pose3d pose) {

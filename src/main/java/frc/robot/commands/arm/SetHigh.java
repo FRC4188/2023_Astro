@@ -26,7 +26,7 @@ public class SetHigh extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    arm.setToScore(config[0], config[1]);
+    arm.setToScore(config[0], config[1], config[2]);
   }
 
   // Called once the command ends or is interrupted.

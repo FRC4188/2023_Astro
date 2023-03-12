@@ -31,7 +31,7 @@ public class Shoulder extends SubsystemBase {
 
   private ProfiledPIDController pid =
       new ProfiledPIDController(
-          Constants.arm.telescope.kP,
+          Constants.arm.shoulder.kP,
           Constants.arm.shoulder.kI,
           Constants.arm.shoulder.kD,
           Constants.arm.shoulder.CONSTRAINTS);
@@ -44,9 +44,6 @@ public class Shoulder extends SubsystemBase {
   public Shoulder() {
     init();
     TempManager.addMotor(leader, follower);
-    SmartDashboard.putNumber("Shoulder P", 0);
-    SmartDashboard.putNumber("Shoulder I", 0);
-    SmartDashboard.putNumber("Shoulder D", 0);
   }
 
   @Override
@@ -68,13 +65,14 @@ public class Shoulder extends SubsystemBase {
     leader.setInverted(true);
     leader.setBrake(true);
     leader.setEncoder(encoder.getAbsolutePosition());
-    leader.enableSoftLimit(SoftLimitDirection.kForward, true);
-    leader.enableSoftLimit(SoftLimitDirection.kReverse, true);
-    leader.setSoftLimit(SoftLimitDirection.kForward, (float) Constants.arm.shoulder.UPPER_LIMIT);
-    leader.setSoftLimit(SoftLimitDirection.kReverse, (float) Constants.arm.shoulder.LOWER_LIMIT);
+    // leader.enableSoftLimit(SoftLimitDirection.kForward, true);
+    // leader.enableSoftLimit(SoftLimitDirection.kReverse, true);
+    // leader.setSoftLimit(SoftLimitDirection.kForward, (float) Constants.arm.shoulder.UPPER_LIMIT);
+    // leader.setSoftLimit(SoftLimitDirection.kReverse, (float) Constants.arm.shoulder.LOWER_LIMIT);
 
     follower.follow(leader);
 
+    pid.reset(getAngle());
     pid.enableContinuousInput(-180, 180);
     pid.setTolerance(Constants.arm.shoulder.ALLOWED_ERROR);
   }
@@ -84,6 +82,9 @@ public class Shoulder extends SubsystemBase {
   }
 
   public void set(double percent) {
+    if (getAngle() > Constants.arm.shoulder.UPPER_LIMIT && percent > 0.0) percent = 0.0;
+    else if (getAngle() < Constants.arm.shoulder.LOWER_LIMIT && percent < 0.0) percent = 0.0;
+
     leader.set(percent);
   }
 
@@ -92,9 +93,13 @@ public class Shoulder extends SubsystemBase {
   }
 
   public void setAngle(double angle) {
-    State setpoint = pid.getSetpoint();
-    leader.setVoltage(
-        pid.calculate(getAngle(), angle) + ff.calculate(90 - setpoint.position, setpoint.velocity));
+    if (angle > Constants.arm.shoulder.UPPER_LIMIT) angle = Constants.arm.shoulder.UPPER_LIMIT;
+    else if (angle < Constants.arm.shoulder.LOWER_LIMIT) angle = Constants.arm.shoulder.LOWER_LIMIT;
+
+    //State setpoint = pid.getSetpoint();
+    System.out.println(pid.calculate(getAngle(), angle));
+    set(
+        pid.calculate(getAngle(), angle));// + ff.calculate(90 - setpoint.position, setpoint.velocity));
   }
 
   public double getAngle() {

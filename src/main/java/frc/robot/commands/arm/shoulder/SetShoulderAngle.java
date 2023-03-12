@@ -2,23 +2,21 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.arm;
-
-import java.util.function.BooleanSupplier;
+package frc.robot.commands.arm.shoulder;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
-import frc.robot.subsystems.arm.Arm;
+import frc.robot.subsystems.arm.Shoulder;
+import frc.robot.subsystems.arm.Telescope;
 
-public class SetMid extends CommandBase {
-  private Arm arm = Arm.getInstance();
+public class SetShoulderAngle extends CommandBase {
+  private Shoulder shoulder = Shoulder.getInstance();
 
-  private double[] config = Constants.arm.configs.MID;
-
-  /** Creates a new SetHigh. */
-  public SetMid() {
+  private double angle;
+  /** Creates a new SetShoulderAngle. */
+  public SetShoulderAngle(double angle) {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(arm.getShoulder(), arm.getTelescope(), arm.getWrist());
+    addRequirements(shoulder);
+    this.angle = angle;
   }
 
   // Called when the command is initially scheduled.
@@ -28,12 +26,13 @@ public class SetMid extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    arm.setToScore(config[0], config[1]);
+    shoulder.setAngle(angle);;
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+  }
 
   // Returns true when the command should end.
   @Override

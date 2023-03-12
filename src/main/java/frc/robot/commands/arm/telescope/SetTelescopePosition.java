@@ -2,23 +2,20 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.arm;
-
-import java.util.function.BooleanSupplier;
+package frc.robot.commands.arm.telescope;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
-import frc.robot.subsystems.arm.Arm;
+import frc.robot.subsystems.arm.Telescope;
 
-public class SetMid extends CommandBase {
-  private Arm arm = Arm.getInstance();
+public class SetTelescopePosition extends CommandBase {
+  private Telescope telescope = Telescope.getInstance();
 
-  private double[] config = Constants.arm.configs.MID;
-
-  /** Creates a new SetHigh. */
-  public SetMid() {
+  private double position;
+  /** Creates a new SetTelescopePosition. */
+  public SetTelescopePosition(double position) {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(arm.getShoulder(), arm.getTelescope(), arm.getWrist());
+    addRequirements(telescope);
+    this.position = position;
   }
 
   // Called when the command is initially scheduled.
@@ -28,12 +25,13 @@ public class SetMid extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    arm.setToScore(config[0], config[1]);
+    telescope.setPosition(position);
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+  }
 
   // Returns true when the command should end.
   @Override
