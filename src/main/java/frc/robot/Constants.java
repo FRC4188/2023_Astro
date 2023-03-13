@@ -213,7 +213,7 @@ public final class Constants {
       public static final double kD = 0.00;
       public static final double kF = 0.0;
 
-      //raymond here, reducing these for shoulder PID testing
+      // raymond here, reducing these for shoulder PID testing
       public static final double MAX_VEL = 1000.0;
       public static final double MAX_ACCEL = 90.0;
       public static final double ALLOWED_ERROR = 5;
@@ -256,7 +256,7 @@ public final class Constants {
       public static final double ROTATIONS_PER_DEGREE = GEAR_RATIO / 360;
 
       public static final double UPPER_LIMIT = 90;
-      public static final double LOWER_LIMIT = -90; 
+      public static final double LOWER_LIMIT = -90;
 
       public static final double kP = 0.03;
       public static final double kI = 0.0;

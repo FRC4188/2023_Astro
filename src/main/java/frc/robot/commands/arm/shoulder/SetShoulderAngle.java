@@ -6,7 +6,6 @@ package frc.robot.commands.arm.shoulder;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.arm.Shoulder;
-import frc.robot.subsystems.arm.Telescope;
 
 public class SetShoulderAngle extends CommandBase {
   private Shoulder shoulder = Shoulder.getInstance();
@@ -26,13 +25,13 @@ public class SetShoulderAngle extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    shoulder.setAngle(angle);;
+    shoulder.setAngle(angle);
+    ;
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override

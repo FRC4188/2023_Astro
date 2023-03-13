@@ -6,13 +6,11 @@ package frc.robot.subsystems.arm;
 
 import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 import com.ctre.phoenix.sensors.WPI_CANCoder;
-import com.revrobotics.CANSparkMax.SoftLimitDirection;
 
 import csplib.motors.CSP_SparkMax;
 import csplib.utils.TempManager;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -85,13 +83,13 @@ public class Wrist extends SubsystemBase {
     if (!(shoulder.getAngle() + getAngle() >= -180) && percent < 0.0) percent = 0.0;
     else if (!(180 >= shoulder.getAngle() + getAngle()) && percent > 0.0) percent = 0.0;
 
-    motor.set(percent);  
+    motor.set(percent);
   }
 
   public void setAngle(double angle) {
     // State setpoint = pid.getSetpoint();
     motor.set(
-        pid.calculate(getAngle(), angle)); //+ ff.calculate(setpoint.position, setpoint.velocity));
+        pid.calculate(getAngle(), angle)); // + ff.calculate(setpoint.position, setpoint.velocity));
   }
 
   public void setPID(double kP, double kI, double kD) {

@@ -22,17 +22,18 @@ public class SetPosition extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new ParallelCommandGroup(
-        new SequentialCommandGroup(
-          new ZeroTelescope(),
-          new SetShoulderAngle(shoulderAngle).until(() -> Math.abs(shoulderAngle - Shoulder.getInstance().getAngle()) < 1),
-          new ParallelCommandGroup(
-            new SetTelescopePosition(telescopeLength).unless(() -> Math.abs(telescopeLength - Telescope.getInstance().getPosition()) < 0.15),
-            new SetShoulderAngle(shoulderAngle)
-          )
-        ),
-        new SetWristAngle(wristAngle)
-      )
-    );
+        new ParallelCommandGroup(
+            new SequentialCommandGroup(
+                new ZeroTelescope(),
+                new SetShoulderAngle(shoulderAngle)
+                    .until(() -> Math.abs(shoulderAngle - Shoulder.getInstance().getAngle()) < 1),
+                new ParallelCommandGroup(
+                    new SetTelescopePosition(telescopeLength)
+                        .unless(
+                            () ->
+                                Math.abs(telescopeLength - Telescope.getInstance().getPosition())
+                                    < 0.15),
+                    new SetShoulderAngle(shoulderAngle))),
+            new SetWristAngle(wristAngle)));
   }
 }

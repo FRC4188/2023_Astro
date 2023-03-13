@@ -1,12 +1,9 @@
 package frc.robot.subsystems.claw;
 
-import java.util.function.BooleanSupplier;
 
 import csplib.motors.CSP_Talon;
 import csplib.utils.TempManager;
 import edu.wpi.first.wpilibj.AnalogInput;
-import edu.wpi.first.wpilibj.AnalogPotentiometer;
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -47,7 +44,7 @@ public class Claw extends SubsystemBase {
   }
 
   private void setInverted() {
-    // if (isCube && shoulder.getAngle() < 0.0) 
+    // if (isCube && shoulder.getAngle() < 0.0)
   }
 
   public void setIsCube(boolean isCube) {

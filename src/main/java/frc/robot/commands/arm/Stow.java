@@ -4,7 +4,6 @@
 
 package frc.robot.commands.arm;
 
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
@@ -22,9 +21,8 @@ public class Stow extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new ZeroTelescope(),
-      new RunCommand(() -> shoulder.setAngle(0), shoulder),
-      new SetWristAngle(Constants.arm.wrist.LOWER_LIMIT + 10)
-    );
+        new ZeroTelescope(),
+        new RunCommand(() -> shoulder.setAngle(0), shoulder),
+        new SetWristAngle(Constants.arm.wrist.LOWER_LIMIT + 10));
   }
 }

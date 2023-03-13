@@ -10,11 +10,8 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.AutoEventMaps;
-import frc.robot.commands.arm.SetHigh;
-import frc.robot.commands.arm.SetMid;
 import frc.robot.commands.arm.SetPosition;
 import frc.robot.commands.arm.Stow;
-import frc.robot.commands.arm.telescope.SetTelescopePosition;
 import frc.robot.commands.arm.telescope.ZeroTelescope;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.arm.Shoulder;
@@ -69,17 +66,17 @@ public class RobotContainer {
 
     // shoulder.setDefaultCommand(new Stow());
     shoulder.setDefaultCommand(
-        new RunCommand(
-            () -> 
-                shoulder.setAngle(copilot.getRightY() * 110), 
-            shoulder));
-    claw.setDefaultCommand(new InstantCommand(() -> claw.setIsCube(copilot.getLeftButton().getAsBoolean()), claw));
+        new RunCommand(() -> shoulder.setAngle(copilot.getRightY() * 110), shoulder));
+    claw.setDefaultCommand(
+        new InstantCommand(() -> claw.setIsCube(copilot.getLeftButton().getAsBoolean()), claw));
   }
 
   /** Use this method to define your button->command mappings. */
   private void configureButtonBindings() {
-    pilot.getAButton().onTrue(new InstantCommand(() -> Sensors.getInstance().resetPigeon(), Sensors.getInstance()));
-
+    pilot
+        .getAButton()
+        .onTrue(
+            new InstantCommand(() -> Sensors.getInstance().resetPigeon(), Sensors.getInstance()));
 
     copilot.getRightTButton().whileTrue(new SetPosition(77, 0.1875, 57)).onFalse(new Stow());
 
@@ -116,9 +113,8 @@ public class RobotContainer {
         .getDownButton()
         .onTrue(new RunCommand(() -> telescope.set(-0.3), telescope))
         .onFalse(new InstantCommand(() -> telescope.set(0.0), telescope));
-    
-    copilot.getStartButton().onTrue(new ZeroTelescope());
 
+    copilot.getStartButton().onTrue(new ZeroTelescope());
 
     // copilot
     //     .getBackButton()
@@ -149,7 +145,6 @@ public class RobotContainer {
                         SmartDashboard.getNumber("Wrist P", 0),
                         SmartDashboard.getNumber("Wrist I", 0),
                         SmartDashboard.getNumber("Wrist D", 0))));
-                        
 
     SmartDashboard.putData(
         "Set Drive Rot",
@@ -158,7 +153,6 @@ public class RobotContainer {
 
     SmartDashboard.putData(
         "Set Zero", new InstantCommand(() -> drivetrain.zeroPower(), drivetrain));
-
   }
 
   private void addChooser() {

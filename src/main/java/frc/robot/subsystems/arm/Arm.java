@@ -57,7 +57,8 @@ public class Arm {
   }
 
   public void setToScore(double shoulderAngle, double telescopeLength, double wristAngle) {
-    // double cubeWristSet = (Math.abs(shoulderAngle) < 90) ? 90 - shoulderAngle : shoulderAngle - 90;
+    // double cubeWristSet = (Math.abs(shoulderAngle) < 90) ? 90 - shoulderAngle : shoulderAngle -
+    // 90;
     // double coneWristSet = 180 - shoulderAngle;
     // double wristSet = (claw.getIsCube()) ? cubeWristSet : coneWristSet;
     setPosition(shoulderAngle, telescopeLength, wristAngle);

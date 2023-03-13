@@ -6,13 +6,11 @@ package frc.robot.subsystems.arm;
 
 import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 import com.ctre.phoenix.sensors.WPI_CANCoder;
-import com.revrobotics.CANSparkMax.SoftLimitDirection;
 
 import csplib.motors.CSP_SparkMax;
 import csplib.utils.TempManager;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -96,10 +94,11 @@ public class Shoulder extends SubsystemBase {
     if (angle > Constants.arm.shoulder.UPPER_LIMIT) angle = Constants.arm.shoulder.UPPER_LIMIT;
     else if (angle < Constants.arm.shoulder.LOWER_LIMIT) angle = Constants.arm.shoulder.LOWER_LIMIT;
 
-    //State setpoint = pid.getSetpoint();
+    // State setpoint = pid.getSetpoint();
     System.out.println(pid.calculate(getAngle(), angle));
     set(
-        pid.calculate(getAngle(), angle));// + ff.calculate(90 - setpoint.position, setpoint.velocity));
+        pid.calculate(
+            getAngle(), angle)); // + ff.calculate(90 - setpoint.position, setpoint.velocity));
   }
 
   public double getAngle() {
