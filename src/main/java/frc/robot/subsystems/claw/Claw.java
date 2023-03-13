@@ -1,6 +1,5 @@
 package frc.robot.subsystems.claw;
 
-
 import csplib.motors.CSP_Talon;
 import csplib.utils.TempManager;
 import edu.wpi.first.wpilibj.AnalogInput;
