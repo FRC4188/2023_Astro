@@ -6,15 +6,15 @@ package frc.robot.subsystems.arm;
 
 import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 import com.ctre.phoenix.sensors.WPI_CANCoder;
-import com.revrobotics.CANSparkMax.SoftLimitDirection;
 
 import csplib.motors.CSP_SparkMax;
 import csplib.utils.TempManager;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.arm.shoulder;
 
 public class Wrist extends SubsystemBase {
   private static Wrist instance;
@@ -36,15 +36,22 @@ public class Wrist extends SubsystemBase {
   private ArmFeedforward ff =
       new ArmFeedforward(Constants.arm.wrist.kS, Constants.arm.wrist.kG, Constants.arm.wrist.kV);
 
+  private Shoulder shoulder = Shoulder.getInstance();
+
   /** Creates a new Wrist. */
   private Wrist() {
     init();
     TempManager.addMotor(motor);
+
+    SmartDashboard.putNumber("Wrist P", 0);
+    SmartDashboard.putNumber("Wrist I", 0);
+    SmartDashboard.putNumber("Wrist D", 0);
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("Wrist Position", getAngle());
   }
 
   private void init() {
@@ -52,17 +59,18 @@ public class Wrist extends SubsystemBase {
     encoder.clearStickyFaults();
     encoder.configAbsoluteSensorRange(AbsoluteSensorRange.Signed_PlusMinus180);
     encoder.setPosition(0.0);
-    encoder.configSensorDirection(false);
-    encoder.configMagnetOffset(-Constants.arm.wrist.ZERO);
+    encoder.configSensorDirection(true);
+    encoder.configMagnetOffset(Constants.arm.wrist.ZERO);
 
     motor.setScalar(1 / Constants.arm.wrist.ROTATIONS_PER_DEGREE);
     motor.setBrake(true);
     motor.setEncoder(Constants.arm.wrist.LOWER_LIMIT);
-    motor.enableSoftLimit(SoftLimitDirection.kForward, true);
-    motor.enableSoftLimit(SoftLimitDirection.kReverse, true);
-    motor.setSoftLimit(SoftLimitDirection.kForward, (float) Constants.arm.wrist.UPPER_LIMIT);
-    motor.setSoftLimit(SoftLimitDirection.kReverse, (float) Constants.arm.wrist.LOWER_LIMIT);
+    // motor.enableSoftLimit(SoftLimitDirection.kForward, true);
+    // motor.enableSoftLimit(SoftLimitDirection.kReverse, true);
+    // motor.setSoftLimit(SoftLimitDirection.kForward, (float) Constants.arm.wrist.UPPER_LIMIT);
+    // motor.setSoftLimit(SoftLimitDirection.kReverse, (float) Constants.arm.wrist.LOWER_LIMIT);
 
+    pid.reset(getAngle());
     pid.enableContinuousInput(-180, 180);
     pid.setTolerance(Constants.arm.wrist.ALLOWED_ERROR);
   }
@@ -72,13 +80,16 @@ public class Wrist extends SubsystemBase {
   }
 
   public void set(double percent) {
+    if (!(shoulder.getAngle() + getAngle() >= -180) && percent < 0.0) percent = 0.0;
+    else if (!(180 >= shoulder.getAngle() + getAngle()) && percent > 0.0) percent = 0.0;
+
     motor.set(percent);
   }
 
   public void setAngle(double angle) {
-    State setpoint = pid.getSetpoint();
-    motor.setVoltage(
-        pid.calculate(getAngle(), angle) + ff.calculate(setpoint.position, setpoint.velocity));
+    // State setpoint = pid.getSetpoint();
+    motor.set(
+        pid.calculate(getAngle(), angle)); // + ff.calculate(setpoint.position, setpoint.velocity));
   }
 
   public void setPID(double kP, double kI, double kD) {

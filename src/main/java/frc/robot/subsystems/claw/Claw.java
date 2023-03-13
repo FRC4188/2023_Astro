@@ -1,10 +1,13 @@
 package frc.robot.subsystems.claw;
 
+
 import csplib.motors.CSP_Talon;
 import csplib.utils.TempManager;
-import edu.wpi.first.wpilibj.AnalogPotentiometer;
+import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.subsystems.arm.Shoulder;
 
 public class Claw extends SubsystemBase {
   private static Claw instance;
@@ -15,8 +18,8 @@ public class Claw extends SubsystemBase {
   }
 
   private CSP_Talon motor = new CSP_Talon(Constants.ids.CLAW);
-  private AnalogPotentiometer sensor =
-      new AnalogPotentiometer(Constants.ids.ULTRASONIC_SENSOR, Constants.claw.SENSOR_SCALE);
+  private AnalogInput sensor = new AnalogInput(Constants.ids.ULTRASONIC_SENSOR);
+  private Shoulder shoulder = Shoulder.getInstance();
 
   private boolean isCube;
 
@@ -30,13 +33,18 @@ public class Claw extends SubsystemBase {
     motor.setInverted(false);
   }
 
+  @Override
+  public void periodic() {
+    SmartDashboard.putBoolean("Distance Sensor", getTriggered());
+    SmartDashboard.putBoolean("IsCube", isCube);
+  }
+
   public void set(double percent) {
     motor.set(percent);
   }
 
   private void setInverted() {
-    if (isCube) motor.setInverted(false);
-    else motor.setInverted(true);
+    // if (isCube && shoulder.getAngle() < 0.0)
   }
 
   public void setIsCube(boolean isCube) {
@@ -55,8 +63,8 @@ public class Claw extends SubsystemBase {
     motor.set(-1.0);
   }
 
-  public double getDistance() {
-    return sensor.get();
+  public boolean getTriggered() {
+    return sensor.getValue() > 250;
   }
 
   public double getClawLength() {

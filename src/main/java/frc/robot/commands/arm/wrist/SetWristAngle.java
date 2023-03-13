@@ -2,21 +2,20 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.arm;
+package frc.robot.commands.arm.wrist;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
-import frc.robot.subsystems.arm.Arm;
+import frc.robot.subsystems.arm.Wrist;
 
-public class SetHigh extends CommandBase {
-  private Arm arm = Arm.getInstance();
+public class SetWristAngle extends CommandBase {
+  private Wrist wrist = Wrist.getInstance();
 
-  private double[] config = Constants.arm.configs.HIGH;
-
-  /** Creates a new SetHigh. */
-  public SetHigh() {
+  private double angle;
+  /** Creates a new SetTelescopePosition. */
+  public SetWristAngle(double angle) {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(arm.getShoulder(), arm.getTelescope(), arm.getWrist());
+    addRequirements(wrist);
+    this.angle = angle;
   }
 
   // Called when the command is initially scheduled.
@@ -26,7 +25,7 @@ public class SetHigh extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    arm.setToScore(config[0], config[1], config[2]);
+    wrist.setAngle(angle);
   }
 
   // Called once the command ends or is interrupted.

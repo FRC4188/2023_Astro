@@ -6,13 +6,11 @@ package frc.robot.subsystems.arm;
 
 import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 import com.ctre.phoenix.sensors.WPI_CANCoder;
-import com.revrobotics.CANSparkMax.SoftLimitDirection;
 
 import csplib.motors.CSP_SparkMax;
 import csplib.utils.TempManager;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -31,7 +29,7 @@ public class Shoulder extends SubsystemBase {
 
   private ProfiledPIDController pid =
       new ProfiledPIDController(
-          Constants.arm.telescope.kP,
+          Constants.arm.shoulder.kP,
           Constants.arm.shoulder.kI,
           Constants.arm.shoulder.kD,
           Constants.arm.shoulder.CONSTRAINTS);
@@ -65,13 +63,14 @@ public class Shoulder extends SubsystemBase {
     leader.setInverted(true);
     leader.setBrake(true);
     leader.setEncoder(encoder.getAbsolutePosition());
-    leader.enableSoftLimit(SoftLimitDirection.kForward, true);
-    leader.enableSoftLimit(SoftLimitDirection.kReverse, true);
-    leader.setSoftLimit(SoftLimitDirection.kForward, (float) Constants.arm.shoulder.UPPER_LIMIT);
-    leader.setSoftLimit(SoftLimitDirection.kReverse, (float) Constants.arm.shoulder.LOWER_LIMIT);
+    // leader.enableSoftLimit(SoftLimitDirection.kForward, true);
+    // leader.enableSoftLimit(SoftLimitDirection.kReverse, true);
+    // leader.setSoftLimit(SoftLimitDirection.kForward, (float) Constants.arm.shoulder.UPPER_LIMIT);
+    // leader.setSoftLimit(SoftLimitDirection.kReverse, (float) Constants.arm.shoulder.LOWER_LIMIT);
 
     follower.follow(leader);
 
+    pid.reset(getAngle());
     pid.enableContinuousInput(-180, 180);
     pid.setTolerance(Constants.arm.shoulder.ALLOWED_ERROR);
   }
@@ -81,13 +80,25 @@ public class Shoulder extends SubsystemBase {
   }
 
   public void set(double percent) {
+    if (getAngle() > Constants.arm.shoulder.UPPER_LIMIT && percent > 0.0) percent = 0.0;
+    else if (getAngle() < Constants.arm.shoulder.LOWER_LIMIT && percent < 0.0) percent = 0.0;
+
     leader.set(percent);
   }
 
+  public void setPID(double kP, double kI, double kD) {
+    pid.setPID(kP, kI, kD);
+  }
+
   public void setAngle(double angle) {
-    State setpoint = pid.getSetpoint();
-    leader.setVoltage(
-        pid.calculate(getAngle(), angle) + ff.calculate(90 - setpoint.position, setpoint.velocity));
+    if (angle > Constants.arm.shoulder.UPPER_LIMIT) angle = Constants.arm.shoulder.UPPER_LIMIT;
+    else if (angle < Constants.arm.shoulder.LOWER_LIMIT) angle = Constants.arm.shoulder.LOWER_LIMIT;
+
+    // State setpoint = pid.getSetpoint();
+    System.out.println(pid.calculate(getAngle(), angle));
+    set(
+        pid.calculate(
+            getAngle(), angle)); // + ff.calculate(90 - setpoint.position, setpoint.velocity));
   }
 
   public double getAngle() {
