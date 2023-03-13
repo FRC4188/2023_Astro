@@ -7,6 +7,7 @@ package frc.robot.commands;
 import java.util.HashMap;
 import java.util.Map;
 
+
 import com.pathplanner.lib.PathConstraints;
 
 import edu.wpi.first.wpilibj2.command.Command;
@@ -26,4 +27,33 @@ public class AutoEventMaps {
       new PathConstraints(4, 2), new PathConstraints(0.5, 0.2)
     };
   }
+
+  public static final class R31P {
+    public static final HashMap<String, Command> EVENTS =
+        new HashMap<>();
+    
+    public static final PathConstraints[] CONSTRAINTS = {
+      new PathConstraints(4, 3)
+    };
+  }
+
+  public static final class R34P {
+    public static final HashMap<String, Command> EVENTS =
+        new HashMap<>();
+    
+    public static final PathConstraints[] CONSTRAINTS = {
+      new PathConstraints(4, 3)
+    };
+  }
+
+  public static final class R32 {
+    public static final HashMap<String, Command> EVENTS =
+        new HashMap<>();
+    
+    public static final PathConstraints[] CONSTRAINTS = {
+      new PathConstraints(4, 3)
+    };
+  }
+
+
 }

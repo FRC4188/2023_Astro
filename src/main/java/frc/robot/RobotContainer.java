@@ -143,6 +143,18 @@ public class RobotContainer {
         "Test",
         AutoBuilder.buildAuto(
             "Test Auto Path", AutoEventMaps.Test.EVENTS, AutoEventMaps.Test.CONSTRAINTS));
+    autoChooser.addOption(
+        "R31P",
+        AutoBuilder.buildAuto(
+            "R31P", AutoEventMaps.R31P.EVENTS, AutoEventMaps.R31P.CONSTRAINTS));
+    autoChooser.addOption(
+        "R34P", 
+        AutoBuilder.buildAuto(
+            "R34P", AutoEventMaps.R34P.EVENTS, AutoEventMaps.R34P.CONSTRAINTS));
+    autoChooser.addOption(
+        "R32", 
+        AutoBuilder.buildAuto(
+            "R32", AutoEventMaps.R32.EVENTS, AutoEventMaps.R32.CONSTRAINTS));
     // autoChooser.addOption(
     //     "Test", AutoBuilder.buildAuto("New Path", new HashMap<>(), new PathConstraints(5.0, 1)));
     // autoChooser.addOption(
