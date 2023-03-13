@@ -4,8 +4,6 @@
 
 package frc.robot.commands.arm;
 
-import java.util.function.BooleanSupplier;
-
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.arm.Arm;
@@ -16,7 +14,7 @@ public class SetMid extends CommandBase {
   private double[] config = Constants.arm.configs.MID;
 
   /** Creates a new SetHigh. */
-  public SetMid(BooleanSupplier isCube) {
+  public SetMid() {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(arm.getShoulder(), arm.getTelescope(), arm.getWrist());
   }
