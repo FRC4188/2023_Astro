@@ -1,7 +1,6 @@
 package frc.robot.subsystems.arm;
 
 import com.revrobotics.CANSparkMax.SoftLimitDirection;
-
 import csplib.motors.CSP_SparkMax;
 import csplib.utils.TempManager;
 import edu.wpi.first.math.controller.ProfiledPIDController;

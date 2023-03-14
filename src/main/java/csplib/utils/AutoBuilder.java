@@ -4,16 +4,14 @@
 
 package csplib.utils;
 
-import java.util.HashMap;
-import java.util.List;
-
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.auto.SwerveAutoBuilder;
-
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.drivetrain.Drivetrain;
+import java.util.HashMap;
+import java.util.List;
 
 /** Add your docs here. */
 public class AutoBuilder {

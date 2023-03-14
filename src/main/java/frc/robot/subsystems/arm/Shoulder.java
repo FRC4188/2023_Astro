@@ -7,7 +7,6 @@ package frc.robot.subsystems.arm;
 import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 import com.ctre.phoenix.sensors.WPI_CANCoder;
 import com.revrobotics.CANSparkMax.SoftLimitDirection;
-
 import csplib.motors.CSP_SparkMax;
 import csplib.utils.Conversions;
 import edu.wpi.first.math.controller.ArmFeedforward;

@@ -1,9 +1,6 @@
 package frc.robot;
 
-import java.util.HashMap;
-
 import com.pathplanner.lib.PathConstraints;
-
 import csplib.inputs.CSP_Controller;
 import csplib.inputs.CSP_Controller.Scale;
 import csplib.utils.AutoBuilder;
@@ -18,6 +15,7 @@ import frc.robot.commands.arm.wrist.ZeroWrist;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.claw.Claw;
 import frc.robot.subsystems.drivetrain.Drivetrain;
+import java.util.HashMap;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
