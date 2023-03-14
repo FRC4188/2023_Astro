@@ -5,13 +5,10 @@
 package frc.robot.commands.arm;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.Constants;
 import frc.robot.commands.arm.shoulder.SetShoulderAngle;
 import frc.robot.commands.arm.telescope.ZeroTelescope;
 import frc.robot.commands.arm.wrist.SetWristAngle;
-import frc.robot.subsystems.arm.Shoulder;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -23,10 +20,6 @@ public class Stow extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
         new ZeroTelescope(),
-        new ParallelCommandGroup(
-          new SetShoulderAngle(0),
-          new SetWristAngle(-45)
-        )
-    );
+        new ParallelCommandGroup(new SetShoulderAngle(0), new SetWristAngle(-45)));
   }
 }

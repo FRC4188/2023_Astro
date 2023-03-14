@@ -8,7 +8,6 @@ import csplib.motors.CSP_Falcon;
 import csplib.utils.TempManager;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -36,7 +35,7 @@ public class Telescope extends SubsystemBase {
   private ElevatorFeedforward ff =
       new ElevatorFeedforward(
           Constants.arm.telescope.kS, Constants.arm.telescope.kG, Constants.arm.telescope.kV);
-  
+
   private Telescope() {
     init();
     TempManager.addMotor(motor);
@@ -49,7 +48,7 @@ public class Telescope extends SubsystemBase {
 
     if (getLimitSwitch()) {
       motor.setEncoder(Constants.arm.telescope.LOWER_LIMIT);
-    } 
+    }
   }
 
   public void init() {

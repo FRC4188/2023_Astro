@@ -5,11 +5,7 @@
 package frc.robot.commands.groups;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.Constants;
 import frc.robot.commands.arm.SetPosition;
-import frc.robot.commands.claw.Intake;
 import frc.robot.subsystems.claw.Claw;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -24,11 +20,9 @@ public class IntakeFrom extends ParallelCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      (isCube) ? 
-        new SetPosition(cube) : 
-        new SetPosition(cone)
-      // new Intake()
-      // new RunCommand(() -> claw.intake(), claw)
-    );
+        (isCube) ? new SetPosition(cube) : new SetPosition(cone)
+        // new Intake()
+        // new RunCommand(() -> claw.intake(), claw)
+        );
   }
 }

@@ -41,15 +41,12 @@ public class Wrist extends SubsystemBase {
   private Wrist() {
     init();
     TempManager.addMotor(motor);
-
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Wrist Position", getMotorAngle());
-    
-
   }
 
   private void init() {
@@ -77,11 +74,10 @@ public class Wrist extends SubsystemBase {
   }
 
   public void set(double percent) {
-    if ((!(shoulder.getAngle() + getMotorAngle() >= -180) && percent < 0.0) ||
-      getMotorAngle() > Constants.arm.wrist.UPPER_LIMIT && percent > 0.0) percent = 0.0;
-
-    else if ((!(180 >= shoulder.getAngle() + getMotorAngle()) && percent > 0.0) || 
-      getMotorAngle() < Constants.arm.wrist.LOWER_LIMIT && percent < 0.0) percent = 0.0;
+    if ((!(shoulder.getAngle() + getMotorAngle() >= -180) && percent < 0.0)
+        || getMotorAngle() > Constants.arm.wrist.UPPER_LIMIT && percent > 0.0) percent = 0.0;
+    else if ((!(180 >= shoulder.getAngle() + getMotorAngle()) && percent > 0.0)
+        || getMotorAngle() < Constants.arm.wrist.LOWER_LIMIT && percent < 0.0) percent = 0.0;
 
     motor.set(percent);
   }
@@ -89,7 +85,8 @@ public class Wrist extends SubsystemBase {
   public void setAngle(double angle) {
     // State setpoint = pid.getSetpoint();
     motor.set(
-        pid.calculate(getMotorAngle(), angle)); // + ff.calculate(setpoint.position, setpoint.velocity));
+        pid.calculate(
+            getMotorAngle(), angle)); // + ff.calculate(setpoint.position, setpoint.velocity));
   }
 
   public void setPID(double kP, double kI, double kD) {

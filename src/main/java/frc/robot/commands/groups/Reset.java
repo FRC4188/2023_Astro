@@ -6,7 +6,6 @@ package frc.robot.commands.groups;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.arm.Stow;
 import frc.robot.subsystems.claw.Claw;
 
@@ -19,9 +18,6 @@ public class Reset extends ParallelCommandGroup {
   public Reset() {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(
-      new Stow(),
-      new InstantCommand(() -> claw.disable(), claw)
-    );
+    addCommands(new Stow(), new InstantCommand(() -> claw.disable(), claw));
   }
 }

@@ -20,13 +20,9 @@ public class Toss extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new ZeroTelescope(),
-      new ParallelDeadlineGroup(
-        new SequentialCommandGroup(
-          new WaitCommand(0.7),
-          new Outtake().withTimeout(0.5)
-        ),
-      new SetPosition(0, 1, 0).withTimeout(2.0)
-    ));
+        new ZeroTelescope(),
+        new ParallelDeadlineGroup(
+            new SequentialCommandGroup(new WaitCommand(0.7), new Outtake().withTimeout(0.5)),
+            new SetPosition(0, 1, 0).withTimeout(2.0)));
   }
 }

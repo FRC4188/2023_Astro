@@ -4,7 +4,6 @@
 
 package frc.robot.subsystems.arm;
 
-import java.util.function.BooleanSupplier;
 
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;

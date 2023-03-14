@@ -4,12 +4,9 @@
 
 package frc.robot.commands.arm;
 
-import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.Constants.arm.shoulder;
-import frc.robot.Constants.arm.wrist;
 import frc.robot.commands.arm.shoulder.SetShoulderAngle;
 import frc.robot.commands.arm.telescope.SetTelescopePosition;
 import frc.robot.commands.arm.telescope.ZeroTelescope;
@@ -22,7 +19,7 @@ import frc.robot.subsystems.arm.Telescope;
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class SetPosition extends SequentialCommandGroup {
-    private Arm arm = Arm.getInstance();
+  private Arm arm = Arm.getInstance();
   /** Creates a new SetPosition. */
   public SetPosition(double shoulderAngle, double telescopeLength, double wristAngle) {
     // Add your commands in the addCommands() call, e.g.
@@ -43,8 +40,7 @@ public class SetPosition extends SequentialCommandGroup {
                                 Math.abs(telescopeLength - Telescope.getInstance().getPosition())
                                     < 0.15),
                     new SetShoulderAngle(sAngle))),
-            new SetWristAngle(wAngle))
-    );
+            new SetWristAngle(wAngle)));
   }
 
   public SetPosition(double[] config) {
@@ -59,11 +55,7 @@ public class SetPosition extends SequentialCommandGroup {
                 new SetShoulderAngle(shoulderAngle),
                 new ParallelCommandGroup(
                     new SetShoulderAngle(shoulderAngle),
-                    new SetTelescopePosition(telescopeLength)   
-                )
-            ),
-            new SetWristAngle(wristAngle)
-        )
-    );
+                    new SetTelescopePosition(telescopeLength))),
+            new SetWristAngle(wristAngle)));
   }
 }

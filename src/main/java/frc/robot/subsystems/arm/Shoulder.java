@@ -14,7 +14,6 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.Constants.arm.shoulder;
 
 public class Shoulder extends SubsystemBase {
   private static Shoulder instance;
@@ -51,7 +50,6 @@ public class Shoulder extends SubsystemBase {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Shoulder Encoder Angle", getAngle());
     SmartDashboard.putNumber("Shoulder Motor Angle", getMotorAngle());
-
   }
 
   public void init() {
@@ -87,7 +85,6 @@ public class Shoulder extends SubsystemBase {
     else if (getAngle() < Constants.arm.shoulder.LOWER_LIMIT && percent < 0.0) percent = 0.0;
 
     leader.set(percent);
-    
   }
 
   public void setPID(double kP, double kI, double kD) {
