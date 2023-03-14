@@ -4,7 +4,6 @@
 
 package frc.robot.subsystems.arm;
 
-
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import frc.robot.Constants;

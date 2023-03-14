@@ -4,14 +4,12 @@
 
 package frc.robot.commands;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.pathplanner.lib.PathConstraints;
-
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
+import java.util.HashMap;
+import java.util.Map;
 
 /** Add your docs here. */
 public class AutoEventMaps {
