@@ -14,6 +14,7 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.arm.shoulder;
 
 public class Shoulder extends SubsystemBase {
   private static Shoulder instance;
@@ -42,6 +43,7 @@ public class Shoulder extends SubsystemBase {
   public Shoulder() {
     init();
     TempManager.addMotor(leader, follower);
+    SmartDashboard.putNumber("Shoulder Set", 0);
   }
 
   @Override
@@ -49,6 +51,7 @@ public class Shoulder extends SubsystemBase {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Shoulder Encoder Angle", getAngle());
     SmartDashboard.putNumber("Shoulder Motor Angle", getMotorAngle());
+
   }
 
   public void init() {
@@ -84,6 +87,7 @@ public class Shoulder extends SubsystemBase {
     else if (getAngle() < Constants.arm.shoulder.LOWER_LIMIT && percent < 0.0) percent = 0.0;
 
     leader.set(percent);
+    
   }
 
   public void setPID(double kP, double kI, double kD) {
@@ -91,11 +95,7 @@ public class Shoulder extends SubsystemBase {
   }
 
   public void setAngle(double angle) {
-    if (angle > Constants.arm.shoulder.UPPER_LIMIT) angle = Constants.arm.shoulder.UPPER_LIMIT;
-    else if (angle < Constants.arm.shoulder.LOWER_LIMIT) angle = Constants.arm.shoulder.LOWER_LIMIT;
-
     // State setpoint = pid.getSetpoint();
-    System.out.println(pid.calculate(getAngle(), angle));
     set(
         pid.calculate(
             getAngle(), angle)); // + ff.calculate(90 - setpoint.position, setpoint.velocity));

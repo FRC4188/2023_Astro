@@ -38,12 +38,17 @@ public class Claw extends SubsystemBase {
     SmartDashboard.putBoolean("IsCube", isCube);
   }
 
+  public void disable() {
+    motor.disable();
+  }
+
   public void set(double percent) {
     motor.set(percent);
   }
 
   private void setInverted() {
-    // if (isCube && shoulder.getAngle() < 0.0)
+    if (isCube || shoulder.getAngle() < 0) motor.setInverted(true);
+    else motor.setInverted(false);
   }
 
   public void setIsCube(boolean isCube) {

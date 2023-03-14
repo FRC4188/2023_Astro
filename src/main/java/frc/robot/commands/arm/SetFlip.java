@@ -5,18 +5,13 @@
 package frc.robot.commands.arm;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
 import frc.robot.subsystems.arm.Arm;
 
-public class SetHigh extends CommandBase {
+public class SetFlip extends CommandBase {
   private Arm arm = Arm.getInstance();
-
-  private double[] config = Constants.arm.configs.HIGH;
-
-  /** Creates a new SetHigh. */
-  public SetHigh() {
+  /** Creates a new SetFlip. */
+  public SetFlip() {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(arm.getShoulder(), arm.getTelescope(), arm.getWrist());
   }
 
   // Called when the command is initially scheduled.
@@ -26,12 +21,14 @@ public class SetHigh extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    arm.setToScore(config[0], config[1], config[2]);
+    arm.setFlip(true);
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    arm.setFlip(false);
+  }
 
   // Returns true when the command should end.
   @Override

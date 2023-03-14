@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems.arm;
 
+import java.util.function.BooleanSupplier;
+
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import frc.robot.Constants;
@@ -26,11 +28,9 @@ public class Arm {
   private Claw claw = Claw.getInstance();
   private Sensors sensors = Sensors.getInstance();
 
-  private Arm() {}
+  private boolean isFlipped;
 
-  public void stow() {
-    setPosition(0, Constants.arm.telescope.LOWER_LIMIT, Constants.arm.wrist.LOWER_LIMIT);
-  }
+  private Arm() {}
 
   public void disable() {
     shoulder.disable();
@@ -38,37 +38,8 @@ public class Arm {
     wrist.disable();
   }
 
-  public void set(double shoulderPercent, double telescopePercent, double wristPercent) {
-    shoulder.set(shoulderPercent);
-    telescope.set(telescopePercent);
-    wrist.set(wristPercent);
-  }
-
-  public void setPosition(double shoulderAngle, double telescopeLength, double wristAngle) {
-    shoulder.setAngle(shoulderAngle);
-    telescope.setPosition(telescopeLength);
-    wrist.setAngle(wristAngle);
-  }
-
-  public void setPosition(double[] positions) {
-    shoulder.setAngle(positions[0]);
-    telescope.setPosition(positions[1]);
-    wrist.setAngle(positions[2]);
-  }
-
-  public void setToScore(double shoulderAngle, double telescopeLength, double wristAngle) {
-    // double cubeWristSet = (Math.abs(shoulderAngle) < 90) ? 90 - shoulderAngle : shoulderAngle -
-    // 90;
-    // double coneWristSet = 180 - shoulderAngle;
-    // double wristSet = (claw.getIsCube()) ? cubeWristSet : coneWristSet;
-    setPosition(shoulderAngle, telescopeLength, wristAngle);
-  }
-
-  public void setToScore(double shoulderAngle, double telescopeLength) {
-    double cubeWristSet = (Math.abs(shoulderAngle) < 90) ? 90 - shoulderAngle : shoulderAngle - 90;
-    double coneWristSet = 180 - shoulderAngle;
-    double wristAngle = (claw.getIsCube()) ? cubeWristSet : coneWristSet;
-    setPosition(shoulderAngle, telescopeLength, wristAngle);
+  public void setFlip(boolean isFlipped) {
+    this.isFlipped = isFlipped;
   }
 
   public double[] getInverseKinematics(Pose3d pose) {
@@ -131,6 +102,10 @@ public class Arm {
 
     return new Pose3d(x, y, z, new Rotation3d(0, wristPAngle, 0))
         .relativeTo(new Pose3d(0, 0, Constants.robot.SHOULDER_HEIGHT, new Rotation3d()));
+  }
+
+  public boolean getIsFlipped() {
+    return isFlipped;
   }
 
   public Shoulder getShoulder() {

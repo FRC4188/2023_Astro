@@ -195,6 +195,13 @@ public final class Constants {
       public static final double[] HIGH = {45.0, 1.4, 110};
       public static final double[] MID = {45.0, 1.0};
       public static final double[] LOW = {0.0, 0.0};
+      public static final double[] SS_CONE = {79.0, 0.4, 57.0};
+      public static final double[] SS_CUBE = {0.0, 0.1875, 0.0};
+      public static final double[] DS_CONE = {0, 0, 0};
+      public static final double[] DS_CUBE = {0, 0, 0};
+      public static final double[] FLOOR_CONE = {0, 0, 0};
+      public static final double[] FLOOR_CUBE = {0, 0, 0};
+      public static final double[] TIPPED_CONE = {0, 0, 0};
     }
 
     public static final class shoulder {
@@ -210,13 +217,13 @@ public final class Constants {
 
       public static final double kP = 0.04;
       public static final double kI = 0.0;
-      public static final double kD = 0.00;
+      public static final double kD = 0.0;
       public static final double kF = 0.0;
 
       // raymond here, reducing these for shoulder PID testing
       public static final double MAX_VEL = 1000.0;
       public static final double MAX_ACCEL = 90.0;
-      public static final double ALLOWED_ERROR = 5;
+      public static final double ALLOWED_ERROR = 0.1;
 
       public static final Constraints CONSTRAINTS = new Constraints(MAX_VEL, MAX_ACCEL);
 
@@ -234,7 +241,7 @@ public final class Constants {
       public static final double UPPER_LIMIT = Units.metersToInches(1) * 2048;
       public static final double LOWER_LIMIT = 7.5 * 2048;
 
-      public static final double kP = 30.0;
+      public static final double kP = 5.0;
       public static final double kI = 0.0;
       public static final double kD = 0.0;
       public static final double kF = 0.0;
@@ -250,13 +257,13 @@ public final class Constants {
     }
 
     public static final class wrist {
-      public static final double ZERO = -181.826171875;
+      public static final double ZERO = 0;
 
       public static final double GEAR_RATIO = 100; // 100 to 1
       public static final double ROTATIONS_PER_DEGREE = GEAR_RATIO / 360;
 
-      public static final double UPPER_LIMIT = 90;
-      public static final double LOWER_LIMIT = -90;
+      public static final double UPPER_LIMIT = 126.4748;
+      public static final double LOWER_LIMIT = -126.4748;
 
       public static final double kP = 0.03;
       public static final double kI = 0.0;
@@ -267,10 +274,10 @@ public final class Constants {
       public static final double kG = 0;
       public static final double kV = 0;
 
-      public static final double MAX_VEL = 100.0;
-      public static final double MAX_ACCEL = 10.0;
+      public static final double MAX_VEL = 50.0;
+      public static final double MAX_ACCEL = 30.0;
       public static final Constraints CONSTRAINTS = new Constraints(MAX_VEL, MAX_ACCEL);
-      public static final double ALLOWED_ERROR = 0.5;
+      public static final double ALLOWED_ERROR = 1;
     }
   }
 }

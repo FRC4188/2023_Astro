@@ -36,11 +36,10 @@ public class Telescope extends SubsystemBase {
   private ElevatorFeedforward ff =
       new ElevatorFeedforward(
           Constants.arm.telescope.kS, Constants.arm.telescope.kG, Constants.arm.telescope.kV);
-
+  
   private Telescope() {
     init();
     TempManager.addMotor(motor);
-    SmartDashboard.putNumber("TL", 0);
   }
 
   @Override
@@ -50,7 +49,7 @@ public class Telescope extends SubsystemBase {
 
     if (getLimitSwitch()) {
       motor.setEncoder(Constants.arm.telescope.LOWER_LIMIT);
-    }
+    } 
   }
 
   public void init() {
@@ -64,7 +63,6 @@ public class Telescope extends SubsystemBase {
     motor.setRampRate(0.25);
 
     pid.reset(getPosition());
-    pid.enableContinuousInput(-180, 180);
     pid.setTolerance(0.1);
   }
 
@@ -90,8 +88,7 @@ public class Telescope extends SubsystemBase {
   }
 
   public void setPosition(double position) {
-    State setpoint = pid.getSetpoint();
-    motor.setVoltage(pid.calculate(getPosition(), position)); // + ff.calculate(setpoint.velocity));
+    motor.set(pid.calculate(getPosition(), position)); // + ff.calculate(setpoint.velocity));
   }
 
   public void setPID(double kP, double kI, double kD) {

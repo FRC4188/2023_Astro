@@ -37,21 +37,19 @@ public class Wrist extends SubsystemBase {
       new ArmFeedforward(Constants.arm.wrist.kS, Constants.arm.wrist.kG, Constants.arm.wrist.kV);
 
   private Shoulder shoulder = Shoulder.getInstance();
-
   /** Creates a new Wrist. */
   private Wrist() {
     init();
     TempManager.addMotor(motor);
 
-    SmartDashboard.putNumber("Wrist P", 0);
-    SmartDashboard.putNumber("Wrist I", 0);
-    SmartDashboard.putNumber("Wrist D", 0);
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("Wrist Position", getAngle());
+    SmartDashboard.putNumber("Wrist Position", getMotorAngle());
+    
+
   }
 
   private void init() {
@@ -70,8 +68,7 @@ public class Wrist extends SubsystemBase {
     // motor.setSoftLimit(SoftLimitDirection.kForward, (float) Constants.arm.wrist.UPPER_LIMIT);
     // motor.setSoftLimit(SoftLimitDirection.kReverse, (float) Constants.arm.wrist.LOWER_LIMIT);
 
-    pid.reset(getAngle());
-    pid.enableContinuousInput(-180, 180);
+    pid.reset(getMotorAngle());
     pid.setTolerance(Constants.arm.wrist.ALLOWED_ERROR);
   }
 
@@ -80,8 +77,11 @@ public class Wrist extends SubsystemBase {
   }
 
   public void set(double percent) {
-    if (!(shoulder.getAngle() + getAngle() >= -180) && percent < 0.0) percent = 0.0;
-    else if (!(180 >= shoulder.getAngle() + getAngle()) && percent > 0.0) percent = 0.0;
+    if ((!(shoulder.getAngle() + getMotorAngle() >= -180) && percent < 0.0) ||
+      getMotorAngle() > Constants.arm.wrist.UPPER_LIMIT && percent > 0.0) percent = 0.0;
+
+    else if ((!(180 >= shoulder.getAngle() + getMotorAngle()) && percent > 0.0) || 
+      getMotorAngle() < Constants.arm.wrist.LOWER_LIMIT && percent < 0.0) percent = 0.0;
 
     motor.set(percent);
   }
@@ -89,7 +89,7 @@ public class Wrist extends SubsystemBase {
   public void setAngle(double angle) {
     // State setpoint = pid.getSetpoint();
     motor.set(
-        pid.calculate(getAngle(), angle)); // + ff.calculate(setpoint.position, setpoint.velocity));
+        pid.calculate(getMotorAngle(), angle)); // + ff.calculate(setpoint.position, setpoint.velocity));
   }
 
   public void setPID(double kP, double kI, double kD) {

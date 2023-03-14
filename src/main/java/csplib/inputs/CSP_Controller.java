@@ -110,17 +110,11 @@ public class CSP_Controller extends CommandXboxController {
   }
 
   public double getRightT(Scale scale) {
-    double triggerVal = getRightTriggerAxis();
-    return (triggerVal > Constants.controller.TRIGGER_THRESHOLD)
-        ? getOutput(triggerVal, scale)
-        : 0.0;
+    return getOutput(getRightTriggerAxis(), scale);
   }
 
   public double getLeftT(Scale scale) {
-    double triggerVal = getLeftTriggerAxis();
-    return (triggerVal > Constants.controller.TRIGGER_THRESHOLD)
-        ? getOutput(triggerVal, scale)
-        : 0.0;
+    return getOutput(getLeftTriggerAxis(), scale);
   }
 
   public Trigger getRightTButton() {
