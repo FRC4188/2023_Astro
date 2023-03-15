@@ -11,7 +11,6 @@ import frc.robot.Constants;
 import frc.robot.commands.arm.SetPosition;
 import frc.robot.commands.claw.Outtake;
 import frc.robot.commands.groups.Reset;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,14 +29,12 @@ public class AutoEventMaps {
   }
 
   public static final class B31P {
-    public static final HashMap<String, Command> EVENTS = 
-      new HashMap<>(
-        Map.ofEntries(
-          Map.entry("Set High Cone", new SetPosition(Constants.arm.configs.HIGH)),
-          Map.entry("Outtake", new Outtake()),
-          Map.entry("Reset", new Reset()),
-          Map.entry("Set Intake Cube", new SetPosition(Constants.arm.configs.FLOOR_CUBE))
-        )
-      );
+    public static final HashMap<String, Command> EVENTS =
+        new HashMap<>(
+            Map.ofEntries(
+                Map.entry("Set High Cone", new SetPosition(Constants.arm.configs.HIGH)),
+                Map.entry("Outtake", new Outtake()),
+                Map.entry("Reset", new Reset()),
+                Map.entry("Set Intake Cube", new SetPosition(Constants.arm.configs.FLOOR_CUBE))));
   }
 }

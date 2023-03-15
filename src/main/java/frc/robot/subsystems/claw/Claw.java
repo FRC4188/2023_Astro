@@ -7,7 +7,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.arm.wrist;
-import frc.robot.subsystems.arm.Shoulder;
 import frc.robot.subsystems.arm.Wrist;
 
 public class Claw extends SubsystemBase {
@@ -20,7 +19,7 @@ public class Claw extends SubsystemBase {
 
   private CSP_Talon motor = new CSP_Talon(Constants.ids.CLAW);
   private AnalogInput sensor = new AnalogInput(Constants.ids.ULTRASONIC_SENSOR);
-  
+
   private Wrist wrist = Wrist.getInstance();
 
   private boolean isCube;
