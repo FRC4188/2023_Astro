@@ -16,28 +16,23 @@ import java.util.HashMap;
 import java.util.Map;
 
 /** Add your docs here. */
-public class AutoEventMaps {
+public class AutoConfigs {
   public static final PathConstraints DEFAULT_CONSTRAINTS =
       new PathConstraints(Constants.drivetrain.MAX_VELOCITY, Constants.drivetrain.MAX_ACCEL);
+    
+  public static final HashMap<String, Command> EVENTS = 
+  new HashMap<>(
+    Map.ofEntries(
+      Map.entry("Set High Cone", new SetPosition(Constants.arm.configs.HIGH)),
+      Map.entry("Outtake", new Outtake()),
+      Map.entry("Reset", new Reset()),
+      Map.entry("Set Intake Cube", new SetPosition(Constants.arm.configs.FLOOR_CUBE))
+    )
+  );
 
   public static final class Test {
-    public static final HashMap<String, Command> EVENTS =
-        new HashMap<>(Map.ofEntries(Map.entry("Score Cube", new SequentialCommandGroup())));
-
     public static final PathConstraints[] CONSTRAINTS = {
       new PathConstraints(4, 2), new PathConstraints(0.5, 0.2)
     };
-  }
-
-  public static final class B31P {
-    public static final HashMap<String, Command> EVENTS = 
-      new HashMap<>(
-        Map.ofEntries(
-          Map.entry("Set High Cone", new SetPosition(Constants.arm.configs.HIGH)),
-          Map.entry("Outtake", new Outtake()),
-          Map.entry("Reset", new Reset()),
-          Map.entry("Set Intake Cube", new SetPosition(Constants.arm.configs.FLOOR_CUBE))
-        )
-      );
   }
 }

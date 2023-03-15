@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.arm.telescope;
-import frc.robot.commands.AutoEventMaps;
+import frc.robot.commands.AutoConfigs;
 import frc.robot.commands.arm.SetFlip;
 import frc.robot.commands.arm.SetPosition;
 import frc.robot.commands.arm.telescope.ZeroTelescope;
@@ -139,7 +139,7 @@ public class RobotContainer {
     autoChooser.addOption(
         "Test",
         AutoBuilder.buildAuto(
-            "Test Auto Path", AutoEventMaps.Test.EVENTS, AutoEventMaps.Test.CONSTRAINTS));
+            "Test Auto Path", AutoConfigs.EVENTS, AutoConfigs.Test.CONSTRAINTS));
 
 
     SmartDashboard.putData("Auto Chooser", autoChooser);
