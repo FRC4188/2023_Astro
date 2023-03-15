@@ -11,7 +11,7 @@ import com.pathplanner.lib.auto.SwerveAutoBuilder;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.commands.AutoEventMaps;
+import frc.robot.commands.AutoConfigs;
 import frc.robot.subsystems.drivetrain.Drivetrain;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -46,6 +46,6 @@ public class AutoBuilder {
   }
 
   public static Command buildAuto(String pathName, HashMap<String, Command> eventMap) {
-    return buildAuto(pathName, eventMap, AutoEventMaps.DEFAULT_CONSTRAINTS);
+    return buildAuto(pathName, eventMap, AutoConfigs.DEFAULT_CONSTRAINTS);
   }
 }
