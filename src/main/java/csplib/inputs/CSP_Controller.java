@@ -1,23 +1,21 @@
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
+
 package csplib.inputs;
 
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.POVButton;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
 
-public class CSP_Controller extends XboxController {
+/** Add your docs here. */
+public class CSP_Controller extends CommandXboxController {
   public enum Scale {
     LINEAR,
     SQUARED,
     CUBED
   }
 
-  /**
-   * Creates a new CSP_Controller object
-   *
-   * @param port controller input port
-   */
   public CSP_Controller(int port) {
     super(port);
   }
@@ -39,99 +37,96 @@ public class CSP_Controller extends XboxController {
     }
   }
 
+  /**
+   * 
+   * @param scale
+   * @return
+   */
   public double getRightY(Scale scale) {
-    return -getOutput(getRightY(), scale);
+    return -getOutput(this.getRightY(), scale);
   }
 
   public double getRightX(Scale scale) {
-    return getOutput(getRightX(), scale);
+    return getOutput(this.getRightX(), scale);
   }
 
   public double getLeftY(Scale scale) {
-    return -getOutput(getLeftY(), scale);
+    return -getOutput(this.getLeftY(), scale);
   }
 
   public double getLeftX(Scale scale) {
-    return -getOutput(getLeftX(), scale);
+    return -getOutput(this.getLeftX(), scale);
   }
 
-  public JoystickButton getAButtonObj() {
-    return new JoystickButton(this, Button.kA.value);
+  public Trigger getLeftS() {
+    return this.leftStick();
   }
 
-  public JoystickButton getBButtonObj() {
-    return new JoystickButton(this, Button.kB.value);
+  public Trigger getRightS() {
+    return this.rightStick();
   }
 
-  public JoystickButton getXButtonObj() {
-    return new JoystickButton(this, Button.kX.value);
+  public Trigger getXButton() {
+    return this.x();
   }
 
-  public JoystickButton getYButtonObj() {
-    return new JoystickButton(this, Button.kY.value);
+  public Trigger getYButton() {
+    return this.y();
   }
 
-  public JoystickButton getStartButtonObj() {
-    return new JoystickButton(this, Button.kStart.value);
+  public Trigger getAButton() {
+    return this.a();
   }
 
-  public JoystickButton getBackButtonObj() {
-    return new JoystickButton(this, Button.kBack.value);
+  public Trigger getBButton() {
+    return this.b();
   }
 
-  public JoystickButton getLBButtonObj() {
-    return new JoystickButton(this, Button.kLeftBumper.value);
+  public Trigger getUpButton() {
+    return this.povUp();
   }
 
-  public JoystickButton getRBButtonObj() {
-    return new JoystickButton(this, Button.kLeftBumper.value);
+  public Trigger getDownButton() {
+    return this.povDown();
   }
 
-  public JoystickButton getLSButtonObj() {
-    return new JoystickButton(this, Button.kLeftStick.value);
+  public Trigger getRightButton() {
+    return this.povRight();
   }
 
-  public JoystickButton getRSButtonObj() {
-    return new JoystickButton(this, Button.kRightStick.value);
+  public Trigger getLeftButton() {
+    return this.povLeft();
   }
 
-  public POVButton getDpadUpButtonObj() {
-    return new POVButton(this, 0);
+  public Trigger getLeftBumperButton() {
+    return this.leftBumper();
   }
 
-  public POVButton getDpadDownButtonObj() {
-    return new POVButton(this, 180);
+  public Trigger getRightBumperButton() {
+    return this.rightBumper();
   }
 
-  public POVButton getDpadRightButtonObj() {
-    return new POVButton(this, 90);
+  public Trigger getStartButton() {
+    return this.start();
   }
 
-  public POVButton getDpadLeftButtonObj() {
-    return new POVButton(this, 270);
+  public Trigger getBackButton() {
+    return this.back();
   }
 
   public double getRightT(Scale scale) {
-    return getOutput(
-        getRightTriggerAxis() > Constants.controller.TRIGGER_THRESHOLD
-            ? getRightTriggerAxis()
-            : 0.0,
-        scale);
+    return getOutput(getRightTriggerAxis(), scale);
   }
 
   public double getLeftT(Scale scale) {
-    return getOutput(
-        getLeftTriggerAxis() > Constants.controller.TRIGGER_THRESHOLD ? getLeftTriggerAxis() : 0.0,
-        scale);
+    return getOutput(getLeftTriggerAxis(), scale);
   }
 
-  public void setRumble(double intensity) {
-    if (DriverStation.isDisabled()) {
-      setRumble(RumbleType.kRightRumble, 0);
-      setRumble(RumbleType.kLeftRumble, 0);
-    } else {
-      setRumble(RumbleType.kLeftRumble, intensity);
-      setRumble(RumbleType.kRightRumble, intensity);
-    }
+  public Trigger getRightTButton() {
+    return this.rightTrigger();
+  }
+
+  public Trigger getLeftTButton() {
+    return this.leftTrigger();
   }
 }

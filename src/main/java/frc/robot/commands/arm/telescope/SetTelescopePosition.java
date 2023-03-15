@@ -7,12 +7,15 @@ package frc.robot.commands.arm.telescope;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.arm.Telescope;
 
-public class ZeroTelescope extends CommandBase {
+public class SetTelescopePosition extends CommandBase {
   private Telescope telescope = Telescope.getInstance();
-  /** Creates a new ZeroTelescope. */
-  public ZeroTelescope() {
+
+  private double position;
+  /** Creates a new SetTelescopePosition. */
+  public SetTelescopePosition(double position) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(telescope);
+    this.position = position;
   }
 
   // Called when the command is initially scheduled.
@@ -22,7 +25,7 @@ public class ZeroTelescope extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    telescope.zero();
+    telescope.setPosition(position);
   }
 
   // Called once the command ends or is interrupted.
@@ -34,6 +37,6 @@ public class ZeroTelescope extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return telescope.getLimitSwitch();
+    return Math.abs(position - telescope.getPosition()) < 0.1;
   }
 }
