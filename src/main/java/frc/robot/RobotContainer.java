@@ -136,12 +136,10 @@ public class RobotContainer {
         "Set Arm Positions",
         new SetPosition(
             new double[] {
-                SmartDashboard.getNumber("Set Shoulder Angle", 0),
-                SmartDashboard.getNumber("Set Telescope Position", 0.1875),
-                SmartDashboard.getNumber("Set Wrist Angle", 110)
-            }
-        )
-    );
+              SmartDashboard.getNumber("Set Shoulder Angle", 0),
+              SmartDashboard.getNumber("Set Telescope Position", 0.1875),
+              SmartDashboard.getNumber("Set Wrist Angle", 110)
+            }));
 
     SmartDashboard.putData(
         "Set Drive Rot",
