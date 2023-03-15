@@ -12,13 +12,11 @@ import frc.robot.subsystems.claw.Claw;
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class ScoreOn extends SequentialCommandGroup {
-  
+
   /** Creates a new ScoreOn. */
   public ScoreOn(double[] cone, double[] cube) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(
-      (Claw.getInstance().getIsCube()) ? new SetPosition(cube) : new SetPosition(cone)
-    );
+    addCommands((Claw.getInstance().getIsCube()) ? new SetPosition(cube) : new SetPosition(cone));
   }
 }
