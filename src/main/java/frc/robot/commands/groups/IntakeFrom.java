@@ -15,12 +15,10 @@ public class IntakeFrom extends ParallelCommandGroup {
 
   /** Creates a new Intake. */
   public IntakeFrom(double[] cone, double[] cube) {
-    Claw claw = Claw.getInstance();
-    boolean isCube = claw.getIsCube();
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-        (isCube) ? new SetPosition(cube) : new SetPosition(cone)
+        (Claw.getInstance().getIsCube()) ? new SetPosition(cube) : new SetPosition(cone)
         // new Intake()
         // new RunCommand(() -> claw.intake(), claw)
         );
