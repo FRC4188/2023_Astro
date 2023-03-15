@@ -46,6 +46,7 @@ public class Wrist extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Wrist Position", getMotorAngle());
+    SmartDashboard.putNumber("Wrist Set Point", pid.getSetpoint().position);
   }
 
   private void init() {
@@ -58,13 +59,13 @@ public class Wrist extends SubsystemBase {
 
     motor.setScalar(1 / Constants.arm.wrist.ROTATIONS_PER_DEGREE);
     motor.setBrake(true);
-    motor.setEncoder(Constants.arm.wrist.LOWER_LIMIT);
+    motor.setEncoder(Constants.arm.wrist.UPPER_LIMIT);
     // motor.enableSoftLimit(SoftLimitDirection.kForward, true);
     // motor.enableSoftLimit(SoftLimitDirection.kReverse, true);
     // motor.setSoftLimit(SoftLimitDirection.kForward, (float) Constants.arm.wrist.UPPER_LIMIT);
     // motor.setSoftLimit(SoftLimitDirection.kReverse, (float) Constants.arm.wrist.LOWER_LIMIT);
 
-    pid.reset(getMotorAngle());
+    pid.reset(Constants.arm.wrist.UPPER_LIMIT);
     pid.setTolerance(Constants.arm.wrist.ALLOWED_ERROR);
   }
 
@@ -94,6 +95,10 @@ public class Wrist extends SubsystemBase {
 
   public double getAngle() {
     return encoder.getAbsolutePosition();
+  }
+
+  public double getSetpoint() {
+    return pid.getSetpoint().position;
   }
 
   public double getMotorAngle() {

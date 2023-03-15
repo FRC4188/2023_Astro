@@ -192,16 +192,17 @@ public final class Constants {
 
   public static final class arm {
     public static final class configs {
-      public static final double[] HIGH = {45.0, 1.4, 110};
-      public static final double[] MID = {45.0, 1.0};
-      public static final double[] LOW = {0.0, 0.0};
-      public static final double[] SS_CONE = {79.0, 0.4, 57.0};
+      public static final double[] HIGH = {45.0, 1.5, 100};
+      public static final double[] MID = {45.0, 1.0, 100.0};
+      public static final double[] LOW = {0.0, 0.1875, 0.0};
+      public static final double[] SS_CONE = {0.0, 0.1875, 0.0};
       public static final double[] SS_CUBE = {0.0, 0.1875, 0.0};
-      public static final double[] DS_CONE = {0, 0, 0};
-      public static final double[] DS_CUBE = {0, 0, 0};
-      public static final double[] FLOOR_CONE = {0, 0, 0};
-      public static final double[] FLOOR_CUBE = {0, 0, 0};
-      public static final double[] TIPPED_CONE = {0, 0, 0};
+      public static final double[] DS_CONE = {0, 0.1875, 0};
+      public static final double[] DS_CUBE = {0, 0.1875, 0};
+      public static final double[] FLOOR_CONE = {79.0, 0.1875, 57.0};
+      public static final double[] FLOOR_CUBE = {0, 0.1875, 0};
+      public static final double[] TIPPED_CONE = {0, 0.1875, 0};
+      public static final double[] RESET = {0, 0.1875, 110};
     }
 
     public static final class shoulder {
@@ -238,10 +239,10 @@ public final class Constants {
       public static final double TICKS_PER_INCH = 2048; // 57.014 rotations per inch
       public static final double TICKS_PER_METER = 2048 / 0.025;
 
-      public static final double UPPER_LIMIT = Units.metersToInches(1) * 2048;
+      public static final double UPPER_LIMIT = Units.metersToInches(1.6) * 2048;
       public static final double LOWER_LIMIT = 7.5 * 2048;
 
-      public static final double kP = 5.0;
+      public static final double kP = 5.2;
       public static final double kI = 0.0;
       public static final double kD = 0.0;
       public static final double kF = 0.0;

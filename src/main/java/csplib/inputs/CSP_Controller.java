@@ -37,6 +37,11 @@ public class CSP_Controller extends CommandXboxController {
     }
   }
 
+  /**
+   * 
+   * @param scale
+   * @return
+   */
   public double getRightY(Scale scale) {
     return -getOutput(this.getRightY(), scale);
   }

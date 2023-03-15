@@ -4,34 +4,42 @@
 
 package frc.robot.commands.arm.wrist;
 
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants.arm.wrist;
 import frc.robot.subsystems.arm.Wrist;
 
-public class SetWristAngle extends CommandBase {
+public class HoldWrist extends CommandBase {
   private Wrist wrist = Wrist.getInstance();
 
-  private double angle;
-  /** Creates a new SetTelescopePosition. */
-  public SetWristAngle(double angle) {
+  private double lastAngle;
+  private DoubleSupplier set;
+  private double wristSet;
+  private double prevSet;
+  /** Creates a new HoldWrist. */
+  public HoldWrist(DoubleSupplier set) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(wrist);
-    this.angle = angle;
+    this.set = set;
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    lastAngle = wrist.getMotorAngle();
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    wrist.setAngle(angle);
+    wrist.setAngle(wristSet);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    wrist.disable();
+    
   }
 
   // Returns true when the command should end.

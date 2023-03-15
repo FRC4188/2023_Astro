@@ -6,7 +6,9 @@ import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.arm.wrist;
 import frc.robot.subsystems.arm.Shoulder;
+import frc.robot.subsystems.arm.Wrist;
 
 public class Claw extends SubsystemBase {
   private static Claw instance;
@@ -18,7 +20,8 @@ public class Claw extends SubsystemBase {
 
   private CSP_Talon motor = new CSP_Talon(Constants.ids.CLAW);
   private AnalogInput sensor = new AnalogInput(Constants.ids.ULTRASONIC_SENSOR);
-  private Shoulder shoulder = Shoulder.getInstance();
+  
+  private Wrist wrist = Wrist.getInstance();
 
   private boolean isCube;
 
@@ -47,7 +50,7 @@ public class Claw extends SubsystemBase {
   }
 
   private void setInverted() {
-    if (isCube || shoulder.getAngle() < 0) motor.setInverted(true);
+    if (isCube && wrist.getMotorAngle() < 0) motor.setInverted(true);
     else motor.setInverted(false);
   }
 

@@ -43,18 +43,20 @@ public class SetPosition extends SequentialCommandGroup {
   }
 
   public SetPosition(double[] config) {
-    double shoulderAngle = (arm.getIsFlipped()) ? -config[0] : config[0];
+    double shoulderAngle = config[0];
     double telescopeLength = config[1];
-    double wristAngle = (arm.getIsFlipped()) ? -config[2] : config[2];
+    double wristAngle = config[2];
 
     addCommands(
         new ParallelCommandGroup(
             new SequentialCommandGroup(
                 new ZeroTelescope(),
-                new SetShoulderAngle(shoulderAngle),
+                new SetShoulderAngle(shoulderAngle).until(() -> shoulderAngle - Shoulder.getInstance().getAngle() < 1),
                 new ParallelCommandGroup(
                     new SetShoulderAngle(shoulderAngle),
                     new SetTelescopePosition(telescopeLength))),
-            new SetWristAngle(wristAngle)));
+            new SetWristAngle(wristAngle)
+        )
+    );
   }
 }

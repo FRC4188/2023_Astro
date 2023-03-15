@@ -48,7 +48,7 @@ public class Shoulder extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Shoulder Encoder Angle", getAngle());
-    SmartDashboard.putNumber("Shoulder Motor Angle", getMotorAngle());
+    SmartDashboard.putNumber("Shoulder Setpoint", pid.getSetpoint().position);
   }
 
   public void init() {

@@ -15,6 +15,8 @@ public class ScoreOn extends SequentialCommandGroup {
   public ScoreOn(double[] position) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new SetPosition(position));
+    addCommands(
+      new SetPosition(position)
+    );
   }
 }
