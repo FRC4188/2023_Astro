@@ -7,6 +7,9 @@ package frc.robot.subsystems.sensors;
 import csplib.utils.LimelightHelpers;
 import edu.wpi.first.math.filter.MedianFilter;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Constants;
 
 /** Add your docs here. */
@@ -43,11 +46,34 @@ public class Limelights {
         180);
   }
 
+  private Pose3d filterPose(Pose3d pose) {
+    double filteredX = filter.calculate(pose.getX());
+    double filteredY = filter.calculate(pose.getY());
+    double filteredZ = filter.calculate(pose.getZ());
+
+    return new Pose3d(filteredX, filteredY, filteredZ, pose.getRotation());
+  }
+
   public Pose3d getPose3d() {
     if (LimelightHelpers.getTV(frontLLName)) {
-      return LimelightHelpers.getBotPose3d_wpiBlue(frontLLName);
+      return (DriverStation.getAlliance() == Alliance.Blue)
+          ? filterPose(LimelightHelpers.getBotPose3d_wpiBlue(frontLLName))
+          : filterPose(LimelightHelpers.getBotPose3d_wpiRed(frontLLName).relativeTo(new Pose3d()));
     } else if (LimelightHelpers.getTV(backLLName)) {
-      return LimelightHelpers.getBotPose3d_wpiBlue(backLLName);
+      return filterPose(LimelightHelpers.getBotPose3d_wpiBlue(backLLName));
     } else return new Pose3d();
+  }
+
+  public double getLatency() {
+    double time = Timer.getFPGATimestamp();
+    if (LimelightHelpers.getTV(frontLLName)) {
+      return time
+          - (LimelightHelpers.getLatency_Capture(frontLLName) / 1000)
+          - (LimelightHelpers.getLatency_Pipeline(frontLLName) / 1000);
+    } else if (LimelightHelpers.getTV(backLLName)) {
+      return time
+          - (LimelightHelpers.getLatency_Capture(backLLName) / 1000)
+          - (LimelightHelpers.getLatency_Pipeline(backLLName) / 1000);
+    } else return 0.0;
   }
 }

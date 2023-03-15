@@ -1,23 +1,26 @@
 package frc.robot;
 
-import java.util.HashMap;
-
-import com.pathplanner.lib.PathConstraints;
-
 import csplib.inputs.CSP_Controller;
 import csplib.inputs.CSP_Controller.Scale;
 import csplib.utils.AutoBuilder;
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.commands.arm.wrist.ZeroWrist;
+import frc.robot.Constants.arm.telescope;
+import frc.robot.commands.AutoEventMaps;
+import frc.robot.commands.arm.SetPosition;
+import frc.robot.commands.groups.IntakeFrom;
+import frc.robot.commands.groups.Reset;
 import frc.robot.subsystems.arm.Arm;
+import frc.robot.subsystems.arm.Shoulder;
+import frc.robot.subsystems.arm.Telescope;
+import frc.robot.subsystems.arm.Wrist;
 import frc.robot.subsystems.claw.Claw;
 import frc.robot.subsystems.drivetrain.Drivetrain;
+import frc.robot.subsystems.sensors.Sensors;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -28,11 +31,15 @@ import frc.robot.subsystems.drivetrain.Drivetrain;
 public class RobotContainer {
 
   private CSP_Controller pilot = new CSP_Controller(Constants.controller.PILOT_PORT);
-  private CSP_Controller copilot = new CSP_Controller(1);
+  private CSP_Controller copilot = new CSP_Controller(Constants.controller.COPILOT_PORT);
 
   private Drivetrain drivetrain = Drivetrain.getInstance();
   private Arm arm = Arm.getInstance();
   private Claw claw = Claw.getInstance();
+
+  private Shoulder shoulder = Shoulder.getInstance();
+  private Telescope telescope = Telescope.getInstance();
+  private Wrist wrist = Wrist.getInstance();
 
   private SendableChooser<Command> autoChooser = new SendableChooser<Command>();
 
@@ -57,69 +64,88 @@ public class RobotContainer {
                     pilot.getLeftX(Scale.SQUARED),
                     pilot.getRightX(Scale.SQUARED)),
             drivetrain));
-    arm.setDefaultCommand(
-        new RunCommand(
-            () -> {
-              arm.setWristAngle(copilot.getRightX(Scale.LINEAR) * Constants.arm.wrist.UPPER_LIMIT);
-              arm.setShoulderPosition(copilot.getLeftX(Scale.LINEAR) * 90.0);
-              arm.setTelescope(copilot.getRightTriggerAxis() - copilot.getLeftTriggerAxis());
-            },
-            arm));
+
+    // shoulder.setDefaultCommand(
+    //     new RunCommand(() -> shoulder.setAngle(shoulder.getAngle() +
+    // (copilot.getRightY(Scale.LINEAR) * 15)), shoulder));
+    // telescope.setDefaultCommand(
+    //   new RunCommand(() -> telescope.setPosition(telescope.getPosition() +
+    // (copilot.getRightT(Scale.LINEAR) - copilot.getLeftT(Scale.LINEAR))), telescope)
+    // );
+    // wrist.setDefaultCommand(
+    //   new HoldWrist(() -> (copilot.getLeftY(Scale.LINEAR) * 10))
+    // );
   }
 
   /** Use this method to define your button->command mappings. */
   private void configureButtonBindings() {
-    pilot.getLSButtonObj().onTrue(new InstantCommand(() -> drivetrain.resetOdometry(new Pose2d())));
+    pilot
+        .getAButton()
+        .onTrue(
+            new InstantCommand(() -> Sensors.getInstance().resetPigeon(), Sensors.getInstance()));
 
-    copilotBindings();
-  }
-
-  private void copilotBindings() {
-    copilot
-        .getRBButtonObj()
-        .whileTrue(new InstantCommand(() -> claw.set(0.7), arm))
-        .onFalse(new InstantCommand(() -> claw.set(0.0), arm));
-    copilot
-        .getLBButtonObj()
-        .whileTrue(new InstantCommand(() -> claw.set(-0.7), arm))
-        .onFalse(new InstantCommand(() -> claw.set(0.0), arm));
+    pilot
+        .getLeftTButton()
+        .whileTrue(new RunCommand(() -> claw.outtake(), claw))
+        .onFalse(new InstantCommand(() -> claw.disable(), claw));
+    pilot
+        .getRightTButton()
+        .whileTrue(new RunCommand(() -> claw.intake(), claw))
+        .onFalse(new InstantCommand(() -> claw.disable(), claw));
 
     copilot
-        .getYButtonObj()
-        .whileTrue(new InstantCommand(() -> arm.setShoulder(0.3), arm))
-        .onFalse(new InstantCommand(() -> arm.setShoulder(0.0), arm));
+        .getAButton()
+        .onTrue(new IntakeFrom(Constants.arm.configs.FLOOR_CONE, Constants.arm.configs.FLOOR_CUBE));
     copilot
-        .getAButtonObj()
-        .whileTrue(new InstantCommand(() -> arm.setShoulder(-0.3), arm))
-        .onFalse(new InstantCommand(() -> arm.setShoulder(0.0), arm));
+        .getXButton()
+        .onTrue(new IntakeFrom(Constants.arm.configs.SS_CONE, Constants.arm.configs.SS_CUBE));
     copilot
-        .getXButtonObj()
-        .whileTrue(new InstantCommand(() -> arm.setWrist(0.3), arm))
-        .onFalse(new InstantCommand(() -> arm.setWrist(0.0), arm));
+        .getYButton()
+        .onTrue(new IntakeFrom(Constants.arm.configs.DS_CONE, Constants.arm.configs.DS_CUBE));
     copilot
-        .getBButtonObj()
-        .whileTrue(new InstantCommand(() -> arm.setWrist(-0.3), arm))
-        .onFalse(new InstantCommand(() -> arm.setWrist(0.0), arm));
+        .getBButton()
+        .onTrue(
+            new IntakeFrom(Constants.arm.configs.TIPPED_CONE, Constants.arm.configs.FLOOR_CUBE));
 
-    copilot.getStartButtonObj().onTrue(new ZeroWrist());
+    copilot.getUpButton().onTrue(new SetPosition(Constants.arm.configs.HIGH));
+    copilot.getRightButton().onTrue(new SetPosition(Constants.arm.configs.MID));
+    copilot.getDownButton().onTrue(new SetPosition(Constants.arm.configs.LOW));
+
+    copilot
+        .getLeftBumperButton()
+        .debounce(0.3)
+        .onTrue(new InstantCommand(() -> claw.setIsCube(false)));
+    copilot
+        .getRightBumperButton()
+        .debounce(0.3)
+        .onTrue(new InstantCommand(() -> claw.setIsCube(true)));
+
+    copilot.getBackButton().onTrue(new Reset());
   }
 
   private void smartdashboardButtons() {
     SmartDashboard.putData(
-        "Set Velocity",
-        new RunCommand(
-            () -> drivetrain.setVelocity(SmartDashboard.getNumber("Set Drive Velocity", 0)),
-            drivetrain));
+        "Set Drive Rot PID",
+        new InstantCommand(
+            () ->
+                drivetrain.setRotPID(
+                    SmartDashboard.getNumber("Rot P", 0),
+                    SmartDashboard.getNumber("Rot I", 0),
+                    SmartDashboard.getNumber("Rot D", 0))));
 
     SmartDashboard.putData(
         "Set Telescope PID",
-        new RunCommand(
+        new InstantCommand(
             () ->
-                arm.setTelescopePID(
-                    SmartDashboard.getNumber("Telescope kP", 0.0),
-                    SmartDashboard.getNumber("Telescope kI", 0.0),
-                    SmartDashboard.getNumber("Telescope kD", 0.0),
-                    SmartDashboard.getNumber("Telescope kF", 0.0))));
+                telescope.setPID(
+                    SmartDashboard.getNumber("Telescope P", 0),
+                    SmartDashboard.getNumber("Telescope I", 0),
+                    SmartDashboard.getNumber("Telescope D", 0))));
+
+    SmartDashboard.putData(
+        "Set Drive Rot",
+        new RunCommand(
+            () -> drivetrain.setRotation(SmartDashboard.getNumber("Drive Rot", 0)), drivetrain));
 
     SmartDashboard.putData(
         "Set Zero", new InstantCommand(() -> drivetrain.zeroPower(), drivetrain));
@@ -128,9 +154,9 @@ public class RobotContainer {
   private void addChooser() {
     autoChooser.setDefaultOption("Do nothing", new SequentialCommandGroup());
     autoChooser.addOption(
-        "Test", AutoBuilder.buildAuto("New Path", new HashMap<>(), new PathConstraints(5.0, 1)));
-    autoChooser.addOption(
-        "B21", AutoBuilder.buildAuto("B21", new HashMap<>(), new PathConstraints(5.0, 2)));
+        "Test",
+        AutoBuilder.buildAuto(
+            "Test Auto Path", AutoEventMaps.Test.EVENTS, AutoEventMaps.Test.CONSTRAINTS));
 
     SmartDashboard.putData("Auto Chooser", autoChooser);
   }

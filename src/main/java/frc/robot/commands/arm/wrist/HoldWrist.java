@@ -5,36 +5,43 @@
 package frc.robot.commands.arm.wrist;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
-import frc.robot.subsystems.arm.Arm;
+import frc.robot.Constants.arm.wrist;
+import frc.robot.subsystems.arm.Wrist;
+import java.util.function.DoubleSupplier;
 
-public class ZeroWrist extends CommandBase {
-  private Arm arm = Arm.getInstance();
-  /** Creates a new ZeroWrist. */
-  public ZeroWrist() {
+public class HoldWrist extends CommandBase {
+  private Wrist wrist = Wrist.getInstance();
+
+  private double lastAngle;
+  private DoubleSupplier set;
+  private double wristSet;
+  private double prevSet;
+  /** Creates a new HoldWrist. */
+  public HoldWrist(DoubleSupplier set) {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(arm);
+    addRequirements(wrist);
+    this.set = set;
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    lastAngle = wrist.getMotorAngle();
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    arm.zeroWrist();
+    wrist.setAngle(wristSet);
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    arm.setWrist(0.0);
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Math.abs(arm.getWristAngle() - Constants.arm.wrist.LOWER_LIMIT) < 0.5;
+    return false;
   }
 }
