@@ -17,6 +17,7 @@ public class IntakeFrom extends ParallelCommandGroup {
   public IntakeFrom(double[] cone, double[] cube) {
     Claw claw = Claw.getInstance();
     boolean isCube = claw.getIsCube();
+    
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
