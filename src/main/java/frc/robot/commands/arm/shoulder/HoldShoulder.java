@@ -9,8 +9,8 @@ import frc.robot.subsystems.arm.Shoulder;
 
 public class HoldShoulder extends CommandBase {
   private Shoulder shoulder = Shoulder.getInstance();
-  
-  private double setAngle; 
+
+  private double setAngle;
 
   /** Creates a new HoldShoulder. */
   public HoldShoulder() {

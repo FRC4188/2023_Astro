@@ -13,13 +13,8 @@ import frc.robot.Constants.arm.telescope;
 import frc.robot.commands.AutoConfigs;
 import frc.robot.commands.arm.SetFlip;
 import frc.robot.commands.arm.SetPosition;
-import frc.robot.commands.arm.telescope.ZeroTelescope;
-import frc.robot.commands.arm.wrist.HoldWrist;
-import frc.robot.commands.claw.Intake;
-import frc.robot.commands.claw.Outtake;
 import frc.robot.commands.groups.IntakeFrom;
 import frc.robot.commands.groups.Reset;
-import frc.robot.commands.groups.ScoreOn;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.arm.Shoulder;
 import frc.robot.subsystems.arm.Telescope;
@@ -72,9 +67,11 @@ public class RobotContainer {
             drivetrain));
 
     // shoulder.setDefaultCommand(
-    //     new RunCommand(() -> shoulder.setAngle(shoulder.getAngle() + (copilot.getRightY(Scale.LINEAR) * 15)), shoulder));
+    //     new RunCommand(() -> shoulder.setAngle(shoulder.getAngle() +
+    // (copilot.getRightY(Scale.LINEAR) * 15)), shoulder));
     // telescope.setDefaultCommand(
-    //   new RunCommand(() -> telescope.setPosition(telescope.getPosition() + (copilot.getRightT(Scale.LINEAR) - copilot.getLeftT(Scale.LINEAR))), telescope)
+    //   new RunCommand(() -> telescope.setPosition(telescope.getPosition() +
+    // (copilot.getRightT(Scale.LINEAR) - copilot.getLeftT(Scale.LINEAR))), telescope)
     // );
     // wrist.setDefaultCommand(
     //   new HoldWrist(() -> (copilot.getLeftY(Scale.LINEAR) * 10))
@@ -88,20 +85,41 @@ public class RobotContainer {
         .onTrue(
             new InstantCommand(() -> Sensors.getInstance().resetPigeon(), Sensors.getInstance()));
 
-    pilot.getLeftTButton().whileTrue(new RunCommand(() -> claw.outtake(), claw)).onFalse(new InstantCommand(() -> claw.disable(), claw));
-    pilot.getRightTButton().whileTrue(new RunCommand(() -> claw.intake(), claw)).onFalse(new InstantCommand(() -> claw.disable(), claw));
+    pilot
+        .getLeftTButton()
+        .whileTrue(new RunCommand(() -> claw.outtake(), claw))
+        .onFalse(new InstantCommand(() -> claw.disable(), claw));
+    pilot
+        .getRightTButton()
+        .whileTrue(new RunCommand(() -> claw.intake(), claw))
+        .onFalse(new InstantCommand(() -> claw.disable(), claw));
 
-    copilot.getAButton().onTrue(new IntakeFrom(Constants.arm.configs.FLOOR_CONE, Constants.arm.configs.FLOOR_CUBE));
-    copilot.getXButton().onTrue(new IntakeFrom(Constants.arm.configs.SS_CONE, Constants.arm.configs.SS_CUBE));
-    copilot.getYButton().onTrue(new IntakeFrom(Constants.arm.configs.DS_CONE, Constants.arm.configs.DS_CUBE));
-    copilot.getBButton().onTrue(new IntakeFrom(Constants.arm.configs.TIPPED_CONE, Constants.arm.configs.FLOOR_CUBE));
+    copilot
+        .getAButton()
+        .onTrue(new IntakeFrom(Constants.arm.configs.FLOOR_CONE, Constants.arm.configs.FLOOR_CUBE));
+    copilot
+        .getXButton()
+        .onTrue(new IntakeFrom(Constants.arm.configs.SS_CONE, Constants.arm.configs.SS_CUBE));
+    copilot
+        .getYButton()
+        .onTrue(new IntakeFrom(Constants.arm.configs.DS_CONE, Constants.arm.configs.DS_CUBE));
+    copilot
+        .getBButton()
+        .onTrue(
+            new IntakeFrom(Constants.arm.configs.TIPPED_CONE, Constants.arm.configs.FLOOR_CUBE));
 
     copilot.getUpButton().onTrue(new SetPosition(Constants.arm.configs.HIGH));
     copilot.getRightButton().onTrue(new SetPosition(Constants.arm.configs.MID));
     copilot.getDownButton().onTrue(new SetPosition(Constants.arm.configs.LOW));
 
-    copilot.getLeftBumperButton().debounce(0.3).onTrue(new InstantCommand(() -> claw.setIsCube(false)));
-    copilot.getRightBumperButton().debounce(0.3).onTrue(new InstantCommand(() -> claw.setIsCube(true)));
+    copilot
+        .getLeftBumperButton()
+        .debounce(0.3)
+        .onTrue(new InstantCommand(() -> claw.setIsCube(false)));
+    copilot
+        .getRightBumperButton()
+        .debounce(0.3)
+        .onTrue(new InstantCommand(() -> claw.setIsCube(true)));
 
     copilot.getBackButton().onTrue(new Reset());
   }
@@ -120,12 +138,11 @@ public class RobotContainer {
         "Set Telescope PID",
         new InstantCommand(
             () ->
-                telescope
-                    .setPID(
-                        SmartDashboard.getNumber("Telescope P", 0),
-                        SmartDashboard.getNumber("Telescope I", 0),
-                        SmartDashboard.getNumber("Telescope D", 0))));
-    
+                telescope.setPID(
+                    SmartDashboard.getNumber("Telescope P", 0),
+                    SmartDashboard.getNumber("Telescope I", 0),
+                    SmartDashboard.getNumber("Telescope D", 0))));
+
     SmartDashboard.putData(
         "Set Drive Rot",
         new RunCommand(
@@ -134,13 +151,13 @@ public class RobotContainer {
     SmartDashboard.putData(
         "Set Zero", new InstantCommand(() -> drivetrain.zeroPower(), drivetrain));
   }
+
   private void addChooser() {
     autoChooser.setDefaultOption("Do nothing", new SequentialCommandGroup());
     autoChooser.addOption(
         "Test",
         AutoBuilder.buildAuto(
             "Test Auto Path", AutoConfigs.EVENTS, AutoConfigs.Test.CONSTRAINTS));
-
 
     SmartDashboard.putData("Auto Chooser", autoChooser);
   }

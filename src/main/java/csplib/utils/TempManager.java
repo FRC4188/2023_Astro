@@ -15,6 +15,7 @@ public final class TempManager {
 
   /**
    * Add motors to list of motors to be monitored
+   *
    * @param motors
    */
   public static void addMotor(CSP_Motor... motors) {
@@ -23,9 +24,7 @@ public final class TempManager {
     }
   }
 
-  /**
-   * Begin monitoring
-   */
+  /** Begin monitoring */
   public static void monitor() {
     for (CSP_Motor motor : motorsList) {
       if (motor.getTemperature() > Constants.robot.MAX_TEMP

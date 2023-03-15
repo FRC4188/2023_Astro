@@ -11,7 +11,6 @@ import frc.robot.Constants;
 import frc.robot.commands.arm.SetPosition;
 import frc.robot.commands.claw.Outtake;
 import frc.robot.commands.groups.Reset;
-
 import java.util.HashMap;
 import java.util.Map;
 

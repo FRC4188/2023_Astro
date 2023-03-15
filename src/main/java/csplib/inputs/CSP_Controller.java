@@ -38,7 +38,6 @@ public class CSP_Controller extends CommandXboxController {
   }
 
   /**
-   * 
    * @param scale
    * @return
    */

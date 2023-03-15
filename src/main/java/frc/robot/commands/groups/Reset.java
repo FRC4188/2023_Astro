@@ -7,10 +7,8 @@ package frc.robot.commands.groups;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
-import frc.robot.commands.arm.SetPosition;
 import frc.robot.commands.arm.shoulder.HoldShoulder;
 import frc.robot.commands.arm.shoulder.SetShoulderAngle;
 import frc.robot.commands.arm.telescope.SetTelescopePosition;
@@ -34,19 +32,15 @@ public class Reset extends ParallelCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new ParallelCommandGroup(
-        new SequentialCommandGroup(
-            new ParallelDeadlineGroup(
-              new ZeroTelescope(),
-              new HoldShoulder()
-              ),
-            new SetShoulderAngle(shoulderAngle).until(() -> shoulderAngle - Shoulder.getInstance().getAngle() < 1),
-            new ParallelCommandGroup(
-                new SetShoulderAngle(shoulderAngle),
-                new SetTelescopePosition(telescopeLength))),
-        new SetWristAngle(wristAngle)
-        ), 
-      new InstantCommand(() -> claw.disable(), claw)
-      );
+        new ParallelCommandGroup(
+            new SequentialCommandGroup(
+                new ParallelDeadlineGroup(new ZeroTelescope(), new HoldShoulder()),
+                new SetShoulderAngle(shoulderAngle)
+                    .until(() -> shoulderAngle - Shoulder.getInstance().getAngle() < 1),
+                new ParallelCommandGroup(
+                    new SetShoulderAngle(shoulderAngle),
+                    new SetTelescopePosition(telescopeLength))),
+            new SetWristAngle(wristAngle)),
+        new InstantCommand(() -> claw.disable(), claw));
   }
 }
