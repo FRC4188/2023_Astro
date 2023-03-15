@@ -133,13 +133,13 @@ public class RobotContainer {
                     SmartDashboard.getNumber("Rot D", 0))));
 
     SmartDashboard.putData(
-        "Set Telescope PID",
-        new InstantCommand(
-            () ->
-                telescope.setPID(
-                    SmartDashboard.getNumber("Telescope P", 0),
-                    SmartDashboard.getNumber("Telescope I", 0),
-                    SmartDashboard.getNumber("Telescope D", 0))));
+        "Set Arm Positions",
+        new SetPosition(
+            new double[] {
+              SmartDashboard.getNumber("Set Shoulder Angle", 0),
+              SmartDashboard.getNumber("Set Telescope Position", 0.1875),
+              SmartDashboard.getNumber("Set Wrist Angle", 110)
+            }));
 
     SmartDashboard.putData(
         "Set Drive Rot",
