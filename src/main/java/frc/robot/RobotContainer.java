@@ -14,6 +14,7 @@ import frc.robot.commands.AutoEventMaps;
 import frc.robot.commands.arm.SetPosition;
 import frc.robot.commands.groups.IntakeFrom;
 import frc.robot.commands.groups.Reset;
+import frc.robot.commands.groups.ScoreOn;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.arm.Shoulder;
 import frc.robot.subsystems.arm.Telescope;
@@ -42,6 +43,8 @@ public class RobotContainer {
   private Wrist wrist = Wrist.getInstance();
 
   private SendableChooser<Command> autoChooser = new SendableChooser<Command>();
+
+  private boolean isCube = claw.getIsCube();
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -104,12 +107,33 @@ public class RobotContainer {
         .onTrue(new IntakeFrom(Constants.arm.configs.DS_CONE, Constants.arm.configs.DS_CUBE));
     copilot
         .getBButton()
-        .onTrue(
-            new IntakeFrom(Constants.arm.configs.TIPPED_CONE, Constants.arm.configs.FLOOR_CUBE));
+        .onTrue(new IntakeFrom(Constants.arm.configs.TIPPED_CONE, Constants.arm.configs.FLOOR_CUBE));
 
-    copilot.getUpButton().onTrue(new SetPosition(Constants.arm.configs.HIGH));
-    copilot.getRightButton().onTrue(new SetPosition(Constants.arm.configs.MID));
-    copilot.getDownButton().onTrue(new SetPosition(Constants.arm.configs.LOW));
+    copilot
+        .getUpButton()
+        .onTrue(new ScoreOn(Constants.arm.configs.HIGH_CONE, Constants.arm.configs.HIGH_CUBE));
+    copilot
+        .getRightButton()
+        .onTrue(new ScoreOn(Constants.arm.configs.MID_CONE, Constants.arm.configs.MID_CUBE));
+    copilot
+        .getLeftButton()
+        .onTrue(new ScoreOn(Constants.arm.configs.MID_CONE, Constants.arm.configs.MID_CUBE));
+    copilot
+        .getDownButton()
+        .onTrue(new ScoreOn(Constants.arm.configs.LOW_CONE, Constants.arm.configs.LOW_CUBE));
+
+    // copilot
+    //     .getUpButton()
+    //     .onTrue(new SetPosition((isCube) ? Constants.arm.configs.HIGH_CUBE : Constants.arm.configs.HIGH_CONE));
+    // copilot
+    //     .getRightButton()
+    //     .onTrue(new SetPosition((isCube) ? Constants.arm.configs.MID_CUBE : Constants.arm.configs.MID_CONE));
+    // copilot
+    //     .getLeftButton()
+    //     .onTrue(new SetPosition((isCube) ? Constants.arm.configs.MID_CUBE : Constants.arm.configs.MID_CONE));
+    // copilot
+    //     .getDownButton()
+    //     .onTrue(new SetPosition((isCube) ? Constants.arm.configs.LOW_CUBE : Constants.arm.configs.LOW_CONE));
 
     copilot
         .getLeftBumperButton()
@@ -120,35 +144,40 @@ public class RobotContainer {
         .debounce(0.3)
         .onTrue(new InstantCommand(() -> claw.setIsCube(true)));
 
-    copilot.getBackButton().onTrue(new Reset());
+    copilot
+        .getBackButton()
+        .onTrue(new Reset());
+    copilot
+        .getStartButton()
+        .onTrue(new Reset());
   }
 
   private void smartdashboardButtons() {
-    SmartDashboard.putData(
-        "Set Drive Rot PID",
-        new InstantCommand(
-            () ->
-                drivetrain.setRotPID(
-                    SmartDashboard.getNumber("Rot P", 0),
-                    SmartDashboard.getNumber("Rot I", 0),
-                    SmartDashboard.getNumber("Rot D", 0))));
+    // SmartDashboard.putData(
+    //     "Set Drive Rot PID",
+    //     new InstantCommand(
+    //         () ->
+    //             drivetrain.setRotPID(
+    //                 SmartDashboard.getNumber("Rot P", 0),
+    //                 SmartDashboard.getNumber("Rot I", 0),
+    //                 SmartDashboard.getNumber("Rot D", 0))));
 
-    SmartDashboard.putData(
-        "Set Telescope PID",
-        new InstantCommand(
-            () ->
-                telescope.setPID(
-                    SmartDashboard.getNumber("Telescope P", 0),
-                    SmartDashboard.getNumber("Telescope I", 0),
-                    SmartDashboard.getNumber("Telescope D", 0))));
+    // SmartDashboard.putData(
+    //     "Set Telescope PID",
+    //     new InstantCommand(
+    //         () ->
+    //             telescope.setPID(
+    //                 SmartDashboard.getNumber("Telescope P", 0),
+    //                 SmartDashboard.getNumber("Telescope I", 0),
+    //                 SmartDashboard.getNumber("Telescope D", 0))));
 
-    SmartDashboard.putData(
-        "Set Drive Rot",
-        new RunCommand(
-            () -> drivetrain.setRotation(SmartDashboard.getNumber("Drive Rot", 0)), drivetrain));
+    // SmartDashboard.putData(
+    //     "Set Drive Rot",
+    //     new RunCommand(
+    //         () -> drivetrain.setRotation(SmartDashboard.getNumber("Drive Rot", 0)), drivetrain));
 
-    SmartDashboard.putData(
-        "Set Zero", new InstantCommand(() -> drivetrain.zeroPower(), drivetrain));
+    // SmartDashboard.putData(
+    //     "Set Zero", new InstantCommand(() -> drivetrain.zeroPower(), drivetrain));
   }
 
   private void addChooser() {
@@ -156,8 +185,13 @@ public class RobotContainer {
     autoChooser.addOption(
         "Test",
         AutoBuilder.buildAuto(
-            "Test Auto Path", AutoEventMaps.Test.EVENTS, AutoEventMaps.Test.CONSTRAINTS));
-
+            "Test Auto Path", AutoEventMaps.Test.EVENTS, AutoEventMaps.Test.CONSTRAINTS)
+    );
+    autoChooser.addOption(
+            "B31P",
+            AutoBuilder.buildAuto(
+                "B31P", AutoEventMaps.B31P.EVENTS, AutoEventMaps.B31P.CONSTRAINTS)
+    );
     SmartDashboard.putData("Auto Chooser", autoChooser);
   }
 

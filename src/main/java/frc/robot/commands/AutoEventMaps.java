@@ -32,9 +32,18 @@ public class AutoEventMaps {
     public static final HashMap<String, Command> EVENTS =
         new HashMap<>(
             Map.ofEntries(
-                Map.entry("Set High Cone", new SetPosition(Constants.arm.configs.HIGH)),
+                Map.entry("Set High Cone", new SetPosition(Constants.arm.configs.HIGH_CONE)),
                 Map.entry("Outtake", new Outtake()),
                 Map.entry("Reset", new Reset()),
-                Map.entry("Set Intake Cube", new SetPosition(Constants.arm.configs.FLOOR_CUBE))));
+                Map.entry("Set Intake Cube", new SetPosition(Constants.arm.configs.FLOOR_CUBE)),
+                Map.entry("Set High Cube", new SetPosition(Constants.arm.configs.HIGH_CUBE))
+                )
+          );
+    
+    public static final PathConstraints[] CONSTRAINTS = {
+      new PathConstraints(4, 2)
+    };
   }
+
+
 }

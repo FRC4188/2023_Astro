@@ -45,7 +45,7 @@
       "isStopPoint": true,
       "stopEvent": {
         "names": [
-          "Intake Cube"
+          "Set Intake Cube"
         ],
         "executionBehavior": "sequential",
         "waitBehavior": "none",

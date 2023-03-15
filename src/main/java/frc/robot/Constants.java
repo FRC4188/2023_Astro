@@ -192,17 +192,28 @@ public final class Constants {
 
   public static final class arm {
     public static final class configs {
-      public static final double[] HIGH = {45.0, 1.5, 100};
-      public static final double[] MID = {45.0, 1.0, 100.0};
-      public static final double[] LOW = {0.0, 0.1875, 0.0};
+      // double[] = {Shoulder Angle, Telescope Length, Wrist Angle}
+      public static final double[] HIGH_CONE = {45.0, 1.5, 100.0};
+      public static final double[] HIGH_CUBE = {45.0, 1.4, 30.0};
+
+      public static final double[] MID_CONE = {45.0, 1.0, 100.0};
+      public static final double[] MID_CUBE = {45.0, 0.9, 30.0};
+
+      public static final double[] LOW_CONE = {45.0, 0.1875, 100.0};
+      public static final double[] LOW_CUBE = {45.0, 0.1875, 30.0};
+
       public static final double[] SS_CONE = {0.0, 0.1875, 0.0};
       public static final double[] SS_CUBE = {0.0, 0.1875, 0.0};
       public static final double[] DS_CONE = {0, 0.1875, 0};
       public static final double[] DS_CUBE = {0, 0.1875, 0};
+
       public static final double[] FLOOR_CONE = {79.0, 0.1875, 57.0};
-      public static final double[] FLOOR_CUBE = {0, 0.1875, 0};
+      public static final double[] FLOOR_CUBE = {105.0, 0.21, 30.0};
       public static final double[] TIPPED_CONE = {0, 0.1875, 0};
+
       public static final double[] RESET = {0, 0.1875, 110};
+
+
     }
 
     public static final class shoulder {

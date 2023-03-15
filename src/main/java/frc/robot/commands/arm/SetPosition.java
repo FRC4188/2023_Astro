@@ -13,18 +13,21 @@ import frc.robot.commands.arm.wrist.SetWristAngle;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.arm.Shoulder;
 import frc.robot.subsystems.arm.Telescope;
+import frc.robot.subsystems.claw.Claw;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class SetPosition extends SequentialCommandGroup {
   private Arm arm = Arm.getInstance();
+
   /** Creates a new SetPosition. */
   public SetPosition(double shoulderAngle, double telescopeLength, double wristAngle) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     double sAngle = (arm.getIsFlipped()) ? -shoulderAngle : shoulderAngle;
     double wAngle = (arm.getIsFlipped()) ? -wristAngle : wristAngle;
+
 
     addCommands(
         new ParallelCommandGroup(
