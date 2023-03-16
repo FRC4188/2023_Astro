@@ -37,7 +37,7 @@ public class Claw extends SubsystemBase {
   @Override
   public void periodic() {
     SmartDashboard.putBoolean("Distance Sensor", getTriggered());
-    SmartDashboard.putBoolean("IsCube", isCube);
+    SmartDashboard.putBoolean("IsCube", getIsCube());
   }
 
   public void disable() {

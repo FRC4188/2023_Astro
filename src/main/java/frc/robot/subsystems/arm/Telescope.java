@@ -45,7 +45,6 @@ public class Telescope extends SubsystemBase {
   public void periodic() {
     SmartDashboard.putNumber("Telescope Len", getPosition());
     SmartDashboard.putBoolean("Telescope Limit", getLimitSwitch());
-    SmartDashboard.putNumber("Telescope Setpoint", pid.getSetpoint().position);
 
     if (getLimitSwitch()) {
       motor.setEncoder(Constants.arm.telescope.LOWER_LIMIT);
@@ -60,7 +59,7 @@ public class Telescope extends SubsystemBase {
     motor.configReverseSoftLimitThreshold(Constants.arm.telescope.LOWER_LIMIT);
     motor.configForwardSoftLimitEnable(true);
     motor.configReverseSoftLimitEnable(true);
-    motor.setRampRate(0.25);
+    motor.setRampRate(0.1);
 
     pid.reset(getPosition());
     pid.setTolerance(Constants.arm.telescope.ALLOWED_ERROR);
@@ -88,7 +87,7 @@ public class Telescope extends SubsystemBase {
   }
 
   public void setPosition(double position) {
-    motor.set(pid.calculate(getPosition(), position)); // + ff.calculate(setpoint.velocity));
+    motor.set(pid.calculate(getPosition(), position)) ;
   }
 
   public void setPID(double kP, double kI, double kD) {
@@ -97,6 +96,10 @@ public class Telescope extends SubsystemBase {
 
   public double getPosition() {
     return motor.getPosition() * 1 / Constants.arm.telescope.TICKS_PER_METER;
+  }
+
+  public boolean isAtSetpoint() {
+    return pid.atGoal();
   }
 
   public boolean getLimitSwitch() {
