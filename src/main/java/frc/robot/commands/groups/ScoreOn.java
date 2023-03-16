@@ -4,13 +4,9 @@
 
 package frc.robot.commands.groups;
 
-import java.util.function.BooleanSupplier;
 
-import edu.wpi.first.wpilibj2.command.PrintCommand;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.arm.SetPosition;
-import frc.robot.subsystems.claw.Claw;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -19,9 +15,6 @@ public class ScoreOn extends SequentialCommandGroup {
 
   /** Creates a new ScoreOn. */
   public ScoreOn(double[] cone, double[] cube) {
-    addCommands(
-        false ? new SetPosition(cube) : new SetPosition(cone)
-
-        );
+    addCommands(false ? new SetPosition(cube) : new SetPosition(cone));
   }
 }

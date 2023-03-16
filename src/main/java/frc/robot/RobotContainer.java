@@ -12,9 +12,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.AutoConfigs;
 import frc.robot.commands.arm.SetFloorCube;
 import frc.robot.commands.arm.SetPosition;
-import frc.robot.commands.groups.IntakeFrom;
 import frc.robot.commands.groups.Reset;
-import frc.robot.commands.groups.ScoreOn;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.arm.Shoulder;
 import frc.robot.subsystems.arm.Telescope;
@@ -44,7 +42,6 @@ public class RobotContainer {
 
   private SendableChooser<Command> autoChooser = new SendableChooser<Command>();
 
-
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Set the default commands
@@ -68,8 +65,9 @@ public class RobotContainer {
             drivetrain));
 
     shoulder.setDefaultCommand(
-        new RunCommand(() -> shoulder.setAngle(shoulder.getAngle() +
-    (copilot.getRightY(Scale.LINEAR) * 15)), shoulder));
+        new RunCommand(
+            () -> shoulder.setAngle(shoulder.getAngle() + (copilot.getRightY(Scale.LINEAR) * 15)),
+            shoulder));
     // telescope.setDefaultCommand(
     //   new RunCommand(() -> telescope.setPosition(telescope.getPosition() +
     // (copilot.getRightT(Scale.LINEAR) - copilot.getLeftT(Scale.LINEAR))), telescope)
@@ -95,54 +93,68 @@ public class RobotContainer {
         .whileTrue(new RunCommand(() -> claw.intake(), claw))
         .onFalse(new InstantCommand(() -> claw.disable(), claw));
 
-    pilot.getUpButton().whileTrue(new RunCommand(() -> telescope.set(0.7), telescope)).onFalse(new InstantCommand(() -> telescope.disable(), telescope));
+    pilot
+        .getUpButton()
+        .whileTrue(new RunCommand(() -> telescope.set(0.7), telescope))
+        .onFalse(new InstantCommand(() -> telescope.disable(), telescope));
 
+    copilot.getAButton().and(() -> claw.getIsCube()).onTrue(new SetFloorCube());
     copilot
-        .getAButton().and(() -> claw.getIsCube())
-        .onTrue(new SetFloorCube());
-    copilot
-        .getAButton().and(() -> !claw.getIsCube())
+        .getAButton()
+        .and(() -> !claw.getIsCube())
         .onTrue(new SetPosition(Constants.arm.configs.FLOOR_CONE));
     copilot
-        .getXButton().and(() -> claw.getIsCube())
+        .getXButton()
+        .and(() -> claw.getIsCube())
         .onTrue(new SetPosition(Constants.arm.configs.SS_CUBE));
     copilot
-        .getXButton().and(() -> !claw.getIsCube())
+        .getXButton()
+        .and(() -> !claw.getIsCube())
         .onTrue(new SetPosition(Constants.arm.configs.SS_CONE));
     copilot
-        .getYButton().and(() -> claw.getIsCube())
+        .getYButton()
+        .and(() -> claw.getIsCube())
         .onTrue(new SetPosition(Constants.arm.configs.DS_CUBE));
     copilot
-        .getYButton().and(() -> !claw.getIsCube())
+        .getYButton()
+        .and(() -> !claw.getIsCube())
         .onTrue(new SetPosition(Constants.arm.configs.DS_CONE));
-    
+
     // copilot
     //     .getXButton()
     //     .onTrue(new IntakeFrom(Constants.arm.configs.SS_CONE, Constants.arm.configs.SS_CUBE));
     // // copilot
     // //     .getYButton()
-    // //     .onTrue(new SetPosition((isCube) ? Constants.arm.configs.DS_CUBE : Constants.arm.configs.DS_CONE));
+    // //     .onTrue(new SetPosition((isCube) ? Constants.arm.configs.DS_CUBE :
+    // Constants.arm.configs.DS_CONE));
     // copilot
     //     .getBButton()
-    //     .onTrue(new IntakeFrom(Constants.arm.configs.TIPPED_CONE, Constants.arm.configs.FLOOR_CUBE));
+    //     .onTrue(new IntakeFrom(Constants.arm.configs.TIPPED_CONE,
+    // Constants.arm.configs.FLOOR_CUBE));
 
     copilot
-        .getUpButton().and(() -> claw.getIsCube())
+        .getUpButton()
+        .and(() -> claw.getIsCube())
         .onTrue(new SetPosition(Constants.arm.configs.HIGH_CUBE));
     copilot
-        .getUpButton().and(() -> !claw.getIsCube())
-        .onTrue(new SetPosition(Constants.arm.configs.HIGH_CONE));  
+        .getUpButton()
+        .and(() -> !claw.getIsCube())
+        .onTrue(new SetPosition(Constants.arm.configs.HIGH_CONE));
     copilot
-        .getRightButton().and(() -> claw.getIsCube())
+        .getRightButton()
+        .and(() -> claw.getIsCube())
         .onTrue(new SetPosition(Constants.arm.configs.MID_CUBE));
     copilot
-        .getRightButton().and(() -> !claw.getIsCube())
+        .getRightButton()
+        .and(() -> !claw.getIsCube())
         .onTrue(new SetPosition(Constants.arm.configs.MID_CONE));
     copilot
-        .getDownButton().and(() -> claw.getIsCube())
+        .getDownButton()
+        .and(() -> claw.getIsCube())
         .onTrue(new SetPosition(Constants.arm.configs.LOW_CUBE));
     copilot
-        .getDownButton().and(() -> !claw.getIsCube())
+        .getDownButton()
+        .and(() -> !claw.getIsCube())
         .onTrue(new SetPosition(Constants.arm.configs.LOW_CONE));
 
     copilot
@@ -154,12 +166,8 @@ public class RobotContainer {
         .debounce(0.1)
         .onTrue(new InstantCommand(() -> claw.setIsCube(true)));
 
-    copilot
-        .getBackButton()
-        .onTrue(new Reset());
-    copilot
-        .getStartButton()
-        .onTrue(new Reset());
+    copilot.getBackButton().onTrue(new Reset());
+    copilot.getStartButton().onTrue(new Reset());
   }
 
   private void smartdashboardButtons() {
@@ -193,10 +201,8 @@ public class RobotContainer {
   private void addChooser() {
     autoChooser.setDefaultOption("Do nothing", new SequentialCommandGroup());
     autoChooser.addOption(
-            "B31P",
-            AutoBuilder.buildAuto(
-                "B31P", AutoConfigs.B31P.EVENTS, AutoConfigs.B31P.CONSTRAINTS)
-    );
+        "B31P",
+        AutoBuilder.buildAuto("B31P", AutoConfigs.B31P.EVENTS, AutoConfigs.B31P.CONSTRAINTS));
     SmartDashboard.putData("Auto Chooser", autoChooser);
   }
 

@@ -204,8 +204,8 @@ public final class Constants {
 
       public static final double[] SS_CONE = {0.0, 0.1875, 0.0};
       public static final double[] SS_CUBE = {0.0, 0.1875, 0.0};
-      //Raymond here, this is the preset for untipped cones on double substation
-      //public static final double[] DS_CONE = {45.0, 1.2, 100.0};
+      // Raymond here, this is the preset for untipped cones on double substation
+      // public static final double[] DS_CONE = {45.0, 1.2, 100.0};
       public static final double[] DS_CONE = {14.0, 0.0, 83.0};
 
       public static final double[] DS_CUBE = {0, 0.1875, 0};
@@ -215,8 +215,6 @@ public final class Constants {
       public static final double[] TIPPED_CONE = {0, 0.1875, 0};
 
       public static final double[] RESET = {0, 0.1875, 110};
-
-
     }
 
     public static final class shoulder {

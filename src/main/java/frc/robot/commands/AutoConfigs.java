@@ -40,14 +40,8 @@ public class AutoConfigs {
                 Map.entry("Outtake", new Outtake()),
                 Map.entry("Reset", new Reset()),
                 Map.entry("Set Intake Cube", new SetPosition(Constants.arm.configs.FLOOR_CUBE)),
-                Map.entry("Set High Cube", new SetPosition(Constants.arm.configs.HIGH_CUBE))
-                )
-          );
-    
-    public static final PathConstraints[] CONSTRAINTS = {
-      new PathConstraints(5, 3)
-    };
+                Map.entry("Set High Cube", new SetPosition(Constants.arm.configs.HIGH_CUBE))));
+
+    public static final PathConstraints[] CONSTRAINTS = {new PathConstraints(5, 3)};
   }
-
-
 }

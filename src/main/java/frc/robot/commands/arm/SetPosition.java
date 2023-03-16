@@ -13,7 +13,6 @@ import frc.robot.commands.arm.wrist.SetWristAngle;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.arm.Shoulder;
 import frc.robot.subsystems.arm.Telescope;
-import frc.robot.subsystems.claw.Claw;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -27,7 +26,6 @@ public class SetPosition extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     double sAngle = (arm.getIsFlipped()) ? -shoulderAngle : shoulderAngle;
     double wAngle = (arm.getIsFlipped()) ? -wristAngle : wristAngle;
-
 
     addCommands(
         new ParallelCommandGroup(
@@ -45,22 +43,22 @@ public class SetPosition extends SequentialCommandGroup {
             new SetWristAngle(wAngle)));
   }
 
-//   public SetPosition(double[] config) {
-//     double shoulderAngle = config[0];
-//     double telescopeLength = config[1];
-//     double wristAngle = config[2];
+  //   public SetPosition(double[] config) {
+  //     double shoulderAngle = config[0];
+  //     double telescopeLength = config[1];
+  //     double wristAngle = config[2];
 
-//     addCommands(
-//         new ParallelCommandGroup(
-//             new SequentialCommandGroup(
-//                 new ZeroTelescope(),
-//                 new SetShoulderAngle(shoulderAngle)
-//                     .until(() -> shoulderAngle - Shoulder.getInstance().getAngle() < 1),
-//                 new ParallelCommandGroup(
-//                     new SetShoulderAngle(shoulderAngle),
-//                     new SetTelescopePosition(telescopeLength))),
-//             new SetWristAngle(wristAngle)));
-//   }
+  //     addCommands(
+  //         new ParallelCommandGroup(
+  //             new SequentialCommandGroup(
+  //                 new ZeroTelescope(),
+  //                 new SetShoulderAngle(shoulderAngle)
+  //                     .until(() -> shoulderAngle - Shoulder.getInstance().getAngle() < 1),
+  //                 new ParallelCommandGroup(
+  //                     new SetShoulderAngle(shoulderAngle),
+  //                     new SetTelescopePosition(telescopeLength))),
+  //             new SetWristAngle(wristAngle)));
+  //   }
 
   public SetPosition(double[] config) {
     double shoulderAngle = config[0];
