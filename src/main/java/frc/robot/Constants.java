@@ -193,11 +193,11 @@ public final class Constants {
   public static final class arm {
     public static final class configs {
       // double[] = {Shoulder Angle, Telescope Length, Wrist Angle}
-      public static final double[] HIGH_CONE = {45.0, 1.6, 100.0};
+      public static final double[] HIGH_CONE = {45.0, 1.5, 70.0};
       public static final double[] HIGH_CUBE = {55.0, 1.25, 120};
 
       public static final double[] MID_CONE = {45.0, 0.8, 100.0};
-      public static final double[] MID_CUBE = {50.0, 0.60, 120};
+      public static final double[] MID_CUBE = {55.0, 0.5, 120};
 
       public static final double[] LOW_CONE = {45.0, 0.1875, 100.0};
       public static final double[] LOW_CUBE = {75.0, 0.1875, 100.0};
@@ -206,13 +206,13 @@ public final class Constants {
       public static final double[] SS_CUBE = {0.0, 0.1875, 0.0};
       // Raymond here, this is the preset for untipped cones on double substation
       // public static final double[] DS_CONE = {45.0, 1.2, 100.0};
-      public static final double[] DS_CONE = {14.0, 0.0, 83.0};
+      public static final double[] DS_CONE = {14.0, 0.1875, 83.0};
 
       public static final double[] DS_CUBE = {0, 0.1875, 0};
 
       public static final double[] FLOOR_CONE = {79.0, 0.1875, 57.0};
       public static final double[] FLOOR_CUBE = {98.0, 0.5, 126};
-      public static final double[] TIPPED_CONE = {0, 0.1875, 0};
+      public static final double[] TIPPED_CONE = {116, 0.1875, -5.0};
 
       public static final double[] RESET = {0, 0.1875, 110};
     }
@@ -225,8 +225,8 @@ public final class Constants {
       // public static final double UPPER_LIMIT = 98.0;
       // public static final double LOWER_LIMIT = -107.0;
 
-      public static final double UPPER_LIMIT = 110.0;
-      public static final double LOWER_LIMIT = -110.0;
+      public static final double UPPER_LIMIT = 117.0;
+      public static final double LOWER_LIMIT = -117.0;
 
       public static final double kP = 0.04;
       public static final double kI = 0.0;
@@ -235,7 +235,7 @@ public final class Constants {
 
       // raymond here, reducing these for shoulder PID testing
       public static final double MAX_VEL = 1000.0;
-      public static final double MAX_ACCEL = 180.0;
+      public static final double MAX_ACCEL = 220.0;
       public static final double ALLOWED_ERROR = 0.1;
 
       public static final Constraints CONSTRAINTS = new Constraints(MAX_VEL, MAX_ACCEL);
@@ -254,7 +254,7 @@ public final class Constants {
       public static final double UPPER_LIMIT = Units.metersToInches(1.6) * 2048;
       public static final double LOWER_LIMIT = 7.5 * 2048;
 
-      public static final double kP = 5;
+      public static final double kP = 60;
       public static final double kI = 0.0;
       public static final double kD = 0.0;
       public static final double kF = 0.0;
@@ -263,8 +263,8 @@ public final class Constants {
       public static final double kG = 1.21;
       public static final double kV = 3.8186;
 
-      public static final double MAX_VEL = 3.0;
-      public static final double MAX_ACCEL = 1.3;
+      public static final double MAX_VEL = 30.0;
+      public static final double MAX_ACCEL = 25.0;
 
       public static final Constraints CONSTRAINTS = new Constraints(MAX_VEL, MAX_ACCEL);
       public static final double ALLOWED_ERROR = 0.05;
@@ -288,8 +288,8 @@ public final class Constants {
       public static final double kG = 0;
       public static final double kV = 0;
 
-      public static final double MAX_VEL = 130.0;
-      public static final double MAX_ACCEL = 90.0;
+      public static final double MAX_VEL = 170.0;
+      public static final double MAX_ACCEL = 120.0;
       public static final Constraints CONSTRAINTS = new Constraints(MAX_VEL, MAX_ACCEL);
       public static final double ALLOWED_ERROR = 1;
     }

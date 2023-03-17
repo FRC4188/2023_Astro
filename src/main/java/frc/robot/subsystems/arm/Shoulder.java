@@ -68,6 +68,7 @@ public class Shoulder extends SubsystemBase {
     // leader.setSoftLimit(SoftLimitDirection.kForward, (float) Constants.arm.shoulder.UPPER_LIMIT);
     // leader.setSoftLimit(SoftLimitDirection.kReverse, (float) Constants.arm.shoulder.LOWER_LIMIT);
 
+    follower.setBrake(true);
     follower.follow(leader);
 
     pid.reset(getAngle());

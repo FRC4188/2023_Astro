@@ -6,8 +6,11 @@ package frc.robot.commands;
 
 import com.pathplanner.lib.PathConstraints;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 import frc.robot.commands.arm.SetPosition;
+import frc.robot.commands.claw.Intake;
 import frc.robot.commands.claw.Outtake;
 import frc.robot.commands.groups.Reset;
 import java.util.HashMap;
@@ -21,27 +24,23 @@ public class AutoConfigs {
   public static final HashMap<String, Command> EVENTS =
       new HashMap<>(
           Map.ofEntries(
-              Map.entry("Set High Cone", new SetPosition(Constants.arm.configs.HIGH_CONE)),
-              Map.entry("Outtake", new Outtake()),
+              Map.entry("Set Mid Cone", new SetPosition(Constants.arm.configs.MID_CONE)),
+              Map.entry("Set Low Cone", new SetPosition(Constants.arm.configs.LOW_CONE)),
+              Map.entry(
+                  "Outtake",
+                  new SequentialCommandGroup(new WaitCommand(1.0), new Outtake().withTimeout(0.5))),
               Map.entry("Reset", new Reset()),
-              Map.entry("Set Intake Cube", new SetPosition(Constants.arm.configs.FLOOR_CUBE))));
+              Map.entry("Set Cube", new SetPosition(Constants.arm.configs.FLOOR_CUBE)),
+              Map.entry("Set Up Cone", new SetPosition(Constants.arm.configs.FLOOR_CONE)),
+              Map.entry("Intake", new Intake().withTimeout(0.5))));
 
-  public static final class Test {
-    public static final PathConstraints[] CONSTRAINTS = {
-      new PathConstraints(4, 2), new PathConstraints(0.5, 0.2)
-    };
+  public static final class three2P {
+    public static final PathConstraints[] CONSTRAINTS = {new PathConstraints(5, 3)};
   }
 
-  public static final class B31P {
-    public static final HashMap<String, Command> EVENTS =
-        new HashMap<>(
-            Map.ofEntries(
-                Map.entry("Set High Cone", new SetPosition(Constants.arm.configs.HIGH_CONE)),
-                Map.entry("Outtake", new Outtake()),
-                Map.entry("Reset", new Reset()),
-                Map.entry("Set Intake Cube", new SetPosition(Constants.arm.configs.FLOOR_CUBE)),
-                Map.entry("Set High Cube", new SetPosition(Constants.arm.configs.HIGH_CUBE))));
-
-    public static final PathConstraints[] CONSTRAINTS = {new PathConstraints(5, 3)};
+  public static final class three1P {
+    public static final PathConstraints[] CONSTRAINTS = {
+      new PathConstraints(5, 3), new PathConstraints(2, 2), new PathConstraints(5, 3)
+    };
   }
 }

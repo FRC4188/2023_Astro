@@ -14,15 +14,21 @@ import frc.robot.commands.arm.wrist.SetWristAngle;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class SetFloorCube extends SequentialCommandGroup {
+public class SetFloor extends SequentialCommandGroup {
   /** Creates a new SetFloorCube. */
-  public SetFloorCube() {
+  public SetFloor(double config[]) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
+    double shoulderAngle = config[0];
+    double telescopeLength = config[1];
+    double wristAngle = config[2];
+
     addCommands(
         new ParallelCommandGroup(
             new SequentialCommandGroup(
-                new ZeroTelescope(), new SetTelescopePosition(0.5), new SetShoulderAngle(98)),
-            new SetWristAngle(126)));
+                new ZeroTelescope(),
+                new SetTelescopePosition(telescopeLength),
+                new SetShoulderAngle(shoulderAngle)),
+            new SetWristAngle(wristAngle)));
   }
 }

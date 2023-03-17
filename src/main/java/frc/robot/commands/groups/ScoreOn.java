@@ -4,17 +4,24 @@
 
 package frc.robot.commands.groups;
 
-
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.arm.SetPosition;
+import frc.robot.commands.claw.Outtake;
+import frc.robot.subsystems.claw.Claw;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class ScoreOn extends SequentialCommandGroup {
+public class ScoreOn extends ParallelCommandGroup {
 
   /** Creates a new ScoreOn. */
-  public ScoreOn(double[] cone, double[] cube) {
-    addCommands(false ? new SetPosition(cube) : new SetPosition(cone));
+  public ScoreOn(double[] cube, double[] cone) {
+    addCommands(
+        new ConditionalCommand(
+            new SetPosition(cube), new SetPosition(cone), Claw.getInstance()::getIsCube),
+        new SequentialCommandGroup(new WaitCommand(1.3), new Outtake()));
   }
 }

@@ -4,9 +4,10 @@
 
 package frc.robot.commands.groups;
 
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.commands.arm.SetPosition;
-import java.util.function.BooleanSupplier;
+import frc.robot.subsystems.claw.Claw;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -14,10 +15,12 @@ import java.util.function.BooleanSupplier;
 public class IntakeFrom extends ParallelCommandGroup {
 
   /** Creates a new Intake. */
-  public IntakeFrom(BooleanSupplier isCube, double[] cone, double[] cube) {
+  public IntakeFrom(double[] cube, double[] cone) {
 
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(isCube.getAsBoolean() ? new SetPosition(cube) : new SetPosition(cone));
+    addCommands(
+        new ConditionalCommand(
+            new SetPosition(cube), new SetPosition(cone), Claw.getInstance()::getIsCube));
   }
 }
