@@ -6,6 +6,7 @@ package frc.robot.commands.arm;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Constants;
 import frc.robot.commands.arm.shoulder.SetShoulderAngle;
 import frc.robot.commands.arm.telescope.SetTelescopePosition;
 import frc.robot.commands.arm.telescope.ZeroTelescope;
@@ -19,6 +20,7 @@ import frc.robot.subsystems.arm.Telescope;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class SetPosition extends SequentialCommandGroup {
   private Arm arm = Arm.getInstance();
+
   /** Creates a new SetPosition. */
   public SetPosition(double shoulderAngle, double telescopeLength, double wristAngle) {
     // Add your commands in the addCommands() call, e.g.
@@ -42,6 +44,23 @@ public class SetPosition extends SequentialCommandGroup {
             new SetWristAngle(wAngle)));
   }
 
+  //   public SetPosition(double[] config) {
+  //     double shoulderAngle = config[0];
+  //     double telescopeLength = config[1];
+  //     double wristAngle = config[2];
+
+  //     addCommands(
+  //         new ParallelCommandGroup(
+  //             new SequentialCommandGroup(
+  //                 new ZeroTelescope(),
+  //                 new SetShoulderAngle(shoulderAngle)
+  //                     .until(() -> shoulderAngle - Shoulder.getInstance().getAngle() < 1),
+  //                 new ParallelCommandGroup(
+  //                     new SetShoulderAngle(shoulderAngle),
+  //                     new SetTelescopePosition(telescopeLength))),
+  //             new SetWristAngle(wristAngle)));
+  //   }
+
   public SetPosition(double[] config) {
     double shoulderAngle = config[0];
     double telescopeLength = config[1];
@@ -52,7 +71,7 @@ public class SetPosition extends SequentialCommandGroup {
             new SequentialCommandGroup(
                 new ZeroTelescope(),
                 new SetShoulderAngle(shoulderAngle)
-                    .until(() -> shoulderAngle - Shoulder.getInstance().getAngle() < 1),
+                    .until(() -> Math.abs(shoulderAngle - Shoulder.getInstance().getAngle()) < Constants.arm.shoulder.ALLOWED_ERROR),
                 new ParallelCommandGroup(
                     new SetShoulderAngle(shoulderAngle),
                     new SetTelescopePosition(telescopeLength))),

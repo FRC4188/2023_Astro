@@ -19,10 +19,6 @@ public class Intake extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-        (!claw.getTriggered())
-            ? new RunCommand(() -> claw.intake(), claw)
-            : new InstantCommand(() -> claw.disable(), claw),
-        new RunCommand(() -> claw.intake(), claw).withTimeout((claw.getIsCube() ? 0.0 : 0.1)),
-        new InstantCommand(() -> claw.disable(), claw));
+      new RunCommand(() -> claw.intake(), claw));
   }
 }

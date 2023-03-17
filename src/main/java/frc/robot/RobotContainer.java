@@ -1,17 +1,20 @@
 package frc.robot;
 
+import java.util.function.BooleanSupplier;
+
 import csplib.inputs.CSP_Controller;
 import csplib.inputs.CSP_Controller.Scale;
 import csplib.utils.AutoBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.AutoConfigs;
+import frc.robot.commands.arm.SetFloor;
 import frc.robot.commands.arm.SetPosition;
-import frc.robot.commands.groups.IntakeFrom;
 import frc.robot.commands.groups.Reset;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.arm.Shoulder;
@@ -65,8 +68,9 @@ public class RobotContainer {
             drivetrain));
 
     // shoulder.setDefaultCommand(
-    //     new RunCommand(() -> shoulder.setAngle(shoulder.getAngle() +
-    // (copilot.getRightY(Scale.LINEAR) * 15)), shoulder));
+    //     new RunCommand(
+    //         () -> shoulder.setAngle(shoulder.getAngle() + (copilot.getRightY(Scale.LINEAR) * 15)),
+    //         shoulder));
     // telescope.setDefaultCommand(
     //   new RunCommand(() -> telescope.setPosition(telescope.getPosition() +
     // (copilot.getRightT(Scale.LINEAR) - copilot.getLeftT(Scale.LINEAR))), telescope)
@@ -78,6 +82,7 @@ public class RobotContainer {
 
   /** Use this method to define your button->command mappings. */
   private void configureButtonBindings() {
+
     pilot
         .getAButton()
         .onTrue(
@@ -92,72 +97,108 @@ public class RobotContainer {
         .whileTrue(new RunCommand(() -> claw.intake(), claw))
         .onFalse(new InstantCommand(() -> claw.disable(), claw));
 
-    copilot
-        .getAButton()
-        .onTrue(new IntakeFrom(Constants.arm.configs.FLOOR_CONE, Constants.arm.configs.FLOOR_CUBE));
-    copilot
-        .getXButton()
-        .onTrue(new IntakeFrom(Constants.arm.configs.SS_CONE, Constants.arm.configs.SS_CUBE));
-    copilot
-        .getYButton()
-        .onTrue(new IntakeFrom(Constants.arm.configs.DS_CONE, Constants.arm.configs.DS_CUBE));
-    copilot
-        .getBButton()
-        .onTrue(
-            new IntakeFrom(Constants.arm.configs.TIPPED_CONE, Constants.arm.configs.FLOOR_CUBE));
+    pilot
+        .getUpButton()
+        .whileTrue(new RunCommand(() -> telescope.set(0.7), telescope))
+        .onFalse(new InstantCommand(() -> telescope.disable(), telescope));
 
-    copilot.getUpButton().onTrue(new SetPosition(Constants.arm.configs.HIGH));
-    copilot.getRightButton().onTrue(new SetPosition(Constants.arm.configs.MID));
-    copilot.getDownButton().onTrue(new SetPosition(Constants.arm.configs.LOW));
+    copilot.getAButton()
+        .onTrue(new ConditionalCommand(
+            new SetFloor(Constants.arm.configs.FLOOR_CUBE), 
+            new SetPosition(Constants.arm.configs.FLOOR_CONE), 
+            claw::getIsCube));
+
+    copilot.getXButton()
+        .onTrue(new ConditionalCommand(
+            new SetPosition(Constants.arm.configs.SS_CUBE), 
+            new SetPosition(Constants.arm.configs.SS_CUBE), 
+            claw::getIsCube));
+
+    copilot.getYButton()
+        .onTrue(new ConditionalCommand(
+            new SetPosition(Constants.arm.configs.DS_CUBE), 
+            new SetPosition(Constants.arm.configs.DS_CONE), 
+            claw::getIsCube));
+
+    copilot.getBButton()
+        .onTrue(new ConditionalCommand(
+            new SetFloor(Constants.arm.configs.FLOOR_CUBE), 
+            new SetFloor(Constants.arm.configs.TIPPED_CONE), 
+            claw::getIsCube));
+
+    copilot.getUpButton()
+        .onTrue(new ConditionalCommand(
+            new SetPosition(Constants.arm.configs.HIGH_CUBE), 
+            new SetPosition(Constants.arm.configs.HIGH_CONE), 
+            claw::getIsCube));
+
+    copilot.getRightButton()
+        .onTrue(new ConditionalCommand(
+            new SetPosition(Constants.arm.configs.MID_CUBE), 
+            new SetPosition(Constants.arm.configs.MID_CONE), 
+            claw::getIsCube));
+
+    copilot.getLeftButton()
+        .onTrue(new ConditionalCommand(
+            new SetPosition(Constants.arm.configs.MID_CUBE), 
+            new SetPosition(Constants.arm.configs.MID_CONE), 
+            claw::getIsCube));
+
+    copilot.getDownButton()
+        .onTrue(new ConditionalCommand(
+            new SetPosition(Constants.arm.configs.FLOOR_CUBE), 
+            new SetPosition(Constants.arm.configs.FLOOR_CONE), 
+            claw::getIsCube));
 
     copilot
         .getLeftBumperButton()
-        .debounce(0.3)
+        .debounce(0.1)
         .onTrue(new InstantCommand(() -> claw.setIsCube(false)));
     copilot
         .getRightBumperButton()
-        .debounce(0.3)
+        .debounce(0.1)
         .onTrue(new InstantCommand(() -> claw.setIsCube(true)));
 
     copilot.getBackButton().onTrue(new Reset());
+    copilot.getStartButton().onTrue(new Reset());
   }
 
   private void smartdashboardButtons() {
-    SmartDashboard.putData(
-        "Set Drive Rot PID",
-        new InstantCommand(
-            () ->
-                drivetrain.setRotPID(
-                    SmartDashboard.getNumber("Rot P", 0),
-                    SmartDashboard.getNumber("Rot I", 0),
-                    SmartDashboard.getNumber("Rot D", 0))));
+    // SmartDashboard.putData(
+    //     "Set Drive Rot PID",
+    //     new InstantCommand(
+    //         () ->
+    //             drivetrain.setRotPID(
+    //                 SmartDashboard.getNumber("Rot P", 0),
+    //                 SmartDashboard.getNumber("Rot I", 0),
+    //                 SmartDashboard.getNumber("Rot D", 0))));
 
-    SmartDashboard.putData(
-        "Set Arm Positions",
-        new SetPosition(
-            new double[] {
-                SmartDashboard.getNumber("Set Shoulder Angle", 0),
-                SmartDashboard.getNumber("Set Telescope Position", 0.1875),
-                SmartDashboard.getNumber("Set Wrist Angle", 110)
-            }
-        )
-    );
+    // SmartDashboard.putData(
+    //     "Set Telescope PID",
+    //     new InstantCommand(
+    //         () ->
+    //             telescope.setPID(
+    //                 SmartDashboard.getNumber("Telescope P", 0),
+    //                 SmartDashboard.getNumber("Telescope I", 0),
+    //                 SmartDashboard.getNumber("Telescope D", 0))));
 
-    SmartDashboard.putData(
-        "Set Drive Rot",
-        new RunCommand(
-            () -> drivetrain.setRotation(SmartDashboard.getNumber("Drive Rot", 0)), drivetrain));
+    // SmartDashboard.putData(
+    //     "Set Drive Rot",
+    //     new RunCommand(
+    //         () -> drivetrain.setRotation(SmartDashboard.getNumber("Drive Rot", 0)), drivetrain));
 
-    SmartDashboard.putData(
-        "Set Zero", new InstantCommand(() -> drivetrain.zeroPower(), drivetrain));
+    // SmartDashboard.putData(
+    //     "Set Zero", new InstantCommand(() -> drivetrain.zeroPower(), drivetrain));
   }
 
   private void addChooser() {
     autoChooser.setDefaultOption("Do nothing", new SequentialCommandGroup());
     autoChooser.addOption(
-        "Test",
-        AutoBuilder.buildAuto("Test Auto Path", AutoConfigs.EVENTS, AutoConfigs.Test.CONSTRAINTS));
-
+        "3-2P",
+        AutoBuilder.buildAuto("3-2P", AutoConfigs.EVENTS, AutoConfigs.three2P.CONSTRAINTS));
+    autoChooser.addOption(
+        "3-1P",
+        AutoBuilder.buildAuto("3-1P", AutoConfigs.EVENTS, AutoConfigs.three1P.CONSTRAINTS));
     SmartDashboard.putData("Auto Chooser", autoChooser);
   }
 

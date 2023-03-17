@@ -5,6 +5,7 @@
 package frc.robot.commands.arm.telescope;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.subsystems.arm.Telescope;
 
 public class SetTelescopePosition extends CommandBase {
@@ -37,6 +38,6 @@ public class SetTelescopePosition extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Math.abs(position - telescope.getPosition()) < 0.1;
+    return Math.abs(position - telescope.getPosition()) < Constants.arm.telescope.ALLOWED_ERROR;
   }
 }
