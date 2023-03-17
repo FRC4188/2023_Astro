@@ -26,8 +26,8 @@ public class SetFloor extends SequentialCommandGroup {
     addCommands(
         new ParallelCommandGroup(
             new SequentialCommandGroup(
-                new ZeroTelescope(), 
-                new SetTelescopePosition(telescopeLength), 
+                new ZeroTelescope(),
+                new SetTelescopePosition(telescopeLength),
                 new SetShoulderAngle(shoulderAngle)),
             new SetWristAngle(wristAngle)));
   }

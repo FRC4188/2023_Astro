@@ -20,14 +20,8 @@ public class ScoreOn extends ParallelCommandGroup {
   /** Creates a new ScoreOn. */
   public ScoreOn(double[] cube, double[] cone) {
     addCommands(
-      new ConditionalCommand(
-        new SetPosition(cube), 
-        new SetPosition(cone), 
-        Claw.getInstance()::getIsCube),
-      new SequentialCommandGroup(
-        new WaitCommand(1.3),
-        new Outtake()
-      )
-    );
+        new ConditionalCommand(
+            new SetPosition(cube), new SetPosition(cone), Claw.getInstance()::getIsCube),
+        new SequentialCommandGroup(new WaitCommand(1.3), new Outtake()));
   }
 }

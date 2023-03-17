@@ -4,7 +4,6 @@
 
 package frc.robot.commands.claw;
 
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.claw.Claw;
@@ -18,7 +17,6 @@ public class Intake extends SequentialCommandGroup {
   public Intake() {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(
-      new RunCommand(() -> claw.intake(), claw));
+    addCommands(new RunCommand(() -> claw.intake(), claw));
   }
 }

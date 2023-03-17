@@ -1,6 +1,5 @@
 package frc.robot;
 
-import java.util.function.BooleanSupplier;
 
 import csplib.inputs.CSP_Controller;
 import csplib.inputs.CSP_Controller.Scale;
@@ -69,7 +68,8 @@ public class RobotContainer {
 
     // shoulder.setDefaultCommand(
     //     new RunCommand(
-    //         () -> shoulder.setAngle(shoulder.getAngle() + (copilot.getRightY(Scale.LINEAR) * 15)),
+    //         () -> shoulder.setAngle(shoulder.getAngle() + (copilot.getRightY(Scale.LINEAR) *
+    // 15)),
     //         shoulder));
     // telescope.setDefaultCommand(
     //   new RunCommand(() -> telescope.setPosition(telescope.getPosition() +
@@ -102,53 +102,69 @@ public class RobotContainer {
         .whileTrue(new RunCommand(() -> telescope.set(0.7), telescope))
         .onFalse(new InstantCommand(() -> telescope.disable(), telescope));
 
-    copilot.getAButton()
-        .onTrue(new ConditionalCommand(
-            new SetFloor(Constants.arm.configs.FLOOR_CUBE), 
-            new SetPosition(Constants.arm.configs.FLOOR_CONE), 
-            claw::getIsCube));
+    copilot
+        .getAButton()
+        .onTrue(
+            new ConditionalCommand(
+                new SetFloor(Constants.arm.configs.FLOOR_CUBE),
+                new SetPosition(Constants.arm.configs.FLOOR_CONE),
+                claw::getIsCube));
 
-    copilot.getXButton()
-        .onTrue(new ConditionalCommand(
-            new SetPosition(Constants.arm.configs.SS_CUBE), 
-            new SetPosition(Constants.arm.configs.SS_CUBE), 
-            claw::getIsCube));
+    copilot
+        .getXButton()
+        .onTrue(
+            new ConditionalCommand(
+                new SetPosition(Constants.arm.configs.SS_CUBE),
+                new SetPosition(Constants.arm.configs.SS_CUBE),
+                claw::getIsCube));
 
-    copilot.getYButton()
-        .onTrue(new ConditionalCommand(
-            new SetPosition(Constants.arm.configs.DS_CUBE), 
-            new SetPosition(Constants.arm.configs.DS_CONE), 
-            claw::getIsCube));
+    copilot
+        .getYButton()
+        .onTrue(
+            new ConditionalCommand(
+                new SetPosition(Constants.arm.configs.DS_CUBE),
+                new SetPosition(Constants.arm.configs.DS_CONE),
+                claw::getIsCube));
 
-    copilot.getBButton()
-        .onTrue(new ConditionalCommand(
-            new SetFloor(Constants.arm.configs.FLOOR_CUBE), 
-            new SetFloor(Constants.arm.configs.TIPPED_CONE), 
-            claw::getIsCube));
+    copilot
+        .getBButton()
+        .onTrue(
+            new ConditionalCommand(
+                new SetFloor(Constants.arm.configs.FLOOR_CUBE),
+                new SetFloor(Constants.arm.configs.TIPPED_CONE),
+                claw::getIsCube));
 
-    copilot.getUpButton()
-        .onTrue(new ConditionalCommand(
-            new SetPosition(Constants.arm.configs.HIGH_CUBE), 
-            new SetPosition(Constants.arm.configs.HIGH_CONE), 
-            claw::getIsCube));
+    copilot
+        .getUpButton()
+        .onTrue(
+            new ConditionalCommand(
+                new SetPosition(Constants.arm.configs.HIGH_CUBE),
+                new SetPosition(Constants.arm.configs.HIGH_CONE),
+                claw::getIsCube));
 
-    copilot.getRightButton()
-        .onTrue(new ConditionalCommand(
-            new SetPosition(Constants.arm.configs.MID_CUBE), 
-            new SetPosition(Constants.arm.configs.MID_CONE), 
-            claw::getIsCube));
+    copilot
+        .getRightButton()
+        .onTrue(
+            new ConditionalCommand(
+                new SetPosition(Constants.arm.configs.MID_CUBE),
+                new SetPosition(Constants.arm.configs.MID_CONE),
+                claw::getIsCube));
 
-    copilot.getLeftButton()
-        .onTrue(new ConditionalCommand(
-            new SetPosition(Constants.arm.configs.MID_CUBE), 
-            new SetPosition(Constants.arm.configs.MID_CONE), 
-            claw::getIsCube));
+    copilot
+        .getLeftButton()
+        .onTrue(
+            new ConditionalCommand(
+                new SetPosition(Constants.arm.configs.MID_CUBE),
+                new SetPosition(Constants.arm.configs.MID_CONE),
+                claw::getIsCube));
 
-    copilot.getDownButton()
-        .onTrue(new ConditionalCommand(
-            new SetPosition(Constants.arm.configs.FLOOR_CUBE), 
-            new SetPosition(Constants.arm.configs.FLOOR_CONE), 
-            claw::getIsCube));
+    copilot
+        .getDownButton()
+        .onTrue(
+            new ConditionalCommand(
+                new SetPosition(Constants.arm.configs.FLOOR_CUBE),
+                new SetPosition(Constants.arm.configs.FLOOR_CONE),
+                claw::getIsCube));
 
     copilot
         .getLeftBumperButton()
@@ -194,11 +210,9 @@ public class RobotContainer {
   private void addChooser() {
     autoChooser.setDefaultOption("Do nothing", new SequentialCommandGroup());
     autoChooser.addOption(
-        "3-2P",
-        AutoBuilder.buildAuto("3-2P", AutoConfigs.EVENTS, AutoConfigs.three2P.CONSTRAINTS));
+        "3-2P", AutoBuilder.buildAuto("3-2P", AutoConfigs.EVENTS, AutoConfigs.three2P.CONSTRAINTS));
     autoChooser.addOption(
-        "3-1P",
-        AutoBuilder.buildAuto("3-1P", AutoConfigs.EVENTS, AutoConfigs.three1P.CONSTRAINTS));
+        "3-1P", AutoBuilder.buildAuto("3-1P", AutoConfigs.EVENTS, AutoConfigs.three1P.CONSTRAINTS));
     SmartDashboard.putData("Auto Chooser", autoChooser);
   }
 
