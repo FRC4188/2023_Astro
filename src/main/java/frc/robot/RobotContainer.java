@@ -1,6 +1,5 @@
 package frc.robot;
 
-
 import csplib.inputs.CSP_Controller;
 import csplib.inputs.CSP_Controller.Scale;
 import csplib.utils.AutoBuilder;
