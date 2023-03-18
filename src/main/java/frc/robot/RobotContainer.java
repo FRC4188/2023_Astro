@@ -96,17 +96,21 @@ public class RobotContainer {
         .whileTrue(new RunCommand(() -> claw.intake(), claw))
         .onFalse(new InstantCommand(() -> claw.disable(), claw));
 
-    copilot.getAButton()
-        .onTrue(new ConditionalCommand(
-            new SetFloor(Constants.arm.configs.FLOOR_CUBE), 
-            new SetPosition(Constants.arm.configs.FLOOR_CONE), 
-            claw::getIsCube));
+    copilot
+        .getAButton()
+        .onTrue(
+            new ConditionalCommand(
+                new SetFloor(Constants.arm.configs.FLOOR_CUBE),
+                new SetPosition(Constants.arm.configs.FLOOR_CONE),
+                claw::getIsCube));
 
-    copilot.getXButton()
-        .onTrue(new ConditionalCommand(
-            new SetPosition(Constants.arm.configs.SS_CUBE), 
-            new SetPosition(Constants.arm.configs.SS_CONE), 
-            claw::getIsCube));
+    copilot
+        .getXButton()
+        .onTrue(
+            new ConditionalCommand(
+                new SetPosition(Constants.arm.configs.SS_CUBE),
+                new SetPosition(Constants.arm.configs.SS_CONE),
+                claw::getIsCube));
 
     copilot
         .getYButton()
@@ -202,11 +206,11 @@ public class RobotContainer {
     autoChooser.addOption(
         "3-2P", AutoBuilder.buildAuto("3-2P", AutoConfigs.EVENTS, AutoConfigs.three2P.CONSTRAINTS));
     autoChooser.addOption(
-        "3-1P",
-        AutoBuilder.buildAuto("3-1P", AutoConfigs.EVENTS, AutoConfigs.three1P.CONSTRAINTS));
+        "3-1P", AutoBuilder.buildAuto("3-1P", AutoConfigs.EVENTS, AutoConfigs.three1P.CONSTRAINTS));
     autoChooser.addOption(
-        "The Perfect Auto", 
-        AutoBuilder.buildAuto("Perfect Auto", AutoConfigs.EVENTS, AutoConfigs.PerfectAuto.CONSTRAINTS));
+        "The Perfect Auto",
+        AutoBuilder.buildAuto(
+            "Perfect Auto", AutoConfigs.EVENTS, AutoConfigs.PerfectAuto.CONSTRAINTS));
     SmartDashboard.putData("Auto Chooser", autoChooser);
   }
 
