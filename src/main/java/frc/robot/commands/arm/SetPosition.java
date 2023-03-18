@@ -71,7 +71,10 @@ public class SetPosition extends SequentialCommandGroup {
             new SequentialCommandGroup(
                 new ZeroTelescope(),
                 new SetShoulderAngle(shoulderAngle)
-                    .until(() -> Math.abs(shoulderAngle - Shoulder.getInstance().getAngle()) < Constants.arm.shoulder.ALLOWED_ERROR),
+                    .until(
+                        () ->
+                            Math.abs(shoulderAngle - Shoulder.getInstance().getAngle())
+                                < Constants.arm.shoulder.ALLOWED_ERROR),
                 new ParallelCommandGroup(
                     new SetShoulderAngle(shoulderAngle),
                     new SetTelescopePosition(telescopeLength))),
