@@ -60,7 +60,6 @@ public class Telescope extends SubsystemBase {
     motor.configReverseSoftLimitThreshold(Constants.arm.telescope.LOWER_LIMIT);
     motor.configForwardSoftLimitEnable(true);
     motor.configReverseSoftLimitEnable(true);
-    motor.setRampRate(0.1);
 
     pid.reset(getPosition());
     pid.setTolerance(Constants.arm.telescope.ALLOWED_ERROR);
@@ -88,8 +87,10 @@ public class Telescope extends SubsystemBase {
   }
 
   public void setPosition(double position) {
-    motor.set(
-        pid.calculate(getPosition(), position) + ff.calculate(pid.getSetpoint().position) / 12.0);
+    double motorSet =
+        pid.calculate(getPosition(), position) + ff.calculate(pid.getSetpoint().position) / 12.0;
+    System.out.println(motorSet);
+    motor.set(motorSet);
   }
 
   public void setPID(double kP, double kI, double kD) {

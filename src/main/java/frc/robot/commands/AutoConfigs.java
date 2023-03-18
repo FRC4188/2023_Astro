@@ -43,4 +43,8 @@ public class AutoConfigs {
       new PathConstraints(5, 3), new PathConstraints(2, 2), new PathConstraints(5, 3)
     };
   }
+
+  public static final class PerfectAuto {
+    public static final PathConstraints[] CONSTRAINTS = {new PathConstraints(3, 1)};
+  }
 }
