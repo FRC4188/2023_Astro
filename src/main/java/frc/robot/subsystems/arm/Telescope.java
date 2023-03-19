@@ -49,6 +49,7 @@ public class Telescope extends SubsystemBase {
 
     if (getLimitSwitch()) {
       motor.setEncoder(Constants.arm.telescope.LOWER_LIMIT);
+      pid.reset(0.1875);
     }
   }
 

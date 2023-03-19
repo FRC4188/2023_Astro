@@ -5,6 +5,7 @@
 package frc.robot.commands.arm;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
 import frc.robot.commands.arm.shoulder.SetShoulderAngle;
@@ -70,11 +71,13 @@ public class SetPosition extends SequentialCommandGroup {
         new ParallelCommandGroup(
             new SequentialCommandGroup(
                 new ZeroTelescope(),
+                new PrintCommand("YOURE HERE"),
                 new SetShoulderAngle(shoulderAngle)
                     .until(
                         () ->
                             Math.abs(shoulderAngle - Shoulder.getInstance().getAngle())
                                 < Constants.arm.shoulder.ALLOWED_ERROR),
+                new PrintCommand("AFTER SHOULDRE SET"),
                 new ParallelCommandGroup(
                     new SetShoulderAngle(shoulderAngle),
                     new SetTelescopePosition(telescopeLength))),
