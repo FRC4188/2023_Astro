@@ -170,7 +170,7 @@ public final class Constants {
     public static final class rotPID {
       public static final double kP = 1.5;
       public static final double kI = 0.0;
-      public static final double kD = 0.1;
+      public static final double kD = 0.0;
     }
 
     public static final class correctionPID {
@@ -193,10 +193,10 @@ public final class Constants {
   public static final class arm {
     public static final class configs {
       // double[] = {Shoulder Angle, Telescope Length, Wrist Angle}
-      public static final double[] HIGH_CONE = {45.0, 1.5, 70.0};
+      public static final double[] HIGH_CONE = {48.0, 1.15, 70.0};
       public static final double[] HIGH_CUBE = {55.0, 1.25, 120};
 
-      public static final double[] MID_CONE = {45.0, 0.8, 100.0};
+      public static final double[] MID_CONE = {47.0, 0.8, 100.0};
       public static final double[] MID_CUBE = {55.0, 0.5, 120};
 
       public static final double[] LOW_CONE = {45.0, 0.1875, 100.0};
@@ -210,9 +210,9 @@ public final class Constants {
 
       public static final double[] DS_CUBE = {0, 0.1875, 0};
 
-      public static final double[] FLOOR_CONE = {79.0, 0.1875, 57.0};
-      public static final double[] FLOOR_CUBE = {98.0, 0.5, 126};
-      public static final double[] TIPPED_CONE = {116, 0.1875, -5.0};
+      public static final double[] FLOOR_CONE = {85.0, 0.1875, 57.0};
+      public static final double[] FLOOR_CUBE = {104.0, 0.5, 126};
+      public static final double[] TIPPED_CONE = {122, 0.1875, -5.0};
 
       public static final double[] RESET = {0, 0.1875, 110};
     }

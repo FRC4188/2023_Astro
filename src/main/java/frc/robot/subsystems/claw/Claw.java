@@ -6,7 +6,6 @@ import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.Constants.arm.wrist;
 import frc.robot.subsystems.arm.Wrist;
 
 public class Claw extends SubsystemBase {
@@ -49,7 +48,7 @@ public class Claw extends SubsystemBase {
   }
 
   private void setInverted() {
-    if (isCube && wrist.getMotorAngle() < 0) motor.setInverted(true);
+    if (isCube) motor.setInverted(true);
     else motor.setInverted(false);
   }
 

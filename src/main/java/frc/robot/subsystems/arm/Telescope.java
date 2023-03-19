@@ -61,7 +61,7 @@ public class Telescope extends SubsystemBase {
     motor.configForwardSoftLimitEnable(true);
     motor.configReverseSoftLimitEnable(true);
 
-    pid.reset(getPosition());
+    pid.reset(0.1875);
     pid.setTolerance(Constants.arm.telescope.ALLOWED_ERROR);
   }
 
