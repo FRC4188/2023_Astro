@@ -156,7 +156,7 @@ public class RobotContainer {
         .getDownButton()
         .onTrue(
             new ConditionalCommand(
-                new SetPosition(Constants.arm.configs.FLOOR_CUBE),
+                new SetFloor(Constants.arm.configs.FLOOR_CUBE),
                 new SetPosition(Constants.arm.configs.FLOOR_CONE),
                 claw::getIsCube));
 
@@ -211,6 +211,9 @@ public class RobotContainer {
         "The Perfect Auto",
         AutoBuilder.buildAuto(
             "Perfect Auto", AutoConfigs.EVENTS, AutoConfigs.PerfectAuto.CONSTRAINTS));
+    autoChooser.addOption(
+        "3-1", AutoBuilder.buildAuto("3-1", AutoConfigs.EVENTS, AutoConfigs.three1P.CONSTRAINTS));
+    autoChooser.addOption(null, getAutonomousCommand());
     SmartDashboard.putData("Auto Chooser", autoChooser);
   }
 

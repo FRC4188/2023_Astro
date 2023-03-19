@@ -49,7 +49,7 @@ public class Claw extends SubsystemBase {
   }
 
   private void setInverted() {
-    if (isCube && wrist.getMotorAngle() < 0) motor.setInverted(true);
+    if (isCube) motor.setInverted(true);
     else motor.setInverted(false);
   }
 

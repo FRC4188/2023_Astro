@@ -6,6 +6,8 @@ package frc.robot.commands;
 
 import com.pathplanner.lib.PathConstraints;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
@@ -24,15 +26,20 @@ public class AutoConfigs {
   public static final HashMap<String, Command> EVENTS =
       new HashMap<>(
           Map.ofEntries(
+              Map.entry("Set High Cone", new SetPosition(Constants.arm.configs.HIGH_CONE)),
               Map.entry("Set Mid Cone", new SetPosition(Constants.arm.configs.MID_CONE)),
               Map.entry("Set Low Cone", new SetPosition(Constants.arm.configs.LOW_CONE)),
+              Map.entry("Set Tipped Cone", new SetPosition(Constants.arm.configs.FLOOR_CONE)),
               Map.entry(
                   "Outtake",
                   new SequentialCommandGroup(new WaitCommand(1.0), new Outtake().withTimeout(0.5))),
               Map.entry("Reset", new Reset()),
               Map.entry("Set Cube", new SetPosition(Constants.arm.configs.FLOOR_CUBE)),
               Map.entry("Set Up Cone", new SetPosition(Constants.arm.configs.FLOOR_CONE)),
-              Map.entry("Intake", new Intake().withTimeout(0.5))));
+              Map.entry("Intake", new Intake().withTimeout(0.5)),
+              Map.entry("Spit High", new ParallelDeadlineGroup(new SequentialCommandGroup(new WaitCommand(2.0), new Outtake().withTimeout(0.5)), new SetPosition(Constants.arm.configs.HIGH_CONE)))
+              ));
+
 
   public static final class three2P {
     public static final PathConstraints[] CONSTRAINTS = {new PathConstraints(5, 3)};

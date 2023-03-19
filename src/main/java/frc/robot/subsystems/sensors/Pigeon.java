@@ -13,7 +13,7 @@ public class Pigeon extends Pigeon2 {
   }
 
   public void reset() {
-    super.setYaw(0.0);
+    super.setYaw(180.0);
   }
 
   public Rotation2d getRotation2d() {
