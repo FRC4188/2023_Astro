@@ -30,7 +30,6 @@ public class Sensors extends SubsystemBase {
     SmartDashboard.putString("Estimated Pose", getPose3d().toString());
   }
 
-
   public Pose3d getPose3d() {
     return limelights.getPose3d();
   }
