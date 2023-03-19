@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.AutoConfigs;
 import frc.robot.commands.arm.SetFloor;
 import frc.robot.commands.arm.SetPosition;
@@ -156,8 +155,8 @@ public class RobotContainer {
         .getDownButton()
         .onTrue(
             new ConditionalCommand(
-                new SetFloor(Constants.arm.configs.FLOOR_CUBE),
-                new SetPosition(Constants.arm.configs.FLOOR_CONE),
+                new SetPosition(Constants.arm.configs.LOW_CUBE),
+                new SetPosition(Constants.arm.configs.LOW_CONE),
                 claw::getIsCube));
 
     copilot
@@ -202,18 +201,22 @@ public class RobotContainer {
   }
 
   private void addChooser() {
-    autoChooser.setDefaultOption("Do nothing", new SequentialCommandGroup());
+    autoChooser.setDefaultOption(
+        "3-1", AutoBuilder.buildAuto("3-1", AutoConfigs.EVENTS, AutoConfigs.three1P.CONSTRAINTS));
     autoChooser.addOption(
         "3-2P", AutoBuilder.buildAuto("3-2P", AutoConfigs.EVENTS, AutoConfigs.three2P.CONSTRAINTS));
     autoChooser.addOption(
         "3-1P", AutoBuilder.buildAuto("3-1P", AutoConfigs.EVENTS, AutoConfigs.three1P.CONSTRAINTS));
+    autoChooser.addOption(
+        "High Perfect Auto",
+        AutoBuilder.buildAuto(
+            "High Perfect Auto", AutoConfigs.EVENTS, AutoConfigs.PerfectAuto.CONSTRAINTS));
     autoChooser.addOption(
         "The Perfect Auto",
         AutoBuilder.buildAuto(
             "Perfect Auto", AutoConfigs.EVENTS, AutoConfigs.PerfectAuto.CONSTRAINTS));
     autoChooser.addOption(
         "3-1", AutoBuilder.buildAuto("3-1", AutoConfigs.EVENTS, AutoConfigs.three1P.CONSTRAINTS));
-    autoChooser.addOption(null, getAutonomousCommand());
     SmartDashboard.putData("Auto Chooser", autoChooser);
   }
 

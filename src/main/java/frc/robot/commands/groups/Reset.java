@@ -26,7 +26,6 @@ public class Reset extends ParallelCommandGroup {
   private double telescopeLength = Constants.arm.configs.RESET[1];
   private double wristAngle = Constants.arm.configs.RESET[2];
 
-  private double startAngle;
   /** Creates a new Reset. */
   public Reset() {
     // Add your commands in the addCommands() call, e.g.
