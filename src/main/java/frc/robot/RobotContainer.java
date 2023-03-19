@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.AutoConfigs;
 import frc.robot.commands.arm.SetFloor;
 import frc.robot.commands.arm.SetPosition;
@@ -202,12 +201,16 @@ public class RobotContainer {
   }
 
   private void addChooser() {
-    autoChooser.setDefaultOption("3-1", AutoBuilder.buildAuto("3-1", AutoConfigs.EVENTS, AutoConfigs.three1P.CONSTRAINTS));
+    autoChooser.setDefaultOption(
+        "3-1", AutoBuilder.buildAuto("3-1", AutoConfigs.EVENTS, AutoConfigs.three1P.CONSTRAINTS));
     autoChooser.addOption(
         "3-2P", AutoBuilder.buildAuto("3-2P", AutoConfigs.EVENTS, AutoConfigs.three2P.CONSTRAINTS));
     autoChooser.addOption(
         "3-1P", AutoBuilder.buildAuto("3-1P", AutoConfigs.EVENTS, AutoConfigs.three1P.CONSTRAINTS));
-    autoChooser.addOption("High Perfect Auto", AutoBuilder.buildAuto("High Perfect Auto", AutoConfigs.EVENTS, AutoConfigs.PerfectAuto.CONSTRAINTS));
+    autoChooser.addOption(
+        "High Perfect Auto",
+        AutoBuilder.buildAuto(
+            "High Perfect Auto", AutoConfigs.EVENTS, AutoConfigs.PerfectAuto.CONSTRAINTS));
     autoChooser.addOption(
         "The Perfect Auto",
         AutoBuilder.buildAuto(

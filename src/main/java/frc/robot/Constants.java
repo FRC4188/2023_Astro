@@ -235,7 +235,7 @@ public final class Constants {
 
       // raymond here, reducing these for shoulder PID testing
       public static final double MAX_VEL = 1000.0;
-    
+
       public static final double MAX_ACCEL = 220.0;
       public static final double ALLOWED_ERROR = 1;
 
