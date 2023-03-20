@@ -33,9 +33,7 @@ public class Reset extends ParallelCommandGroup {
     addCommands(
         new ParallelCommandGroup(
             new SequentialCommandGroup(
-                new ParallelDeadlineGroup(
-                    new ZeroTelescope(), 
-                    new HoldShoulder()),
+                new ParallelDeadlineGroup(new ZeroTelescope(), new HoldShoulder()),
                 new SetShoulderAngle(shoulderAngle)
                     .until(() -> shoulderAngle - Shoulder.getInstance().getAngle() < 1),
                 new ParallelCommandGroup(

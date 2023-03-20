@@ -132,7 +132,7 @@ public final class Constants {
         new Translation2d(-(Constants.robot.A_WIDTH / 2), -(Constants.robot.A_LENGTH / 2));
 
     public static final double FL_ZERO = -140.80078125;
-    public static final double BL_ZERO = -126.298828125;
+    public static final double BL_ZERO = -129.638671875;
     public static final double BR_ZERO = 34.365234375;
     public static final double FR_ZERO = -20.56640625;
 
@@ -193,10 +193,10 @@ public final class Constants {
   public static final class arm {
     public static final class configs {
       // double[] = {Shoulder Angle, Telescope Length, Wrist Angle}
-      public static final double[] HIGH_CONE = {51.0, 1.15, 70.0};
+      public static final double[] HIGH_CONE = {49.0, 1.15, 70.0};
       public static final double[] HIGH_CUBE = {55.0, 1.25, 120};
 
-      public static final double[] MID_CONE = {51.0, 0.8, 100.0};
+      public static final double[] MID_CONE = {49.0, 0.8, 100.0};
       public static final double[] MID_CUBE = {55.0, 0.5, 120};
 
       public static final double[] LOW_CONE = {45.0, 0.1875, 100.0};
@@ -206,11 +206,11 @@ public final class Constants {
       public static final double[] SS_CUBE = {0.0, 0.1875, 0.0};
       // Raymond here, this is the preset for untipped cones on double substation
       // public static final double[] DS_CONE = {45.0, 1.2, 100.0};
-      public static final double[] DS_CONE = {14.0, 0.1875, 83.0};
+      public static final double[] DS_CONE = {14.0, 0.1875, 82.0};
 
       public static final double[] DS_CUBE = {0, 0.1875, 0};
 
-      public static final double[] FLOOR_CONE = {85.0, 0.1875, 57.0};
+      public static final double[] FLOOR_CONE = {84.0, 0.1875, 57.0};
       public static final double[] FLOOR_CUBE = {104.0, 0.5, 126};
       public static final double[] TIPPED_CONE = {122, 0.1875, -5.0};
 
@@ -218,7 +218,7 @@ public final class Constants {
     }
 
     public static final class shoulder {
-      public static final double ZERO = 119.70703125;
+      public static final double ZERO = 128;
       public static final double GEAR_RATIO = 132.741; // 132.741 to 1
       public static final double ROTATIONS_PER_DEGREE = GEAR_RATIO / 360;
 
@@ -235,7 +235,7 @@ public final class Constants {
 
       // raymond here, reducing these for shoulder PID testing
       public static final double MAX_VEL = 1000.0;
-    
+
       public static final double MAX_ACCEL = 220.0;
       public static final double ALLOWED_ERROR = 1;
 
