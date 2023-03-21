@@ -178,6 +178,12 @@ public final class Constants {
       public static final double kI = 0.0;
       public static final double kD = -0.006;
     }
+
+    public static final class balancePID {
+      public static final double kP = 0.0;
+      public static final double kI = 0.0;
+      public static final double kD = 0.0;
+    }
   }
 
   public static final class sensors {
@@ -247,8 +253,6 @@ public final class Constants {
     }
 
     public static final class telescope {
-      public static final double ZERO_CURRENT = 0.0;
-
       public static final double TICKS_PER_INCH = 2048; // 57.014 rotations per inch
       public static final double TICKS_PER_METER = 2048 / 0.025;
 
