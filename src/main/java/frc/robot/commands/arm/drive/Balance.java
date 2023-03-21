@@ -14,7 +14,11 @@ public class Balance extends CommandBase {
   private Drivetrain drivetrain = Drivetrain.getInstance();
   private Sensors sensors = Sensors.getInstance();
 
-  private PIDController pid = new PIDController(Constants.drivetrain.balancePID.kP, Constants.drivetrain.balancePID.kI, Constants.drivetrain.balancePID.kD);
+  private PIDController pid =
+      new PIDController(
+          Constants.drivetrain.balancePID.kP,
+          Constants.drivetrain.balancePID.kI,
+          Constants.drivetrain.balancePID.kD);
   /** Creates a new Balance. */
   public Balance() {
     // Use addRequirements() here to declare subsystem dependencies.
