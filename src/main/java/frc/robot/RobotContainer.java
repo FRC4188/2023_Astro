@@ -202,7 +202,9 @@ public class RobotContainer {
 
   private void addChooser() {
     autoChooser.setDefaultOption(
-        "3-1", AutoBuilder.buildAuto("3-1", AutoConfigs.EVENTS, AutoConfigs.three1P.CONSTRAINTS));
+        "High Perfect Auto",
+        AutoBuilder.buildAuto(
+            "High Perfect Auto", AutoConfigs.EVENTS, AutoConfigs.PerfectAuto.CONSTRAINTS));
     autoChooser.addOption(
         "3-2P", AutoBuilder.buildAuto("3-2P", AutoConfigs.EVENTS, AutoConfigs.three2P.CONSTRAINTS));
     autoChooser.addOption(

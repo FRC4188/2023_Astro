@@ -46,6 +46,10 @@ public class Sensors extends SubsystemBase {
     return pigeon.getRotation2d();
   }
 
+  public double getPitch() {
+    return pigeon.getPitch();
+  }
+
   public void resetPigeon() {
     pigeon.reset();
   }

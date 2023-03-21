@@ -104,10 +104,10 @@ public class Drivetrain extends SubsystemBase {
     updateOdometry();
     SmartDashboard.putString("Position", getPose2d().toString());
 
-    // SmartDashboard.putNumber("FL Angle", frontLeft.getModulePosition().angle.getDegrees());
-    // SmartDashboard.putNumber("BL Angle", backLeft.getModulePosition().angle.getDegrees());
-    // SmartDashboard.putNumber("BR Angle", backRight.getModulePosition().angle.getDegrees());
-    // SmartDashboard.putNumber("FR Angle", frontRight.getModulePosition().angle.getDegrees());
+    SmartDashboard.putNumber("FL Angle", frontLeft.getModulePosition().angle.getDegrees());
+    SmartDashboard.putNumber("BL Angle", backLeft.getModulePosition().angle.getDegrees());
+    SmartDashboard.putNumber("BR Angle", backRight.getModulePosition().angle.getDegrees());
+    SmartDashboard.putNumber("FR Angle", frontRight.getModulePosition().angle.getDegrees());
   }
 
   public void putDashboard() {
