@@ -95,7 +95,7 @@ public final class Constants {
   }
 
   public static class drivetrain {
-    public static final double DRIVE_GEARING = 6.55; // 6.55 : 1
+    public static final double DRIVE_GEARING = 5.50; // 5.50 : 1
     public static final double WHEEL_DIAMETER = Units.inchesToMeters(4);
     public static final double DRIVE_TICKS_PER_ROTATION =
         robot.FALCON_ENCODER_TICKS * DRIVE_GEARING;
@@ -131,10 +131,10 @@ public final class Constants {
     public static final Translation2d BR_LOCATION =
         new Translation2d(-(Constants.robot.A_WIDTH / 2), -(Constants.robot.A_LENGTH / 2));
 
-    public static final double FL_ZERO = -140.80078125;
-    public static final double BL_ZERO = -129.638671875;
-    public static final double BR_ZERO = 34.365234375;
-    public static final double FR_ZERO = -20.56640625;
+    public static final double FL_ZERO = 0;
+    public static final double BL_ZERO = 0;
+    public static final double BR_ZERO = 0;
+    public static final double FR_ZERO = 0;
 
     public static final class angle {
       public static final double FL_kP = -0.008;
@@ -234,15 +234,13 @@ public final class Constants {
       public static final double UPPER_LIMIT = 117.0;
       public static final double LOWER_LIMIT = -117.0;
 
-      public static final double kP = 0.04;
+      public static final double kP = 0.03;
       public static final double kI = 0.0;
-      public static final double kD = 0.0;
+      public static final double kD = 0.00;
       public static final double kF = 0.0;
 
-      // raymond here, reducing these for shoulder PID testing
       public static final double MAX_VEL = 1000.0;
-
-      public static final double MAX_ACCEL = 220.0;
+      public static final double MAX_ACCEL = 720.0;
       public static final double ALLOWED_ERROR = 1;
 
       public static final Constraints CONSTRAINTS = new Constraints(MAX_VEL, MAX_ACCEL);
@@ -293,8 +291,8 @@ public final class Constants {
       public static final double kG = 0;
       public static final double kV = 0;
 
-      public static final double MAX_VEL = 170.0;
-      public static final double MAX_ACCEL = 120.0;
+      public static final double MAX_VEL = 1000.0;
+      public static final double MAX_ACCEL = 300.0;
       public static final Constraints CONSTRAINTS = new Constraints(MAX_VEL, MAX_ACCEL);
       public static final double ALLOWED_ERROR = 1;
     }

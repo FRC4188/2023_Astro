@@ -37,6 +37,8 @@ public class Shoulder extends SubsystemBase {
       new ArmFeedforward(
           Constants.arm.shoulder.kS, Constants.arm.shoulder.kG, Constants.arm.shoulder.kV);
 
+  private boolean isFlipped;
+
   /** Creates a new Shoulder. */
   public Shoulder() {
     init();
@@ -49,6 +51,7 @@ public class Shoulder extends SubsystemBase {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Shoulder Encoder Angle", getAngle());
     SmartDashboard.putNumber("Shoulder Setpoint", pid.getSetpoint().position);
+    SmartDashboard.putBoolean("Is Flipped", isFlipped);
   }
 
   public void init() {
@@ -80,6 +83,10 @@ public class Shoulder extends SubsystemBase {
     leader.disable();
   }
 
+  public void setFlip(boolean isFlipped) {
+    this.isFlipped = isFlipped;
+  }
+
   public void set(double percent) {
     if (getAngle() > Constants.arm.shoulder.UPPER_LIMIT && percent > 0.0) percent = 0.0;
     else if (getAngle() < Constants.arm.shoulder.LOWER_LIMIT && percent < 0.0) percent = 0.0;
@@ -100,6 +107,10 @@ public class Shoulder extends SubsystemBase {
 
   public double getAngle() {
     return encoder.getAbsolutePosition();
+  }
+
+  public boolean getIsFlipped() {
+    return isFlipped;
   }
 
   public double getMotorAngle() {

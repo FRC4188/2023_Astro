@@ -10,6 +10,8 @@ import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.commands.AutoConfigs;
+import frc.robot.commands.arm.SetCube;
+import frc.robot.commands.arm.SetFlip;
 import frc.robot.commands.arm.SetFloor;
 import frc.robot.commands.arm.SetPosition;
 import frc.robot.commands.groups.Reset;
@@ -94,79 +96,48 @@ public class RobotContainer {
         .getRightTButton()
         .whileTrue(new RunCommand(() -> claw.intake(), claw))
         .onFalse(new InstantCommand(() -> claw.disable(), claw));
-
+    
     copilot
         .getAButton()
-        .onTrue(
-            new ConditionalCommand(
-                new SetFloor(Constants.arm.configs.FLOOR_CUBE),
-                new SetPosition(Constants.arm.configs.FLOOR_CONE),
-                claw::getIsCube));
+        .onTrue(new SetPosition(Constants.arm.configs.FLOOR_CUBE, Constants.arm.configs.FLOOR_CONE));
 
     copilot
         .getXButton()
-        .onTrue(
-            new ConditionalCommand(
-                new SetPosition(Constants.arm.configs.SS_CUBE),
-                new SetPosition(Constants.arm.configs.SS_CONE),
-                claw::getIsCube));
+        .onTrue(new SetPosition(Constants.arm.configs.SS_CUBE, Constants.arm.configs.SS_CONE));
 
     copilot
         .getYButton()
-        .onTrue(
-            new ConditionalCommand(
-                new SetPosition(Constants.arm.configs.DS_CUBE),
-                new SetPosition(Constants.arm.configs.DS_CONE),
-                claw::getIsCube));
-
+        .onTrue(new SetPosition(Constants.arm.configs.DS_CUBE, Constants.arm.configs.DS_CONE));
+    
     copilot
-        .getBButton()
-        .onTrue(
-            new ConditionalCommand(
-                new SetFloor(Constants.arm.configs.FLOOR_CUBE),
-                new SetFloor(Constants.arm.configs.TIPPED_CONE),
-                claw::getIsCube));
+        .getXButton()
+        .onTrue(new SetPosition(Constants.arm.configs.FLOOR_CUBE, Constants.arm.configs.TIPPED_CONE));
 
     copilot
         .getUpButton()
-        .onTrue(
-            new ConditionalCommand(
-                new SetPosition(Constants.arm.configs.HIGH_CUBE),
-                new SetPosition(Constants.arm.configs.HIGH_CONE),
-                claw::getIsCube));
+        .onTrue(new SetPosition(Constants.arm.configs.HIGH_CUBE, Constants.arm.configs.HIGH_CONE));
 
     copilot
         .getRightButton()
-        .onTrue(
-            new ConditionalCommand(
-                new SetPosition(Constants.arm.configs.MID_CUBE),
-                new SetPosition(Constants.arm.configs.MID_CONE),
-                claw::getIsCube));
+        .onTrue(new SetPosition(Constants.arm.configs.MID_CUBE, Constants.arm.configs.MID_CONE));
 
     copilot
         .getLeftButton()
-        .onTrue(
-            new ConditionalCommand(
-                new SetPosition(Constants.arm.configs.MID_CUBE),
-                new SetPosition(Constants.arm.configs.MID_CONE),
-                claw::getIsCube));
+        .onTrue(new SetPosition(Constants.arm.configs.MID_CUBE, Constants.arm.configs.MID_CONE));
 
     copilot
         .getDownButton()
-        .onTrue(
-            new ConditionalCommand(
-                new SetPosition(Constants.arm.configs.LOW_CUBE),
-                new SetPosition(Constants.arm.configs.LOW_CONE),
-                claw::getIsCube));
+        .onTrue(new SetPosition(Constants.arm.configs.LOW_CUBE, Constants.arm.configs.LOW_CONE));
+
+    copilot
+        .getRightBumperButton() 
+        .debounce(0.05)
+        .toggleOnTrue(new SetCube());
 
     copilot
         .getLeftBumperButton()
-        .debounce(0.1)
-        .onTrue(new InstantCommand(() -> claw.setIsCube(false)));
-    copilot
-        .getRightBumperButton()
-        .debounce(0.1)
-        .onTrue(new InstantCommand(() -> claw.setIsCube(true)));
+        .debounce(0.05)
+        .toggleOnTrue(new SetFlip());
 
     copilot.getBackButton().onTrue(new Reset());
     copilot.getStartButton().onTrue(new Reset());

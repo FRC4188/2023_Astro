@@ -4,6 +4,7 @@
 
 package frc.robot.commands.groups;
 
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
@@ -22,6 +23,7 @@ import frc.robot.subsystems.claw.Claw;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class Reset extends ParallelCommandGroup {
   private Claw claw = Claw.getInstance();
+  private Shoulder shoulder = Shoulder.getInstance();
   private double shoulderAngle = Constants.arm.configs.RESET[0];
   private double telescopeLength = Constants.arm.configs.RESET[1];
   private double wristAngle = Constants.arm.configs.RESET[2];
@@ -35,11 +37,14 @@ public class Reset extends ParallelCommandGroup {
             new SequentialCommandGroup(
                 new ParallelDeadlineGroup(new ZeroTelescope(), new HoldShoulder()),
                 new SetShoulderAngle(shoulderAngle)
-                    .until(() -> shoulderAngle - Shoulder.getInstance().getAngle() < 1),
+                    .until(() -> shoulderAngle - Shoulder.getInstance().getAngle() < Constants.arm.shoulder.ALLOWED_ERROR),
                 new ParallelCommandGroup(
                     new SetShoulderAngle(shoulderAngle),
                     new SetTelescopePosition(telescopeLength))),
-            new SetWristAngle(wristAngle)),
+            new ConditionalCommand(
+                new SetWristAngle(-wristAngle), 
+                new SetWristAngle(wristAngle), 
+                shoulder::getIsFlipped)),
         new InstantCommand(() -> claw.disable(), claw));
   }
 }
