@@ -6,6 +6,7 @@ package frc.robot.subsystems.arm;
 
 import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 import com.ctre.phoenix.sensors.WPI_CANCoder;
+
 import csplib.motors.CSP_SparkMax;
 import csplib.utils.TempManager;
 import edu.wpi.first.math.controller.ArmFeedforward;
@@ -13,7 +14,6 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.Constants.arm.shoulder;
 
 public class Wrist extends SubsystemBase {
   private static Wrist instance;
@@ -60,10 +60,6 @@ public class Wrist extends SubsystemBase {
     motor.setScalar(1 / Constants.arm.wrist.ROTATIONS_PER_DEGREE);
     motor.setBrake(true);
     motor.setEncoder(Constants.arm.wrist.UPPER_LIMIT);
-    // motor.enableSoftLimit(SoftLimitDirection.kForward, true);
-    // motor.enableSoftLimit(SoftLimitDirection.kReverse, true);
-    // motor.setSoftLimit(SoftLimitDirection.kForward, (float) Constants.arm.wrist.UPPER_LIMIT);
-    // motor.setSoftLimit(SoftLimitDirection.kReverse, (float) Constants.arm.wrist.LOWER_LIMIT);
 
     pid.reset(Constants.arm.wrist.UPPER_LIMIT);
     pid.setTolerance(Constants.arm.wrist.ALLOWED_ERROR);
@@ -83,10 +79,9 @@ public class Wrist extends SubsystemBase {
   }
 
   public void setAngle(double angle) {
-    // State setpoint = pid.getSetpoint();
     motor.set(
         pid.calculate(
-            getMotorAngle(), angle)); // + ff.calculate(setpoint.position, setpoint.velocity));
+            getMotorAngle(), angle));
   }
 
   public void setPID(double kP, double kI, double kD) {
@@ -99,6 +94,10 @@ public class Wrist extends SubsystemBase {
 
   public double getSetpoint() {
     return pid.getSetpoint().position;
+  }
+
+  public boolean atGoal() {
+    return pid.atGoal();
   }
 
   public double getMotorAngle() {

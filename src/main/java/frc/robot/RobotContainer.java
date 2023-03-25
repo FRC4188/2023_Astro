@@ -6,7 +6,6 @@ import csplib.utils.AutoBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.commands.AutoConfigs;
@@ -15,10 +14,6 @@ import frc.robot.commands.arm.SetFlip;
 import frc.robot.commands.arm.SetFloor;
 import frc.robot.commands.arm.SetPosition;
 import frc.robot.commands.groups.Reset;
-import frc.robot.subsystems.arm.Arm;
-import frc.robot.subsystems.arm.Shoulder;
-import frc.robot.subsystems.arm.Telescope;
-import frc.robot.subsystems.arm.Wrist;
 import frc.robot.subsystems.claw.Claw;
 import frc.robot.subsystems.drivetrain.Drivetrain;
 import frc.robot.subsystems.sensors.Sensors;
@@ -35,12 +30,7 @@ public class RobotContainer {
   private CSP_Controller copilot = new CSP_Controller(Constants.controller.COPILOT_PORT);
 
   private Drivetrain drivetrain = Drivetrain.getInstance();
-  private Arm arm = Arm.getInstance();
   private Claw claw = Claw.getInstance();
-
-  private Shoulder shoulder = Shoulder.getInstance();
-  private Telescope telescope = Telescope.getInstance();
-  private Wrist wrist = Wrist.getInstance();
 
   private SendableChooser<Command> autoChooser = new SendableChooser<Command>();
 
@@ -61,23 +51,10 @@ public class RobotContainer {
         new RunCommand(
             () ->
                 drivetrain.drive(
-                    pilot.getLeftY(Scale.SQUARED),
-                    pilot.getLeftX(Scale.SQUARED),
+                    pilot.getLeftY(Scale.QUARTIC),
+                    pilot.getLeftX(Scale.QUARTIC),
                     pilot.getRightX(Scale.SQUARED)),
             drivetrain));
-
-    // shoulder.setDefaultCommand(
-    //     new RunCommand(
-    //         () -> shoulder.setAngle(shoulder.getAngle() + (copilot.getRightY(Scale.LINEAR) *
-    // 15)),
-    //         shoulder));
-    // telescope.setDefaultCommand(
-    //   new RunCommand(() -> telescope.setPosition(telescope.getPosition() +
-    // (copilot.getRightT(Scale.LINEAR) - copilot.getLeftT(Scale.LINEAR))), telescope)
-    // );
-    // wrist.setDefaultCommand(
-    //   new HoldWrist(() -> (copilot.getLeftY(Scale.LINEAR) * 10))
-    // );
   }
 
   /** Use this method to define your button->command mappings. */
@@ -99,7 +76,7 @@ public class RobotContainer {
     
     copilot
         .getAButton()
-        .onTrue(new SetPosition(Constants.arm.configs.FLOOR_CUBE, Constants.arm.configs.FLOOR_CONE));
+        .onTrue(new SetFloor(Constants.arm.configs.FLOOR_CUBE, Constants.arm.configs.FLOOR_CONE));
 
     copilot
         .getXButton()
@@ -110,8 +87,8 @@ public class RobotContainer {
         .onTrue(new SetPosition(Constants.arm.configs.DS_CUBE, Constants.arm.configs.DS_CONE));
     
     copilot
-        .getXButton()
-        .onTrue(new SetPosition(Constants.arm.configs.FLOOR_CUBE, Constants.arm.configs.TIPPED_CONE));
+        .getBButton()
+        .onTrue(new SetFloor(Constants.arm.configs.FLOOR_CUBE, Constants.arm.configs.TIPPED_CONE));
 
     copilot
         .getUpButton()
@@ -131,12 +108,12 @@ public class RobotContainer {
 
     copilot
         .getRightBumperButton() 
-        .debounce(0.05)
+        .debounce(0.15)
         .toggleOnTrue(new SetCube());
 
     copilot
         .getLeftBumperButton()
-        .debounce(0.05)
+        .debounce(0.15)
         .toggleOnTrue(new SetFlip());
 
     copilot.getBackButton().onTrue(new Reset());

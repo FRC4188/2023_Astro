@@ -19,8 +19,6 @@ public class Claw extends SubsystemBase {
   private CSP_Talon motor = new CSP_Talon(Constants.ids.CLAW);
   private AnalogInput sensor = new AnalogInput(Constants.ids.ULTRASONIC_SENSOR);
 
-  private Wrist wrist = Wrist.getInstance();
-
   private boolean isCube;
 
   private Claw() {
@@ -35,8 +33,7 @@ public class Claw extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putBoolean("Distance Sensor", getTriggered());
-    SmartDashboard.putBoolean("IsCube", getIsCube());
+    SmartDashboard.putBoolean("isCube", getIsCube());
   }
 
   public void disable() {
@@ -66,14 +63,6 @@ public class Claw extends SubsystemBase {
     setInverted();
 
     motor.set(-1.0);
-  }
-
-  public boolean getTriggered() {
-    return sensor.getValue() > 250;
-  }
-
-  public double getClawLength() {
-    return (isCube) ? Constants.robot.CUBE_DISTANCE : Constants.robot.TOTAL_DISTANCE;
   }
 
   public boolean getIsCube() {

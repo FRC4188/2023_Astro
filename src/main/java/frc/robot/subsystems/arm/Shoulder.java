@@ -6,6 +6,7 @@ package frc.robot.subsystems.arm;
 
 import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 import com.ctre.phoenix.sensors.WPI_CANCoder;
+
 import csplib.motors.CSP_SparkMax;
 import csplib.utils.TempManager;
 import edu.wpi.first.math.controller.ArmFeedforward;
@@ -43,7 +44,6 @@ public class Shoulder extends SubsystemBase {
   public Shoulder() {
     init();
     TempManager.addMotor(leader, follower);
-    SmartDashboard.putNumber("Shoulder Set", 0);
   }
 
   @Override
@@ -51,7 +51,7 @@ public class Shoulder extends SubsystemBase {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Shoulder Encoder Angle", getAngle());
     SmartDashboard.putNumber("Shoulder Setpoint", pid.getSetpoint().position);
-    SmartDashboard.putBoolean("Is Flipped", isFlipped);
+    SmartDashboard.putBoolean("isFlipped", getIsFlipped());
   }
 
   public void init() {
@@ -66,10 +66,6 @@ public class Shoulder extends SubsystemBase {
     leader.setInverted(true);
     leader.setBrake(true);
     leader.setEncoder(encoder.getAbsolutePosition());
-    // leader.enableSoftLimit(SoftLimitDirection.kForward, true);
-    // leader.enableSoftLimit(SoftLimitDirection.kReverse, true);
-    // leader.setSoftLimit(SoftLimitDirection.kForward, (float) Constants.arm.shoulder.UPPER_LIMIT);
-    // leader.setSoftLimit(SoftLimitDirection.kReverse, (float) Constants.arm.shoulder.LOWER_LIMIT);
 
     follower.setBrake(true);
     follower.follow(leader);
@@ -113,7 +109,7 @@ public class Shoulder extends SubsystemBase {
     return isFlipped;
   }
 
-  public double getMotorAngle() {
-    return leader.getPosition();
+  public boolean atGoal(double position) {
+    return Math.abs(position - getAngle()) < Constants.arm.shoulder.ALLOWED_ERROR;
   }
 }

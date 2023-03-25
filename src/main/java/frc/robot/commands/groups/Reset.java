@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
 import frc.robot.commands.arm.shoulder.HoldShoulder;
@@ -36,8 +37,11 @@ public class Reset extends ParallelCommandGroup {
         new ParallelCommandGroup(
             new SequentialCommandGroup(
                 new ParallelDeadlineGroup(new ZeroTelescope(), new HoldShoulder()),
+                new PrintCommand("FINISHED"),
                 new SetShoulderAngle(shoulderAngle)
-                    .until(() -> shoulderAngle - Shoulder.getInstance().getAngle() < Constants.arm.shoulder.ALLOWED_ERROR),
+                    .until(() -> shoulder.atGoal(shoulderAngle))
+                    .andThen(new InstantCommand(() -> shoulder.disable())),
+                new PrintCommand("PASSED"),
                 new ParallelCommandGroup(
                     new SetShoulderAngle(shoulderAngle),
                     new SetTelescopePosition(telescopeLength))),

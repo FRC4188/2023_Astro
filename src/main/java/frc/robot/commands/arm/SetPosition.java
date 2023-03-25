@@ -4,21 +4,14 @@
 
 package frc.robot.commands.arm;
 
-import javax.management.remote.SubjectDelegationPermission;
-
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.Constants;
-import frc.robot.Constants.arm.shoulder;
 import frc.robot.commands.arm.shoulder.SetShoulderAngle;
 import frc.robot.commands.arm.telescope.SetTelescopePosition;
 import frc.robot.commands.arm.telescope.ZeroTelescope;
 import frc.robot.commands.arm.wrist.SetWristAngle;
-import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.arm.Shoulder;
-import frc.robot.subsystems.arm.Telescope;
 import frc.robot.subsystems.claw.Claw;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -37,32 +30,13 @@ public class SetPosition extends SequentialCommandGroup {
             new SequentialCommandGroup(
                 new ZeroTelescope(),
                 new SetShoulderAngle(shoulderAngle)
-                    .until(
-                        () ->
-                            Math.abs(shoulderAngle - Shoulder.getInstance().getAngle())
-                                < Constants.arm.shoulder.ALLOWED_ERROR),
+                    .until(() -> Shoulder.getInstance().atGoal(shoulderAngle)),
                 new ParallelCommandGroup(
                     new SetShoulderAngle(shoulderAngle),
                     new SetTelescopePosition(telescopeLength))),
             new SetWristAngle(wristAngle)
             )
         );
-  }
-
-  public SetPosition(double[] cone, double[] cube, boolean isCube, boolean isFlipped) {
-    addCommands(
-        new ConditionalCommand(
-            new ConditionalCommand(
-                new SetPosition(-cube[0], cube[1], -cube[2]), 
-                new SetPosition(-cone[0], cone[1], -cone[2]), 
-                () -> isCube),
-            new ConditionalCommand(
-                new SetPosition(cube[0], cube[1], cube[2]), 
-                new SetPosition(cone[0], cone[1], cone[2]), 
-                () -> isCube),
-            () -> isFlipped
-        )
-    );
   }
 
   public SetPosition(double[] cube, double[] cone) {
