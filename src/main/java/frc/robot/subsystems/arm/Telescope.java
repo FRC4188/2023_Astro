@@ -77,7 +77,7 @@ public class Telescope extends SubsystemBase {
   }
 
   public void disable() {
-    motor.disable();
+    motor.set(0.0);
   }
 
   public void set(double percent) {

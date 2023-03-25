@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.AutoConfigs;
 import frc.robot.commands.arm.SetCube;
 import frc.robot.commands.arm.SetFlip;
@@ -51,15 +52,14 @@ public class RobotContainer {
         new RunCommand(
             () ->
                 drivetrain.drive(
-                    pilot.getLeftY(Scale.QUARTIC),
-                    pilot.getLeftX(Scale.QUARTIC),
-                    pilot.getRightX(Scale.SQUARED)),
+                    pilot.rightBumper().getAsBoolean() ? pilot.getLeftY(Scale.LINEAR) * 0.5 : pilot.getLeftY(Scale.LINEAR),
+                    pilot.rightBumper().getAsBoolean() ? pilot.getLeftX(Scale.LINEAR) * 0.5 : pilot.getLeftX(Scale.LINEAR),
+                    pilot.rightBumper().getAsBoolean() ? pilot.getRightX(Scale.SQUARED) * 0.5 : pilot.getRightX(Scale.SQUARED)),
             drivetrain));
   }
 
   /** Use this method to define your button->command mappings. */
   private void configureButtonBindings() {
-
     pilot
         .getAButton()
         .onTrue(
@@ -108,7 +108,13 @@ public class RobotContainer {
 
     copilot.getRightBumperButton().debounce(0.15).toggleOnTrue(new SetCube());
 
-    copilot.getLeftBumperButton().debounce(0.15).toggleOnTrue(new SetFlip());
+    copilot.getLeftBumperButton()
+        .debounce(0.15)
+        .toggleOnTrue(
+            new SequentialCommandGroup(
+                new SetFlip(),
+                new Reset()
+            ));
 
     copilot.getBackButton().onTrue(new Reset());
     copilot.getStartButton().onTrue(new Reset());

@@ -12,11 +12,14 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.drivetrain.rotPID;
 import frc.robot.subsystems.sensors.Sensors;
 
 public class Drivetrain extends SubsystemBase {
 
   private static Drivetrain instance;
+
+  private Sensors sensor = Sensors.getInstance();
 
   public static synchronized Drivetrain getInstance() {
     if (instance == null) instance = new Drivetrain();
@@ -119,9 +122,20 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public void drive(double x, double y, double rot) {
-    double xSpeed = x * Constants.drivetrain.MAX_VELOCITY;
-    double ySpeed = y * Constants.drivetrain.MAX_VELOCITY;
+    double totalSpeed = Math.pow(Math.hypot(x, y), 3.0);
+    double angle = Math.atan2(y, x);
+    double xSpeed = totalSpeed * Math.cos(angle) * Constants.drivetrain.MAX_VELOCITY;
+    double ySpeed = totalSpeed * Math.sin(angle) * Constants.drivetrain.MAX_VELOCITY;
     double rotSpeed = -rot * Constants.drivetrain.MAX_RADIANS;
+
+    if (rotSpeed != 0.0) {
+      rotPID.setSetpoint(-sensor.getRotation2d().getDegrees());
+    } else if (ySpeed != 0 || xSpeed != 0) {
+      double correction = rotPID.calculate(-sensor.getRotation2d().getDegrees());
+      rotSpeed = rotPID.atSetpoint() ? 0.0 : correction;
+    }
+
+    rotPID.enableContinuousInput(-180, 180);
 
     boolean noInput = xSpeed == 0 && ySpeed == 0 && rotSpeed == 0;
 

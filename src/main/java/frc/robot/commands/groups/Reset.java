@@ -43,7 +43,7 @@ public class Reset extends ParallelCommandGroup {
                     .andThen(new InstantCommand(() -> shoulder.disable())),
                 new PrintCommand("PASSED"),
                 new ParallelCommandGroup(
-                    new SetShoulderAngle(shoulderAngle),
+                    new SetShoulderAngle(shoulderAngle).until(() -> shoulder.atGoal(shoulderAngle)).andThen(new InstantCommand(() -> shoulder.disable())),
                     new SetTelescopePosition(telescopeLength))),
             new ConditionalCommand(
                 new SetWristAngle(-wristAngle),
