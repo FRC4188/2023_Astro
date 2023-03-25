@@ -46,13 +46,10 @@ public final class Constants {
 
     public static double FIELD_WIDTH = Units.feetToMeters(26.2916);
 
-    public static Transform3d RED_RIGHT_WALL = new Transform3d(
-      new Translation3d(
-        FIELD_WIDTH, 
-        new Rotation3d(0, 0, Math.PI)
-      ), 
-      new Rotation3d(0, 0, Math.PI)
-      );
+    public static Transform3d RED_RIGHT_WALL =
+        new Transform3d(
+            new Translation3d(FIELD_WIDTH, new Rotation3d(0, 0, Math.PI)),
+            new Rotation3d(0, 0, Math.PI));
   }
 
   public static final class robot {

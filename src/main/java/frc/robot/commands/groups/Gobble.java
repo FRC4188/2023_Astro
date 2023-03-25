@@ -14,7 +14,6 @@ public class Gobble extends SequentialCommandGroup {
   public Gobble(double[] config) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(
-    );
+    addCommands();
   }
 }

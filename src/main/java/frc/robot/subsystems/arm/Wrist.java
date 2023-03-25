@@ -6,7 +6,6 @@ package frc.robot.subsystems.arm;
 
 import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 import com.ctre.phoenix.sensors.WPI_CANCoder;
-
 import csplib.motors.CSP_SparkMax;
 import csplib.utils.TempManager;
 import edu.wpi.first.math.controller.ArmFeedforward;
@@ -79,9 +78,7 @@ public class Wrist extends SubsystemBase {
   }
 
   public void setAngle(double angle) {
-    motor.set(
-        pid.calculate(
-            getMotorAngle(), angle));
+    motor.set(pid.calculate(getMotorAngle(), angle));
   }
 
   public void setPID(double kP, double kI, double kD) {
