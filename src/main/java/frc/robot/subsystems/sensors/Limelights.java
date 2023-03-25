@@ -24,7 +24,6 @@ public class Limelights {
     this.backLLName = backLLName;
 
     init();
-
   }
 
   private void init() {
