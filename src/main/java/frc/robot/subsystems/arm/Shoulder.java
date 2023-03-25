@@ -37,11 +37,12 @@ public class Shoulder extends SubsystemBase {
       new ArmFeedforward(
           Constants.arm.shoulder.kS, Constants.arm.shoulder.kG, Constants.arm.shoulder.kV);
 
+  private boolean isFlipped;
+
   /** Creates a new Shoulder. */
   public Shoulder() {
     init();
     TempManager.addMotor(leader, follower);
-    SmartDashboard.putNumber("Shoulder Set", 0);
   }
 
   @Override
@@ -49,6 +50,7 @@ public class Shoulder extends SubsystemBase {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Shoulder Encoder Angle", getAngle());
     SmartDashboard.putNumber("Shoulder Setpoint", pid.getSetpoint().position);
+    SmartDashboard.putBoolean("isFlipped", getIsFlipped());
   }
 
   public void init() {
@@ -63,10 +65,6 @@ public class Shoulder extends SubsystemBase {
     leader.setInverted(true);
     leader.setBrake(true);
     leader.setEncoder(encoder.getAbsolutePosition());
-    // leader.enableSoftLimit(SoftLimitDirection.kForward, true);
-    // leader.enableSoftLimit(SoftLimitDirection.kReverse, true);
-    // leader.setSoftLimit(SoftLimitDirection.kForward, (float) Constants.arm.shoulder.UPPER_LIMIT);
-    // leader.setSoftLimit(SoftLimitDirection.kReverse, (float) Constants.arm.shoulder.LOWER_LIMIT);
 
     follower.setBrake(true);
     follower.follow(leader);
@@ -78,6 +76,10 @@ public class Shoulder extends SubsystemBase {
 
   public void disable() {
     leader.disable();
+  }
+
+  public void setFlip(boolean isFlipped) {
+    this.isFlipped = isFlipped;
   }
 
   public void set(double percent) {
@@ -102,7 +104,11 @@ public class Shoulder extends SubsystemBase {
     return encoder.getAbsolutePosition();
   }
 
-  public double getMotorAngle() {
-    return leader.getPosition();
+  public boolean getIsFlipped() {
+    return isFlipped;
+  }
+
+  public boolean atGoal(double position) {
+    return Math.abs(position - getAngle()) < Constants.arm.shoulder.ALLOWED_ERROR;
   }
 }

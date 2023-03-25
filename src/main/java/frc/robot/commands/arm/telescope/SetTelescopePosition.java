@@ -38,6 +38,6 @@ public class SetTelescopePosition extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Math.abs(position - telescope.getPosition()) < Constants.arm.telescope.ALLOWED_ERROR;
+    return Math.abs(telescope.getPosition() - position) < Constants.arm.telescope.ALLOWED_ERROR;
   }
 }

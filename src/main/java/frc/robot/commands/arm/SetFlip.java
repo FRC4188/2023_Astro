@@ -5,10 +5,10 @@
 package frc.robot.commands.arm;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.arm.Arm;
+import frc.robot.subsystems.arm.Shoulder;
 
 public class SetFlip extends CommandBase {
-  private Arm arm = Arm.getInstance();
+  private Shoulder shoulder = Shoulder.getInstance();
   /** Creates a new SetFlip. */
   public SetFlip() {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -21,13 +21,13 @@ public class SetFlip extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    arm.setFlip(true);
+    shoulder.setFlip(true);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    arm.setFlip(false);
+    shoulder.setFlip(false);
   }
 
   // Returns true when the command should end.

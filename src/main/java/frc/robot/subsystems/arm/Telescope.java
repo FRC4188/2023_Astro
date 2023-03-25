@@ -90,7 +90,6 @@ public class Telescope extends SubsystemBase {
   public void setPosition(double position) {
     double motorSet =
         pid.calculate(getPosition(), position) + ff.calculate(pid.getSetpoint().position) / 12.0;
-    System.out.println(motorSet);
     motor.set(motorSet);
   }
 
@@ -100,6 +99,10 @@ public class Telescope extends SubsystemBase {
 
   public double getPosition() {
     return motor.getPosition() * 1 / Constants.arm.telescope.TICKS_PER_METER;
+  }
+
+  public boolean atGoal() {
+    return pid.atGoal();
   }
 
   public boolean getLimitSwitch() {
