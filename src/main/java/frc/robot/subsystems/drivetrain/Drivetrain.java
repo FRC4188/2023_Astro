@@ -123,7 +123,6 @@ public class Drivetrain extends SubsystemBase {
     double ySpeed = y * Constants.drivetrain.MAX_VELOCITY;
     double rotSpeed = -rot * Constants.drivetrain.MAX_RADIANS;
 
-
     boolean noInput = xSpeed == 0 && ySpeed == 0 && rotSpeed == 0;
 
     SwerveModuleState[] states =

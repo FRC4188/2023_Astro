@@ -46,8 +46,8 @@ public class Reset extends ParallelCommandGroup {
                     new SetShoulderAngle(shoulderAngle),
                     new SetTelescopePosition(telescopeLength))),
             new ConditionalCommand(
-                new SetWristAngle(-wristAngle), 
-                new SetWristAngle(wristAngle), 
+                new SetWristAngle(-wristAngle),
+                new SetWristAngle(wristAngle),
                 shoulder::getIsFlipped)),
         new InstantCommand(() -> claw.disable(), claw));
   }

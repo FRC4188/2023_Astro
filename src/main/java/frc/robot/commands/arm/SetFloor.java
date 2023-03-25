@@ -25,31 +25,26 @@ public class SetFloor extends SequentialCommandGroup {
   /** Creates a new SetFloorCube. */
   private SetFloor(double shoulderAngle, double telescopeLength, double wristAngle) {
     addCommands(
-      new ParallelCommandGroup(
-        new SequentialCommandGroup(
-          new ZeroTelescope(),
-          new SetTelescopePosition(telescopeLength),
-          new SetShoulderAngle(shoulderAngle)
-        ),
-        new SetWristAngle(wristAngle)
-      )
-    );
+        new ParallelCommandGroup(
+            new SequentialCommandGroup(
+                new ZeroTelescope(),
+                new SetTelescopePosition(telescopeLength),
+                new SetShoulderAngle(shoulderAngle)),
+            new SetWristAngle(wristAngle)));
   }
 
   public SetFloor(double[] cube, double[] cone) {
     double[] ffc = Constants.arm.configs.FLIPPED_FLOOR_CUBE;
     addCommands(
-      new ConditionalCommand(
-          new ConditionalCommand(
-              new SetFloor(ffc[0], ffc[1], ffc[2]), 
-              new SetFloor(-cone[0], cone[1], -cone[2]), 
-              claw::getIsCube),
-          new ConditionalCommand(
-              new SetFloor(cube[0], cube[1], cube[2]), 
-              new SetFloor(cone[0], cone[1], cone[2]), 
-              claw::getIsCube),
-          shoulder::getIsFlipped
-        )
-    );
+        new ConditionalCommand(
+            new ConditionalCommand(
+                new SetFloor(ffc[0], ffc[1], ffc[2]),
+                new SetFloor(-cone[0], cone[1], -cone[2]),
+                claw::getIsCube),
+            new ConditionalCommand(
+                new SetFloor(cube[0], cube[1], cube[2]),
+                new SetFloor(cone[0], cone[1], cone[2]),
+                claw::getIsCube),
+            shoulder::getIsFlipped));
   }
 }

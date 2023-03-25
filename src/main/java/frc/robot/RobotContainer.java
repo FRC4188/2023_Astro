@@ -73,7 +73,7 @@ public class RobotContainer {
         .getRightTButton()
         .whileTrue(new RunCommand(() -> claw.intake(), claw))
         .onFalse(new InstantCommand(() -> claw.disable(), claw));
-    
+
     copilot
         .getAButton()
         .onTrue(new SetFloor(Constants.arm.configs.FLOOR_CUBE, Constants.arm.configs.FLOOR_CONE));
@@ -85,7 +85,7 @@ public class RobotContainer {
     copilot
         .getYButton()
         .onTrue(new SetPosition(Constants.arm.configs.DS_CUBE, Constants.arm.configs.DS_CONE));
-    
+
     copilot
         .getBButton()
         .onTrue(new SetFloor(Constants.arm.configs.FLOOR_CUBE, Constants.arm.configs.TIPPED_CONE));
@@ -106,15 +106,9 @@ public class RobotContainer {
         .getDownButton()
         .onTrue(new SetPosition(Constants.arm.configs.LOW_CUBE, Constants.arm.configs.LOW_CONE));
 
-    copilot
-        .getRightBumperButton() 
-        .debounce(0.15)
-        .toggleOnTrue(new SetCube());
+    copilot.getRightBumperButton().debounce(0.15).toggleOnTrue(new SetCube());
 
-    copilot
-        .getLeftBumperButton()
-        .debounce(0.15)
-        .toggleOnTrue(new SetFlip());
+    copilot.getLeftBumperButton().debounce(0.15).toggleOnTrue(new SetFlip());
 
     copilot.getBackButton().onTrue(new Reset());
     copilot.getStartButton().onTrue(new Reset());

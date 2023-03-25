@@ -78,9 +78,7 @@ public class Wrist extends SubsystemBase {
   }
 
   public void setAngle(double angle) {
-    motor.set(
-        pid.calculate(
-            getMotorAngle(), angle));
+    motor.set(pid.calculate(getMotorAngle(), angle));
   }
 
   public void setPID(double kP, double kI, double kD) {

@@ -7,7 +7,6 @@ package frc.robot.commands.groups;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.arm.SetPosition;
 import frc.robot.commands.claw.Outtake;
-import frc.robot.subsystems.arm.Shoulder;
 import frc.robot.subsystems.arm.Telescope;
 import frc.robot.subsystems.arm.Wrist;
 
@@ -21,9 +20,8 @@ public class SpitPosition extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new SetPosition(cube, cone)
-        .until(() -> (Wrist.getInstance().atGoal() && Telescope.getInstance().atGoal())),
-      new Outtake()
-    );
-  } 
+        new SetPosition(cube, cone)
+            .until(() -> (Wrist.getInstance().atGoal() && Telescope.getInstance().atGoal())),
+        new Outtake());
+  }
 }
