@@ -52,9 +52,15 @@ public class RobotContainer {
         new RunCommand(
             () ->
                 drivetrain.drive(
-                    pilot.rightBumper().getAsBoolean() ? pilot.getLeftY(Scale.LINEAR) * 0.5 : pilot.getLeftY(Scale.LINEAR),
-                    pilot.rightBumper().getAsBoolean() ? pilot.getLeftX(Scale.LINEAR) * 0.5 : pilot.getLeftX(Scale.LINEAR),
-                    pilot.rightBumper().getAsBoolean() ? pilot.getRightX(Scale.SQUARED) * 0.5 : pilot.getRightX(Scale.SQUARED)),
+                    pilot.rightBumper().getAsBoolean()
+                        ? pilot.getLeftY(Scale.LINEAR) * 0.5
+                        : pilot.getLeftY(Scale.LINEAR),
+                    pilot.rightBumper().getAsBoolean()
+                        ? pilot.getLeftX(Scale.LINEAR) * 0.5
+                        : pilot.getLeftX(Scale.LINEAR),
+                    pilot.rightBumper().getAsBoolean()
+                        ? pilot.getRightX(Scale.SQUARED) * 0.5
+                        : pilot.getRightX(Scale.SQUARED)),
             drivetrain));
   }
 
@@ -108,13 +114,10 @@ public class RobotContainer {
 
     copilot.getRightBumperButton().debounce(0.15).toggleOnTrue(new SetCube());
 
-    copilot.getLeftBumperButton()
+    copilot
+        .getLeftBumperButton()
         .debounce(0.15)
-        .toggleOnTrue(
-            new SequentialCommandGroup(
-                new SetFlip(),
-                new Reset()
-            ));
+        .toggleOnTrue(new SequentialCommandGroup(new SetFlip(), new Reset()));
 
     copilot.getBackButton().onTrue(new Reset());
     copilot.getStartButton().onTrue(new Reset());
