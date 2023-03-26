@@ -1,5 +1,7 @@
 package frc.robot.subsystems.drivetrain;
 
+import java.util.function.Supplier;
+
 import com.pathplanner.lib.auto.PIDConstants;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
@@ -12,11 +14,14 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.drivetrain.rotPID;
 import frc.robot.subsystems.sensors.Sensors;
 
 public class Drivetrain extends SubsystemBase {
 
   private static Drivetrain instance;
+
+  private Sensors sensor = Sensors.getInstance();
 
   public static synchronized Drivetrain getInstance() {
     if (instance == null) instance = new Drivetrain();
@@ -87,8 +92,6 @@ public class Drivetrain extends SubsystemBase {
           },
           new Pose2d());
 
-  private double lastAngle = 0;
-
   private PIDController rotPID =
       new PIDController(
           Constants.drivetrain.correctionPID.kP, 0.0, Constants.drivetrain.correctionPID.kD);
@@ -118,10 +121,23 @@ public class Drivetrain extends SubsystemBase {
     SmartDashboard.putNumber("Set Drive Rotation", 0);
   }
 
-  public void drive(double x, double y, double rot) {
-    double xSpeed = x * Constants.drivetrain.MAX_VELOCITY;
-    double ySpeed = y * Constants.drivetrain.MAX_VELOCITY;
+  public void drive(double x, double y, double rot, Supplier<Boolean> fine) {
+    double totalSpeed = Math.pow(Math.hypot(x, y), 3.0);
+    double angle = Math.atan2(y, x);
+    double xSpeed = totalSpeed * Math.cos(angle) * Constants.drivetrain.MAX_VELOCITY;
+    double ySpeed = totalSpeed * Math.sin(angle) * Constants.drivetrain.MAX_VELOCITY;
     double rotSpeed = -rot * Constants.drivetrain.MAX_RADIANS;
+
+    xSpeed = (fine.get().booleanValue()) ? xSpeed * 0.5 : xSpeed;
+    ySpeed = (fine.get().booleanValue()) ? xSpeed * 0.5 : ySpeed;
+    rotSpeed = (fine.get().booleanValue()) ? rotSpeed * 0.5 : rotSpeed;
+
+    if (rotSpeed != 0.0) {
+      rotPID.setSetpoint(-sensor.getRotation2d().getDegrees());
+    } else if (ySpeed != 0 || xSpeed != 0) {
+      double correction = rotPID.calculate(-sensor.getRotation2d().getDegrees());
+      rotSpeed = rotPID.atSetpoint() ? 0.0 : correction;
+    }
 
     boolean noInput = xSpeed == 0 && ySpeed == 0 && rotSpeed == 0;
 

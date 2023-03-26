@@ -120,7 +120,7 @@ public final class Constants {
     public static final double ANGLE_DEGREES_PER_TICK = 1.0 / ANGLE_TICKS_PER_DEGREE;
 
     public static final double MAX_VOLTS = 12.0;
-    public static final double MAX_VELOCITY = 100.0;
+    public static final double MAX_VELOCITY = 7.0; // ?
     public static final double MAX_ACCEL = 5.0;
     public static final double MAX_CACCEL = 8.0;
     public static final double MAX_RADIANS = 5 * Math.PI;
@@ -183,7 +183,7 @@ public final class Constants {
     }
 
     public static final class correctionPID {
-      public static final double kP = -0.1;
+      public static final double kP = -0.16;
       public static final double kI = 0.0;
       public static final double kD = -0.006;
     }
