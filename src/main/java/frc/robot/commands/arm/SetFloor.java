@@ -7,6 +7,7 @@ package frc.robot.commands.arm;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 import frc.robot.commands.arm.shoulder.SetShoulderAngle;
 import frc.robot.commands.arm.telescope.SetTelescopePosition;
@@ -33,18 +34,18 @@ public class SetFloor extends SequentialCommandGroup {
             new SetWristAngle(wristAngle)));
   }
 
-  public SetFloor(double[] cube, double[] cone) {
-    double[] ffc = Constants.arm.configs.FLIPPED_FLOOR_CUBE;
+  public SetFloor(double[][] cube, double[][] cone) {
     addCommands(
         new ConditionalCommand(
             new ConditionalCommand(
-                new SetFloor(ffc[0], ffc[1], ffc[2]),
-                new SetFloor(-cone[0], cone[1], -cone[2]),
+                new SetFloor(cube[1][0], cube[1][1], cube[1][2]),
+                new SetFloor(cone[1][0], cone[1][1], cone[1][2]),
                 claw::getIsCube),
             new ConditionalCommand(
-                new SetFloor(cube[0], cube[1], cube[2]),
-                new SetFloor(cone[0], cone[1], cone[2]),
+                new SetFloor(cube[0][0], cube[0][1], cube[0][2]),
+                new SetFloor(cone[0][0], cone[0][1], cone[0][2]),
                 claw::getIsCube),
             shoulder::getIsFlipped));
   }
 }
+

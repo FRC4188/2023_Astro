@@ -1,0 +1,102 @@
+{
+  "waypoints": [
+    {
+      "anchorPoint": {
+        "x": 14.65,
+        "y": 4.9240226550628545
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 12.931344108302252,
+        "y": 4.824271753806666
+      },
+      "holonomicAngle": 0.0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [
+          "Spit High",
+          "Reset Flipped"
+        ],
+        "executionBehavior": "sequential",
+        "waitBehavior": "deadline",
+        "waitTime": 4.0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 10.002294916870536,
+        "y": 4.48874599503585
+      },
+      "prevControl": {
+        "x": 9.91161227936491,
+        "y": 4.6066334237931645
+      },
+      "nextControl": {
+        "x": 10.01977920694596,
+        "y": 4.466016417937798
+      },
+      "holonomicAngle": 0.0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": true,
+      "stopEvent": {
+        "names": [
+          "Outtake"
+        ],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0.0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 14.627109429657455,
+        "y": 4.252971137521223
+      },
+      "prevControl": {
+        "x": 12.287497382012306,
+        "y": 5.014705292568481
+      },
+      "nextControl": null,
+      "holonomicAngle": 0.0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [
+          "Spit High Cube",
+          "Reset"
+        ],
+        "executionBehavior": "sequential",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    }
+  ],
+  "markers": [
+    {
+      "position": 0.32727272727272727,
+      "names": [
+        "Set Floor",
+        "Outtake"
+      ]
+    },
+    {
+      "position": 1.2363636363636363,
+      "names": [
+        "Reset Flipped"
+      ]
+    },
+    {
+      "position": 0.10909090909090907,
+      "names": [
+        "Set Cube"
+      ]
+    }
+  ]
+}

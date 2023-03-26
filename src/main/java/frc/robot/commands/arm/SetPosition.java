@@ -22,7 +22,7 @@ public class SetPosition extends SequentialCommandGroup {
   private Claw claw = Claw.getInstance();
 
   /** Creates a new SetPosition. */
-  private SetPosition(double shoulderAngle, double telescopeLength, double wristAngle) {
+  SetPosition(double shoulderAngle, double telescopeLength, double wristAngle) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
@@ -37,16 +37,16 @@ public class SetPosition extends SequentialCommandGroup {
             new SetWristAngle(wristAngle)));
   }
 
-  public SetPosition(double[] cube, double[] cone) {
+  public SetPosition(double[][] cube, double[][] cone) {
     addCommands(
         new ConditionalCommand(
             new ConditionalCommand(
-                new SetPosition(-cube[0], cube[1], -cube[2]),
-                new SetPosition(-cone[0], cone[1], -cone[2]),
+                new SetPosition(cube[1][0], cube[1][1], cube[1][2]),
+                new SetPosition(cone[1][0], cone[1][1], cone[1][2]),
                 claw::getIsCube),
             new ConditionalCommand(
-                new SetPosition(cube[0], cube[1], cube[2]),
-                new SetPosition(cone[0], cone[1], cone[2]),
+                new SetPosition(cube[0][0], cube[0][1], cube[0][2]),
+                new SetPosition(cone[0][0], cone[0][1], cone[0][2]),
                 claw::getIsCube),
             shoulder::getIsFlipped));
   }

@@ -13,17 +13,10 @@ import frc.robot.subsystems.sensors.Sensors;
 public class Balance extends CommandBase {
   private Drivetrain drivetrain = Drivetrain.getInstance();
   private Sensors sensors = Sensors.getInstance();
-
-  private PIDController pid =
-      new PIDController(
-          Constants.drivetrain.balancePID.kP,
-          Constants.drivetrain.balancePID.kI,
-          Constants.drivetrain.balancePID.kD);
   /** Creates a new Balance. */
   public Balance() {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drivetrain);
-    pid.setTolerance(1.0);
   }
 
   // Called when the command is initially scheduled.
@@ -33,7 +26,7 @@ public class Balance extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    drivetrain.drive(pid.calculate(sensors.getPitch(), 0), 0, 0);
+    drivetrain.setVelocity(0.2);
   }
 
   // Called once the command ends or is interrupted.
@@ -45,6 +38,6 @@ public class Balance extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Math.abs(sensors.getPitch()) < 1;
+    return Math.abs(sensors.getPitch()) < 10;
   }
 }
