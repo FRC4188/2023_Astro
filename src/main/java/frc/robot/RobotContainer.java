@@ -3,18 +3,18 @@ package frc.robot;
 import csplib.inputs.CSP_Controller;
 import csplib.inputs.CSP_Controller.Scale;
 import csplib.utils.AutoBuilder;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.AutoConfigs;
 import frc.robot.commands.arm.SetCube;
-import frc.robot.commands.arm.SetFlip;
 import frc.robot.commands.arm.SetFloor;
 import frc.robot.commands.arm.SetPosition;
 import frc.robot.commands.groups.Reset;
+import frc.robot.subsystems.arm.Shoulder;
 import frc.robot.subsystems.claw.Claw;
 import frc.robot.subsystems.drivetrain.Drivetrain;
 import frc.robot.subsystems.sensors.Sensors;
@@ -64,7 +64,9 @@ public class RobotContainer {
     pilot
         .getAButton()
         .onTrue(
-            new InstantCommand(() -> Sensors.getInstance().resetPigeon(), Sensors.getInstance()));
+            new InstantCommand(
+                () -> Sensors.getInstance().setPigeonAngle(new Rotation2d()),
+                Sensors.getInstance()));
 
     pilot
         .getLeftTButton()
@@ -107,12 +109,16 @@ public class RobotContainer {
         .getDownButton()
         .onTrue(new SetPosition(Constants.arm.configs.LOW_CUBE, Constants.arm.configs.LOW_CONE));
 
-    copilot.getRightBumperButton().debounce(0.15).toggleOnTrue(new SetCube());
+    copilot.getRightBumperButton().debounce(0.10).toggleOnTrue(new SetCube());
 
     copilot
         .getLeftBumperButton()
         .debounce(0.15)
-        .toggleOnTrue(new SequentialCommandGroup(new SetFlip(), new Reset()));
+        .onTrue(
+            new InstantCommand(
+                    () -> Shoulder.getInstance().setFlip(!Shoulder.getInstance().getIsFlipped()),
+                    Shoulder.getInstance())
+                .andThen(new Reset()));
 
     copilot.getBackButton().onTrue(new Reset());
     copilot.getStartButton().onTrue(new Reset());
@@ -152,19 +158,18 @@ public class RobotContainer {
         AutoBuilder.buildAuto(
             "High Perfect Auto", AutoConfigs.EVENTS, AutoConfigs.PerfectAuto.CONSTRAINTS));
     autoChooser.addOption(
-        "3-2P", AutoBuilder.buildAuto("3-2P", AutoConfigs.EVENTS, AutoConfigs.three2P.CONSTRAINTS));
-    autoChooser.addOption(
-        "3-1P", AutoBuilder.buildAuto("3-1P", AutoConfigs.EVENTS, AutoConfigs.three1P.CONSTRAINTS));
-    autoChooser.addOption(
         "High Perfect Auto",
         AutoBuilder.buildAuto(
             "High Perfect Auto", AutoConfigs.EVENTS, AutoConfigs.PerfectAuto.CONSTRAINTS));
     autoChooser.addOption(
-        "The Perfect Auto",
-        AutoBuilder.buildAuto(
-            "Perfect Auto", AutoConfigs.EVENTS, AutoConfigs.PerfectAuto.CONSTRAINTS));
+        "RFlat2",
+        AutoBuilder.buildAuto("RFlat2", AutoConfigs.EVENTS, AutoConfigs.RFlat2.CONSTRAINTS));
     autoChooser.addOption(
-        "3-1", AutoBuilder.buildAuto("3-1", AutoConfigs.EVENTS, AutoConfigs.three1P.CONSTRAINTS));
+        "RBump2",
+        AutoBuilder.buildAuto("RBump2", AutoConfigs.EVENTS, AutoConfigs.RFlat2.CONSTRAINTS));
+    autoChooser.addOption(
+        "RMid1.5P",
+        AutoBuilder.buildAuto("RMid1.5P", AutoConfigs.EVENTS, AutoConfigs.RMid15P.CONSTRAINTS));
     SmartDashboard.putData("Auto Chooser", autoChooser);
   }
 

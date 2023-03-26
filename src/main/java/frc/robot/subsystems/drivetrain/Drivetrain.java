@@ -128,16 +128,6 @@ public class Drivetrain extends SubsystemBase {
     double ySpeed = totalSpeed * Math.sin(angle) * Constants.drivetrain.MAX_VELOCITY;
     double rotSpeed = -rot * Constants.drivetrain.MAX_RADIANS;
 
-    xSpeed = (fine.get().booleanValue()) ? xSpeed * 0.5 : xSpeed;
-    ySpeed = (fine.get().booleanValue()) ? xSpeed * 0.5 : ySpeed;
-    rotSpeed = (fine.get().booleanValue()) ? rotSpeed * 0.5 : rotSpeed;
-
-    if (rotSpeed != 0.0) {
-      rotPID.setSetpoint(-sensor.getRotation2d().getDegrees());
-    } else if (ySpeed != 0 || xSpeed != 0) {
-      double correction = rotPID.calculate(-sensor.getRotation2d().getDegrees());
-      rotSpeed = rotPID.atSetpoint() ? 0.0 : correction;
-    }
 
     boolean noInput = xSpeed == 0 && ySpeed == 0 && rotSpeed == 0;
 
@@ -154,6 +144,10 @@ public class Drivetrain extends SubsystemBase {
                     xSpeed, ySpeed, rotSpeed, sensors.getRotation2d()));
 
     setModuleStates(states);
+  }
+
+  public void setRotSetpoint(double setpoint) {
+    rotPID.setSetpoint(setpoint);
   }
 
   public void setRotPID(double kP, double kI, double kD) {

@@ -6,9 +6,11 @@ package frc.robot;
 
 import com.pathplanner.lib.server.PathPlannerServer;
 import csplib.utils.TempManager;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.sensors.Sensors;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -32,6 +34,7 @@ public class Robot extends TimedRobot {
     PathPlannerServer.startServer(5811);
     m_robotContainer = new RobotContainer();
     addPeriodic(() -> TempManager.monitor(), 2.0);
+    Sensors.getInstance().setPigeonAngle(new Rotation2d(Math.PI));
   }
 
   /**

@@ -16,7 +16,7 @@ import frc.robot.subsystems.arm.Wrist;
 public class SpitPosition extends SequentialCommandGroup {
 
   /** Creates a new SpitPosition. */
-  public SpitPosition(double[] cube, double[] cone) {
+  public SpitPosition(double[][] cube, double[][] cone) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(

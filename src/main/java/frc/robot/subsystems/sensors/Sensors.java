@@ -6,6 +6,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.subsystems.drivetrain.Drivetrain;
 
 public class Sensors extends SubsystemBase {
 
@@ -51,6 +52,11 @@ public class Sensors extends SubsystemBase {
   }
 
   public void resetPigeon() {
-    pigeon.reset();
+    setPigeonAngle(new Rotation2d());
+  }
+
+  public void setPigeonAngle(Rotation2d angle) {
+    pigeon.setYaw(angle.getDegrees());
+    Drivetrain.getInstance().setRotSetpoint(angle.getDegrees());
   }
 }
