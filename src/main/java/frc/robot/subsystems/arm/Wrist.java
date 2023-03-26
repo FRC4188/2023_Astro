@@ -100,5 +100,4 @@ public class Wrist extends SubsystemBase {
   public double getMotorAngle() {
     return motor.getPosition();
   }
-
 }

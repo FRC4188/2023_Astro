@@ -38,6 +38,5 @@ public class SetWristAngle extends CommandBase {
   @Override
   public boolean isFinished() {
     return false;
-
   }
 }

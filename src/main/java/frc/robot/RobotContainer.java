@@ -8,13 +8,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.AutoConfigs;
 import frc.robot.commands.arm.SetCube;
-
-import frc.robot.commands.arm.SetFlip;
 import frc.robot.commands.arm.SetFloor;
 import frc.robot.commands.arm.SetPosition;
 import frc.robot.commands.groups.Reset;
@@ -73,7 +69,9 @@ public class RobotContainer {
     pilot
         .getAButton()
         .onTrue(
-            new InstantCommand(() -> Sensors.getInstance().setPigeonAngle(new Rotation2d()), Sensors.getInstance()));
+            new InstantCommand(
+                () -> Sensors.getInstance().setPigeonAngle(new Rotation2d()),
+                Sensors.getInstance()));
 
     pilot
         .getLeftTButton()
@@ -123,11 +121,9 @@ public class RobotContainer {
         .debounce(0.15)
         .onTrue(
             new InstantCommand(
-                () -> 
-                    Shoulder.getInstance()
-                    .setFlip(!Shoulder.getInstance()
-                    .getIsFlipped()), Shoulder.getInstance())
-                    .andThen(new Reset()));
+                    () -> Shoulder.getInstance().setFlip(!Shoulder.getInstance().getIsFlipped()),
+                    Shoulder.getInstance())
+                .andThen(new Reset()));
 
     copilot.getBackButton().onTrue(new Reset());
     copilot.getStartButton().onTrue(new Reset());
@@ -171,13 +167,15 @@ public class RobotContainer {
         AutoBuilder.buildAuto(
             "High Perfect Auto", AutoConfigs.EVENTS, AutoConfigs.PerfectAuto.CONSTRAINTS));
     autoChooser.addOption(
-        "RFlat2", AutoBuilder.buildAuto("RFlat2", AutoConfigs.EVENTS, AutoConfigs.RFlat2.CONSTRAINTS));
+        "RFlat2",
+        AutoBuilder.buildAuto("RFlat2", AutoConfigs.EVENTS, AutoConfigs.RFlat2.CONSTRAINTS));
     autoChooser.addOption(
-        "RBump2", AutoBuilder.buildAuto("RBump2", AutoConfigs.EVENTS, AutoConfigs.RFlat2.CONSTRAINTS));
+        "RBump2",
+        AutoBuilder.buildAuto("RBump2", AutoConfigs.EVENTS, AutoConfigs.RFlat2.CONSTRAINTS));
     autoChooser.addOption(
-        "RMid1.5P", AutoBuilder.buildAuto("RMid1.5P", AutoConfigs.EVENTS, AutoConfigs.RMid15P.CONSTRAINTS));
+        "RMid1.5P",
+        AutoBuilder.buildAuto("RMid1.5P", AutoConfigs.EVENTS, AutoConfigs.RMid15P.CONSTRAINTS));
     SmartDashboard.putData("Auto Chooser", autoChooser);
-
   }
 
   /**

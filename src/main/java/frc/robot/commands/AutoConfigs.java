@@ -8,13 +8,11 @@ import com.pathplanner.lib.PathConstraints;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 import frc.robot.commands.arm.SetCube;
-import frc.robot.commands.arm.SetFlip;
 import frc.robot.commands.arm.SetPosition;
 import frc.robot.commands.arm.drive.Balance;
 import frc.robot.commands.claw.Intake;
@@ -23,7 +21,6 @@ import frc.robot.commands.groups.Reset;
 import frc.robot.commands.groups.SpitPosition;
 import frc.robot.subsystems.arm.Shoulder;
 import frc.robot.subsystems.claw.Claw;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,15 +36,16 @@ public class AutoConfigs {
                   "Spit High",
                   new ParallelDeadlineGroup(
                       new SequentialCommandGroup(
-                          new WaitCommand(2.0), 
-                          new Outtake().withTimeout(0.5)),
-                      new SetPosition(Constants.arm.configs.HIGH_CUBE, Constants.arm.configs.HIGH_CONE))),
+                          new WaitCommand(2.0), new Outtake().withTimeout(0.5)),
+                      new SetPosition(
+                          Constants.arm.configs.HIGH_CUBE, Constants.arm.configs.HIGH_CONE))),
               Map.entry(
                   "Spit High Cube",
                   new ParallelDeadlineGroup(
                       new SequentialCommandGroup(
                           new WaitCommand(2.0), new Intake().withTimeout(0.5)),
-                      new SetPosition(Constants.arm.configs.HIGH_CUBE, Constants.arm.configs.HIGH_CUBE))),
+                      new SetPosition(
+                          Constants.arm.configs.HIGH_CUBE, Constants.arm.configs.HIGH_CUBE))),
               Map.entry(
                   "Spit Mid",
                   new SpitPosition(Constants.arm.configs.MID_CUBE, Constants.arm.configs.MID_CONE)),
@@ -69,46 +67,45 @@ public class AutoConfigs {
                   new SetPosition(
                       Constants.arm.configs.FLOOR_CUBE, Constants.arm.configs.FLOOR_CUBE)),
               Map.entry("Set Cube", new SetCube()),
-              Map.entry("Reset Flipped", 
-                new InstantCommand(
-                  () -> 
-                    Shoulder.getInstance()
-                    .setFlip(!Shoulder.getInstance()
-                    .getIsFlipped()), Shoulder.getInstance())
-                    .andThen(new Reset())),
-              Map.entry("Set Flipped", 
-                new InstantCommand(
-                  () -> 
-                    Shoulder.getInstance()
-                    .setFlip(!Shoulder.getInstance()
-                    .getIsFlipped()), Shoulder.getInstance())),
+              Map.entry(
+                  "Reset Flipped",
+                  new InstantCommand(
+                          () ->
+                              Shoulder.getInstance()
+                                  .setFlip(!Shoulder.getInstance().getIsFlipped()),
+                          Shoulder.getInstance())
+                      .andThen(new Reset())),
+              Map.entry(
+                  "Set Flipped",
+                  new InstantCommand(
+                      () -> Shoulder.getInstance().setFlip(!Shoulder.getInstance().getIsFlipped()),
+                      Shoulder.getInstance())),
               Map.entry("Reset", new Reset()),
-              Map.entry("Intake", 
-                new ConditionalCommand(new Outtake().withTimeout(0.3), new Intake().withTimeout(0.3), Claw.getInstance()::getIsCube)),
-              Map.entry("Outtake", 
-                new ConditionalCommand(new Intake().withTimeout(0.3), new Outtake().withTimeout(0.3), Claw.getInstance()::getIsCube)),
-              Map.entry("Balance",
-                new Balance())
-            )
-        );
-            
+              Map.entry(
+                  "Intake",
+                  new ConditionalCommand(
+                      new Outtake().withTimeout(0.3),
+                      new Intake().withTimeout(0.3),
+                      Claw.getInstance()::getIsCube)),
+              Map.entry(
+                  "Outtake",
+                  new ConditionalCommand(
+                      new Intake().withTimeout(0.3),
+                      new Outtake().withTimeout(0.3),
+                      Claw.getInstance()::getIsCube)),
+              Map.entry("Balance", new Balance())));
 
   public static final class RFlat2 {
-    public static final PathConstraints[] CONSTRAINTS = {
-      new PathConstraints(5, 3)
-    };
+    public static final PathConstraints[] CONSTRAINTS = {new PathConstraints(5, 3)};
   }
 
   public static final class RMid15P {
     public static final PathConstraints[] CONSTRAINTS = {
-      new PathConstraints(3, 1),
-      new PathConstraints(4, 2),
-      new PathConstraints(4, 2)
+      new PathConstraints(3, 1), new PathConstraints(4, 2), new PathConstraints(4, 2)
     };
   }
 
   public static final class PerfectAuto {
     public static final PathConstraints[] CONSTRAINTS = {new PathConstraints(3, 1)};
   }
-
 }

@@ -94,9 +94,7 @@ public class Drivetrain extends SubsystemBase {
 
   private PIDController rotPID =
       new PIDController(
-          Constants.drivetrain.correctionPID.kP, 
-          0.0, 
-          Constants.drivetrain.correctionPID.kD);
+          Constants.drivetrain.correctionPID.kP, 0.0, Constants.drivetrain.correctionPID.kD);
 
   private Drivetrain() {
     putDashboard();

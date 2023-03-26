@@ -33,7 +33,6 @@ public class SetShoulderAngle extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     shoulder.disable();
-
   }
 
   // Returns true when the command should end.
