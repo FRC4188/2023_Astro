@@ -11,8 +11,10 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.commands.AutoConfigs;
 import frc.robot.commands.arm.SetCube;
+import frc.robot.commands.arm.SetFlip;
 import frc.robot.commands.arm.SetFloor;
 import frc.robot.commands.arm.SetPosition;
+import frc.robot.commands.arm.shoulder.SetShoulderAngle;
 import frc.robot.commands.groups.Reset;
 import frc.robot.subsystems.arm.Shoulder;
 import frc.robot.subsystems.claw.Claw;
@@ -76,6 +78,8 @@ public class RobotContainer {
         .getRightTButton()
         .whileTrue(new RunCommand(() -> claw.intake(), claw))
         .onFalse(new InstantCommand(() -> claw.disable(), claw));
+    
+    pilot.getXButton().onTrue(new SetShoulderAngle(30));
 
     copilot
         .getAButton()
@@ -109,16 +113,12 @@ public class RobotContainer {
         .getDownButton()
         .onTrue(new SetPosition(Constants.arm.configs.LOW_CUBE, Constants.arm.configs.LOW_CONE));
 
-    copilot.getRightBumperButton().debounce(0.10).toggleOnTrue(new SetCube());
+    copilot.getRightBumperButton().debounce(0.10).onTrue(new SetCube());
 
     copilot
         .getLeftBumperButton()
         .debounce(0.15)
-        .onTrue(
-            new InstantCommand(
-                    () -> Shoulder.getInstance().setFlip(!Shoulder.getInstance().getIsFlipped()),
-                    Shoulder.getInstance())
-                .andThen(new Reset()));
+        .onTrue(new SetFlip().andThen(new Reset()));
 
     copilot.getBackButton().onTrue(new Reset());
     copilot.getStartButton().onTrue(new Reset());
@@ -161,6 +161,7 @@ public class RobotContainer {
         "High Perfect Auto",
         AutoBuilder.buildAuto(
             "High Perfect Auto", AutoConfigs.EVENTS, AutoConfigs.PerfectAuto.CONSTRAINTS));
+    autoChooser.addOption("RFlat3", AutoBuilder.buildAuto("RFlat3", AutoConfigs.EVENTS, AutoConfigs.RFlat2.CONSTRAINTS));
     autoChooser.addOption(
         "RFlat2",
         AutoBuilder.buildAuto("RFlat2", AutoConfigs.EVENTS, AutoConfigs.RFlat2.CONSTRAINTS));

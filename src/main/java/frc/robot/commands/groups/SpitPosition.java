@@ -20,8 +20,7 @@ public class SpitPosition extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-        new SetPosition(cube, cone)
-            .until(() -> (Wrist.getInstance().atGoal() && Telescope.getInstance().atGoal())),
+        new SetPosition(cube, cone),
         new Outtake());
   }
 }

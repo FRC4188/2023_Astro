@@ -122,12 +122,16 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public void drive(double x, double y, double rot, Supplier<Boolean> fine) {
+    boolean fineControl = fine.get().booleanValue();
     double totalSpeed = Math.pow(Math.hypot(x, y), 3.0);
     double angle = Math.atan2(y, x);
     double xSpeed = totalSpeed * Math.cos(angle) * Constants.drivetrain.MAX_VELOCITY;
     double ySpeed = totalSpeed * Math.sin(angle) * Constants.drivetrain.MAX_VELOCITY;
     double rotSpeed = -rot * Constants.drivetrain.MAX_RADIANS;
 
+    xSpeed = (fineControl) ? xSpeed * 0.5 : xSpeed;
+    ySpeed = (fineControl) ? ySpeed * 0.5 : ySpeed;
+    rotSpeed = (fineControl) ? rotSpeed * 0.5 : rotSpeed;
 
     boolean noInput = xSpeed == 0 && ySpeed == 0 && rotSpeed == 0;
 

@@ -69,7 +69,7 @@ public class Telescope extends SubsystemBase {
   public void zero() {
     if (!getLimitSwitch()) {
       motor.configReverseSoftLimitEnable(false);
-      set(-0.5);
+      set(-0.6);
     } else {
       motor.configReverseSoftLimitThreshold(Constants.arm.telescope.LOWER_LIMIT);
       motor.configReverseSoftLimitEnable(true);
@@ -101,8 +101,8 @@ public class Telescope extends SubsystemBase {
     return motor.getPosition() * 1 / Constants.arm.telescope.TICKS_PER_METER;
   }
 
-  public boolean atGoal() {
-    return pid.atGoal();
+  public boolean atGoal(double position) {
+    return Math.abs(getPosition() - position) < Constants.arm.telescope.ALLOWED_ERROR;
   }
 
   public boolean getLimitSwitch() {

@@ -93,8 +93,8 @@ public class Wrist extends SubsystemBase {
     return pid.getSetpoint().position;
   }
 
-  public boolean atGoal() {
-    return pid.atGoal();
+  public boolean atGoal(double angle) {
+    return Math.abs(getMotorAngle() - angle) < Constants.arm.wrist.ALLOWED_ERROR;
   }
 
   public double getMotorAngle() {

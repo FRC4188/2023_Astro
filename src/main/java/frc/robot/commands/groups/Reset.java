@@ -9,8 +9,10 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
+import frc.robot.Constants.arm.shoulder;
 import frc.robot.commands.arm.shoulder.HoldShoulder;
 import frc.robot.commands.arm.shoulder.SetShoulderAngle;
 import frc.robot.commands.arm.telescope.SetTelescopePosition;
@@ -34,23 +36,20 @@ public class Reset extends ParallelCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-        new ParallelCommandGroup(
-            new SequentialCommandGroup(
-                new ParallelDeadlineGroup(new ZeroTelescope(), new HoldShoulder()),
-                new PrintCommand("FINISHED"),
+        new SequentialCommandGroup(
+            new ParallelDeadlineGroup(new ZeroTelescope(), new HoldShoulder()),
+            new SetShoulderAngle(shoulderAngle)
+                .until(() -> shoulder.atGoal(shoulderAngle))
+                .andThen(new InstantCommand(() -> shoulder.disable())),
+            new ParallelCommandGroup(
                 new SetShoulderAngle(shoulderAngle)
                     .until(() -> shoulder.atGoal(shoulderAngle))
                     .andThen(new InstantCommand(() -> shoulder.disable())),
-                new PrintCommand("PASSED"),
-                new ParallelCommandGroup(
-                    new SetShoulderAngle(shoulderAngle)
-                        .until(() -> shoulder.atGoal(shoulderAngle))
-                        .andThen(new InstantCommand(() -> shoulder.disable())),
-                    new SetTelescopePosition(telescopeLength))),
-            new ConditionalCommand(
-                new SetWristAngle(-wristAngle),
-                new SetWristAngle(wristAngle),
-                shoulder::getIsFlipped)),
+                new SetTelescopePosition(telescopeLength))),
+        new ConditionalCommand(
+            new SetWristAngle(-wristAngle),
+            new SetWristAngle(wristAngle),
+            shoulder::getIsFlipped),
         new InstantCommand(() -> claw.disable(), claw));
   }
 }
