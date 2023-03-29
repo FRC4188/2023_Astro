@@ -301,7 +301,7 @@ public final class Constants {
       public static final double kV = 0;
 
       public static final double MAX_VEL = 1000.0;
-      public static final double MAX_ACCEL = 420.0;
+      public static final double MAX_ACCEL = 520.0;
       public static final Constraints CONSTRAINTS = new Constraints(MAX_VEL, MAX_ACCEL);
       public static final double ALLOWED_ERROR = 1;
     }

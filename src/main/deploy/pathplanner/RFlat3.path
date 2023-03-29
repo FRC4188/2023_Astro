@@ -17,34 +17,11 @@
       "isStopPoint": false,
       "stopEvent": {
         "names": [
-          "Spit High"
+          "Set High",
+          "Outtake",
+          "Zero Telescope"
         ],
         "executionBehavior": "sequential",
-        "waitBehavior": "none",
-        "waitTime": 4.0
-      }
-    },
-    {
-      "anchorPoint": {
-        "x": 12.967617163304503,
-        "y": 4.806135226305541
-      },
-      "prevControl": {
-        "x": 12.949480635803377,
-        "y": 4.815203490056104
-      },
-      "nextControl": {
-        "x": 12.985753690805629,
-        "y": 4.797066962554978
-      },
-      "holonomicAngle": 0,
-      "isReversal": false,
-      "velOverride": null,
-      "isLocked": false,
-      "isStopPoint": false,
-      "stopEvent": {
-        "names": [],
-        "executionBehavior": "parallel",
         "waitBehavior": "none",
         "waitTime": 0
       }
@@ -76,25 +53,28 @@
     },
     {
       "anchorPoint": {
-        "x": 14.654314220909145,
-        "y": 4.343653775026849
+        "x": 14.48,
+        "y": 4.25
       },
       "prevControl": {
-        "x": 13.52078125208882,
-        "y": 4.942159182563979
+        "x": 13.177749241853641,
+        "y": 4.973414684017698
       },
       "nextControl": {
-        "x": 13.52078125208882,
-        "y": 4.942159182563979
+        "x": 14.699845923997405,
+        "y": 4.12787316026021
       },
-      "holonomicAngle": 0.0,
-      "isReversal": true,
+      "holonomicAngle": 0,
+      "isReversal": false,
       "velOverride": null,
       "isLocked": false,
-      "isStopPoint": false,
+      "isStopPoint": true,
       "stopEvent": {
         "names": [
-          "Spit High Cube"
+          "Stop Drivetrain",
+          "Set High",
+          "Outtake",
+          "Zero Telescope"
         ],
         "executionBehavior": "sequential",
         "waitBehavior": "none",
@@ -103,18 +83,18 @@
     },
     {
       "anchorPoint": {
-        "x": 12.441657865771873,
-        "y": 4.7698621713032905
+        "x": 9.849268778398669,
+        "y": 3.975248841122682
       },
       "prevControl": {
-        "x": 13.00571553429802,
-        "y": 4.7698621713032905
+        "x": 11.382444620843199,
+        "y": 5.729379068494996
       },
       "nextControl": {
-        "x": 11.901106429717094,
-        "y": 4.7698621713032905
+        "x": 9.612271972807836,
+        "y": 3.704097125208139
       },
-      "holonomicAngle": 0,
+      "holonomicAngle": 45.0,
       "isReversal": false,
       "velOverride": null,
       "isLocked": false,
@@ -128,12 +108,12 @@
     },
     {
       "anchorPoint": {
-        "x": 10.065772763124475,
-        "y": 3.355213026215527
+        "x": 14.48,
+        "y": 4.17
       },
       "prevControl": {
-        "x": 10.065772763124475,
-        "y": 4.778930435053848
+        "x": 11.22491722934835,
+        "y": 5.602022937656987
       },
       "nextControl": null,
       "holonomicAngle": 0,
@@ -142,8 +122,12 @@
       "isLocked": false,
       "isStopPoint": false,
       "stopEvent": {
-        "names": [],
-        "executionBehavior": "parallel",
+        "names": [
+          "Stop Drivetrain",
+          "Outtake",
+          "Reset"
+        ],
+        "executionBehavior": "sequential",
         "waitBehavior": "none",
         "waitTime": 0
       }
@@ -151,35 +135,49 @@
   ],
   "markers": [
     {
-      "position": 0.01,
+      "position": 0.05,
       "names": [
-        "Reset Flipped"
+        "Set Cube"
       ]
     },
     {
-      "position": 1.1181818181818184,
+      "position": 0.25,
       "names": [
+        "Set Flipped",
         "Set Floor",
-        "Outtake"
+        "Intake"
       ]
     },
     {
-      "position": 2.24,
+      "position": 1.24,
       "names": [
         "Reset Flipped"
       ]
     },
     {
-      "position": 3.01,
+      "position": 1.56,
       "names": [
-        "Reset Flipped"
+        "Prep Shoulder"
       ]
     },
     {
-      "position": 4.13636363636363,
+      "position": 2.356107954545452,
       "names": [
+        "Set Flipped",
         "Set Floor",
-        "Outtake"
+        "Intake"
+      ]
+    },
+    {
+      "position": 3.25,
+      "names": [
+        "Set Mid"
+      ]
+    },
+    {
+      "position": 3.2,
+      "names": [
+        "Set Flipped"
       ]
     }
   ]

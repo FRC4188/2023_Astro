@@ -34,7 +34,7 @@ public class AutoBuilder {
             drivetrain.getRotValues(),
             drivetrain::setModuleStates,
             eventMap,
-            false,
+            true,
             drivetrain);
     try {
       return autoBuilder.fullAuto(paths);

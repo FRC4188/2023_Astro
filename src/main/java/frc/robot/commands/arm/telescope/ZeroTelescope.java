@@ -5,7 +5,6 @@
 package frc.robot.commands.arm.telescope;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
 import frc.robot.subsystems.arm.Telescope;
 
 public class ZeroTelescope extends CommandBase {
@@ -29,12 +28,13 @@ public class ZeroTelescope extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    System.out.println("FINISHED");
     telescope.disable();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Math.abs(telescope.getPosition() - 0.1875) < Constants.arm.telescope.ALLOWED_ERROR;
+    return telescope.getLimitSwitch();
   }
 }

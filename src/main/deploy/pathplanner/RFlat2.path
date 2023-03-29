@@ -17,12 +17,13 @@
       "isStopPoint": false,
       "stopEvent": {
         "names": [
-          "Spit High",
-          "Reset Flipped"
+          "Set High",
+          "Outtake",
+          "Zero Telescope"
         ],
         "executionBehavior": "sequential",
-        "waitBehavior": "deadline",
-        "waitTime": 4.0
+        "waitBehavior": "none",
+        "waitTime": 0
       }
     },
     {
@@ -44,9 +45,7 @@
       "isLocked": false,
       "isStopPoint": true,
       "stopEvent": {
-        "names": [
-          "Outtake"
-        ],
+        "names": [],
         "executionBehavior": "parallel",
         "waitBehavior": "none",
         "waitTime": 0.0
@@ -54,11 +53,11 @@
     },
     {
       "anchorPoint": {
-        "x": 14.627109429657455,
+        "x": 14.59,
         "y": 4.252971137521223
       },
       "prevControl": {
-        "x": 12.287497382012306,
+        "x": 12.250387952354851,
         "y": 5.014705292568481
       },
       "nextControl": null,
@@ -69,7 +68,9 @@
       "isStopPoint": false,
       "stopEvent": {
         "names": [
-          "Spit High Cube",
+          "Stop Drivetrain",
+          "Set High",
+          "Outtake",
           "Reset"
         ],
         "executionBehavior": "sequential",
@@ -80,10 +81,11 @@
   ],
   "markers": [
     {
-      "position": 0.32727272727272727,
+      "position": 0.24630681818181827,
       "names": [
+        "Set Flipped",
         "Set Floor",
-        "Outtake"
+        "Intake"
       ]
     },
     {
@@ -93,9 +95,15 @@
       ]
     },
     {
-      "position": 0.10909090909090907,
+      "position": 0.053977272727272735,
       "names": [
         "Set Cube"
+      ]
+    },
+    {
+      "position": 1.5573863636363632,
+      "names": [
+        "Prep Shoulder"
       ]
     }
   ]

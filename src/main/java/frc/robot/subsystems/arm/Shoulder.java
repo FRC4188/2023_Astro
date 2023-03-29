@@ -108,7 +108,7 @@ public class Shoulder extends SubsystemBase {
     return isFlipped;
   }
 
-  public boolean atGoal(double position) {
-    return Math.abs(position - getAngle()) < Constants.arm.shoulder.ALLOWED_ERROR;
+  public boolean atGoal(double angle) {
+    return Math.abs(angle - getAngle()) < Constants.arm.shoulder.ALLOWED_ERROR;
   }
 }
