@@ -8,12 +8,8 @@ import com.pathplanner.lib.PathConstraints;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
-import frc.robot.Constants.arm.telescope;
 import frc.robot.commands.arm.SetCube;
 import frc.robot.commands.arm.SetFlip;
 import frc.robot.commands.arm.SetPosition;
@@ -24,11 +20,8 @@ import frc.robot.commands.claw.Outtake;
 import frc.robot.commands.drive.Balance;
 import frc.robot.commands.groups.Reset;
 import frc.robot.commands.groups.SpitPosition;
-import frc.robot.subsystems.arm.Shoulder;
-import frc.robot.subsystems.arm.Telescope;
 import frc.robot.subsystems.claw.Claw;
 import frc.robot.subsystems.drivetrain.Drivetrain;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -49,12 +42,13 @@ public class AutoConfigs {
               Map.entry(
                   "Set High",
                   new ConditionalCommand(
-                    new SetPosition(
-                        Constants.arm.configs.HIGH_CUBE, Constants.arm.configs.HIGH_CONE).withTimeout(1.3), 
-                    new SetPosition(
-                        Constants.arm.configs.HIGH_CUBE, Constants.arm.configs.HIGH_CONE).withTimeout(1.6),
-                    Claw.getInstance()::getIsCube
-                    )),
+                      new SetPosition(
+                              Constants.arm.configs.HIGH_CUBE, Constants.arm.configs.HIGH_CONE)
+                          .withTimeout(1.3),
+                      new SetPosition(
+                              Constants.arm.configs.HIGH_CUBE, Constants.arm.configs.HIGH_CONE)
+                          .withTimeout(1.6),
+                      Claw.getInstance()::getIsCube)),
               Map.entry(
                   "Set Mid",
                   new SetPosition(Constants.arm.configs.MID_CUBE, Constants.arm.configs.MID_CONE)),
@@ -65,11 +59,14 @@ public class AutoConfigs {
                   "Set Floor",
                   new SetPosition(
                       Constants.arm.configs.FLOOR_CUBE, Constants.arm.configs.FLOOR_CONE)),
-              Map.entry("Prep Shoulder", new SetShoulderAngle(50)), //just in the middle somwhere
+              Map.entry("Prep Shoulder", new SetShoulderAngle(50)), // just in the middle somwhere
               Map.entry("Set Cube", new SetCube()),
-              Map.entry("Stop Drivetrain", new InstantCommand(() -> Drivetrain.getInstance().zeroPower(), Drivetrain.getInstance())),
+              Map.entry(
+                  "Stop Drivetrain",
+                  new InstantCommand(
+                      () -> Drivetrain.getInstance().zeroPower(), Drivetrain.getInstance())),
               Map.entry("Zero Telescope", new ZeroTelescope()),
-              Map.entry("Reset Flipped",new SetFlip().andThen(new Reset())),
+              Map.entry("Reset Flipped", new SetFlip().andThen(new Reset())),
               Map.entry("Set Flipped", new SetFlip()),
               Map.entry("Reset", new Reset()),
               Map.entry("Print", new PrintCommand("IT DOESNT END")),

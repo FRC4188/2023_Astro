@@ -8,8 +8,6 @@ import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
-import edu.wpi.first.wpilibj2.command.PrintCommand;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
 import frc.robot.Constants.arm.shoulder;
@@ -47,9 +45,7 @@ public class Reset extends ParallelCommandGroup {
                     .andThen(new InstantCommand(() -> shoulder.disable())),
                 new SetTelescopePosition(telescopeLength))),
         new ConditionalCommand(
-            new SetWristAngle(-wristAngle),
-            new SetWristAngle(wristAngle),
-            shoulder::getIsFlipped),
+            new SetWristAngle(-wristAngle), new SetWristAngle(wristAngle), shoulder::getIsFlipped),
         new InstantCommand(() -> claw.disable(), claw));
   }
 }

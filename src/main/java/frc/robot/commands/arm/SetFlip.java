@@ -12,6 +12,7 @@ import frc.robot.subsystems.arm.Shoulder;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class SetFlip extends InstantCommand {
   private Shoulder shoulder = Shoulder.getInstance();
+
   public SetFlip() {
     // Use addRequirements() here to declare subsystem dependencies.
   }

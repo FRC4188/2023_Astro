@@ -1,7 +1,5 @@
 package frc.robot.subsystems.drivetrain;
 
-import java.util.function.Supplier;
-
 import com.pathplanner.lib.auto.PIDConstants;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
@@ -16,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.drivetrain.rotPID;
 import frc.robot.subsystems.sensors.Sensors;
+import java.util.function.Supplier;
 
 public class Drivetrain extends SubsystemBase {
 
