@@ -9,13 +9,16 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.AutoConfigs;
 import frc.robot.commands.arm.SetCube;
 import frc.robot.commands.arm.SetFlip;
 import frc.robot.commands.arm.SetFloor;
 import frc.robot.commands.arm.SetPosition;
 import frc.robot.commands.arm.shoulder.SetShoulderAngle;
+import frc.robot.commands.drive.Balance;
 import frc.robot.commands.groups.Reset;
+import frc.robot.subsystems.arm.Telescope;
 import frc.robot.subsystems.claw.Claw;
 import frc.robot.subsystems.drivetrain.Drivetrain;
 import frc.robot.subsystems.sensors.Sensors;
@@ -32,6 +35,7 @@ public class RobotContainer {
   private CSP_Controller copilot = new CSP_Controller(Constants.controller.COPILOT_PORT);
 
   private Drivetrain drivetrain = Drivetrain.getInstance();
+  private Telescope telescope = Telescope.getInstance();
   private Claw claw = Claw.getInstance();
 
   private SendableChooser<Command> autoChooser = new SendableChooser<Command>();
@@ -53,10 +57,9 @@ public class RobotContainer {
         new RunCommand(
             () ->
                 drivetrain.drive(
-                    pilot.getLeftY(Scale.LINEAR),
-                    pilot.getLeftX(Scale.LINEAR),
-                    pilot.getRightX(Scale.SQUARED),
-                    pilot.getRightButton()::getAsBoolean),
+                    pilot.rightBumper().getAsBoolean() ? pilot.getLeftY(Scale.LINEAR) * 0.5 : pilot.getLeftY(Scale.LINEAR),
+                    pilot.rightBumper().getAsBoolean() ? pilot.getLeftX(Scale.LINEAR) * 0.5 : pilot.getLeftX(Scale.LINEAR),
+                    pilot.rightBumper().getAsBoolean() ? pilot.getRightX(Scale.SQUARED) * 0.1 : pilot.getRightX(Scale.SQUARED)),
             drivetrain));
   }
 
@@ -78,8 +81,6 @@ public class RobotContainer {
         .whileTrue(new RunCommand(() -> claw.intake(), claw))
         .onFalse(new InstantCommand(() -> claw.disable(), claw));
 
-    pilot.getXButton().onTrue(new SetShoulderAngle(30));
-
     copilot
         .getAButton()
         .onTrue(new SetFloor(Constants.arm.configs.FLOOR_CUBE, Constants.arm.configs.FLOOR_CONE));
@@ -94,7 +95,7 @@ public class RobotContainer {
 
     copilot
         .getBButton()
-        .onTrue(new SetFloor(Constants.arm.configs.FLOOR_CUBE, Constants.arm.configs.TIPPED_CONE));
+        .onTrue(new SetFloor(Constants.arm.configs.YOSHI_CUBE, Constants.arm.configs.TIPPED_CONE));
 
     copilot
         .getUpButton()
@@ -112,12 +113,27 @@ public class RobotContainer {
         .getDownButton()
         .onTrue(new SetPosition(Constants.arm.configs.LOW_CUBE, Constants.arm.configs.LOW_CONE));
 
-    copilot.getRightBumperButton().debounce(0.10).onTrue(new SetCube());
+    // copilot.getRightBumperButton().debounce(0.05).onTrue(new SetCube());
 
-    copilot.getLeftBumperButton().debounce(0.15).onTrue(new SetFlip().andThen(new Reset()));
+    // copilot.getLeftBumperButton().debounce(0.05).onTrue(new SetFlip().andThen(new Reset()));
 
-    copilot.getBackButton().onTrue(new Reset());
+    // copilot.getBackButton().onTrue(new Reset());
+    // copilot.getStartButton().onTrue(new Reset());
+
+    //Raymond here we'll see if i like this
+
+    copilot
+        .getLeftBumperButton()
+        .debounce(0.05)
+        .onTrue(new InstantCommand(() -> claw.setIsCube(false)));
+    copilot
+        .getRightBumperButton()
+        .debounce(0.05)
+        .onTrue(new InstantCommand(() -> claw.setIsCube(true)));
+
+    copilot.getBackButton().onTrue(new SetFlip().andThen(new Reset()));
     copilot.getStartButton().onTrue(new Reset());
+    
   }
 
   private void smartdashboardButtons() {
@@ -146,29 +162,73 @@ public class RobotContainer {
 
     // SmartDashboard.putData(
     //     "Set Zero", new InstantCommand(() -> drivetrain.zeroPower(), drivetrain));
+
+
   }
 
   private void addChooser() {
     autoChooser.setDefaultOption(
-        "High Perfect Auto",
-        AutoBuilder.buildAuto(
-            "High Perfect Auto", AutoConfigs.EVENTS, AutoConfigs.PerfectAuto.CONSTRAINTS));
+        "Do Nothng", new SequentialCommandGroup());
     autoChooser.addOption(
         "High Perfect Auto",
         AutoBuilder.buildAuto(
             "High Perfect Auto", AutoConfigs.EVENTS, AutoConfigs.PerfectAuto.CONSTRAINTS));
     autoChooser.addOption(
-        "RFlat3",
-        AutoBuilder.buildAuto("RFlat3", AutoConfigs.EVENTS, AutoConfigs.RFlat2.CONSTRAINTS));
+        "Red Bump 2.5",
+        AutoBuilder.buildAuto("RBump2.5", AutoConfigs.EVENTS, AutoConfigs.RFlat2.CONSTRAINTS));
     autoChooser.addOption(
-        "RFlat2",
-        AutoBuilder.buildAuto("RFlat2", AutoConfigs.EVENTS, AutoConfigs.RFlat2.CONSTRAINTS));
+        "Red Bump 2.5P",
+        AutoBuilder.buildAuto("RBump2.5P", AutoConfigs.EVENTS, AutoConfigs.RFlat2.CONSTRAINTS));   
     autoChooser.addOption(
-        "RBump2",
+        "Red Bump 2",
         AutoBuilder.buildAuto("RBump2", AutoConfigs.EVENTS, AutoConfigs.RFlat2.CONSTRAINTS));
     autoChooser.addOption(
-        "RMid1.5P",
+        "Red Bump 2P",
+        AutoBuilder.buildAuto("RBump2P", AutoConfigs.EVENTS, AutoConfigs.RFlat2.CONSTRAINTS)); 
+    autoChooser.addOption(
+        "Red Flat 2.5P",
+        AutoBuilder.buildAuto("RFlat2.5P", AutoConfigs.EVENTS, AutoConfigs.RFlat2.CONSTRAINTS));
+    autoChooser.addOption(
+        "Red Flat 2",
+        AutoBuilder.buildAuto("RFlat2", AutoConfigs.EVENTS, AutoConfigs.RFlat2.CONSTRAINTS));
+    autoChooser.addOption(
+        "Red Flat 2P",
+        AutoBuilder.buildAuto("RFlat2P", AutoConfigs.EVENTS, AutoConfigs.RFlat2.CONSTRAINTS));
+    autoChooser.addOption(
+        "Red Flat 3",
+        AutoBuilder.buildAuto("RFlat3", AutoConfigs.EVENTS, AutoConfigs.RFlat2.CONSTRAINTS));
+    autoChooser.addOption(
+        "Red Mid 1.5P",
         AutoBuilder.buildAuto("RMid1.5P", AutoConfigs.EVENTS, AutoConfigs.RMid15P.CONSTRAINTS));
+
+    autoChooser.addOption(
+        "Blue Bump 2.5",
+        AutoBuilder.buildAuto("BBump2.5", AutoConfigs.EVENTS, AutoConfigs.RFlat2.CONSTRAINTS));
+    autoChooser.addOption(
+        "Blue Bump 2.5P",
+        AutoBuilder.buildAuto("BBump2.5P", AutoConfigs.EVENTS, AutoConfigs.RFlat2.CONSTRAINTS));   
+    autoChooser.addOption(
+        "Blue Bump 2",
+        AutoBuilder.buildAuto("BBump2", AutoConfigs.EVENTS, AutoConfigs.RFlat2.CONSTRAINTS));
+    autoChooser.addOption(
+        "Blue Bump 2P",
+        AutoBuilder.buildAuto("BBump2P", AutoConfigs.EVENTS, AutoConfigs.RFlat2.CONSTRAINTS)); 
+    autoChooser.addOption(
+        "Blue Flat 2.5P",
+        AutoBuilder.buildAuto("BFlat2.5P", AutoConfigs.EVENTS, AutoConfigs.RFlat2.CONSTRAINTS));
+    autoChooser.addOption(
+        "Blue Flat 2",
+        AutoBuilder.buildAuto("BFlat2", AutoConfigs.EVENTS, AutoConfigs.RFlat2.CONSTRAINTS));
+    autoChooser.addOption(
+        "Blue Flat 2P",
+        AutoBuilder.buildAuto("BFlat2P", AutoConfigs.EVENTS, AutoConfigs.RFlat2.CONSTRAINTS));
+    autoChooser.addOption(
+        "Blue Flat 3",
+        AutoBuilder.buildAuto("BFlat3", AutoConfigs.EVENTS, AutoConfigs.RFlat2.CONSTRAINTS));
+    autoChooser.addOption(
+        "Blue Mid 1.5P",
+        AutoBuilder.buildAuto("BMid1.5P", AutoConfigs.EVENTS, AutoConfigs.RMid15P.CONSTRAINTS));    
+    
     SmartDashboard.putData("Auto Chooser", autoChooser);
   }
 

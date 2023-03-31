@@ -2,15 +2,15 @@
   "waypoints": [
     {
       "anchorPoint": {
-        "x": 14.645245957158583,
+        "x": 1.89,
         "y": 0.46243688978606035
       },
       "prevControl": null,
       "nextControl": {
-        "x": 12.926590065460834,
-        "y": 0.3626859885298722
+        "x": 3.6086588928190944,
+        "y": 0.36273770973603753
       },
-      "holonomicAngle": 0.0,
+      "holonomicAngle": 180.0,
       "isReversal": false,
       "velOverride": null,
       "isLocked": false,
@@ -23,23 +23,23 @@
         ],
         "executionBehavior": "sequential",
         "waitBehavior": "deadline",
-        "waitTime": 4.0
+        "waitTime": 3.5
       }
     },
     {
       "anchorPoint": {
-        "x": 9.690000000000001,
+        "x": 6.95,
         "y": 0.9500000000000001
       },
       "prevControl": {
-        "x": 9.599317362494375,
-        "y": 1.0678874287573152
+        "x": 7.040685534412414,
+        "y": 1.067885200310823
       },
       "nextControl": {
-        "x": 9.707484290075426,
-        "y": 0.927270422901948
+        "x": 6.9325151513793015,
+        "y": 0.9272708525630818
       },
-      "holonomicAngle": 0.0,
+      "holonomicAngle": 180.0,
       "isReversal": false,
       "velOverride": null,
       "isLocked": false,
@@ -53,15 +53,15 @@
     },
     {
       "anchorPoint": {
-        "x": 14.654314220909145,
-        "y": 1.17
+        "x": 1.89,
+        "y": 1.27
       },
       "prevControl": {
-        "x": 12.314702173263997,
-        "y": 0.2631736249437404
+        "x": 4.2295515265525365,
+        "y": 0.3630174959847946
       },
       "nextControl": null,
-      "holonomicAngle": 0.0,
+      "holonomicAngle": -180.0,
       "isReversal": false,
       "velOverride": null,
       "isLocked": false,
@@ -69,7 +69,7 @@
       "stopEvent": {
         "names": [
           "Stop Drivetrain",
-          "Set High",
+          "Set High Delay",
           "Outtake",
           "Reset"
         ],
@@ -81,7 +81,7 @@
   ],
   "markers": [
     {
-      "position": 0.3454545454545455,
+      "position": 0.35,
       "names": [
         "Set Cube",
         "Set Flipped",
@@ -90,7 +90,7 @@
       ]
     },
     {
-      "position": 1.2727272727272714,
+      "position": 1.27,
       "names": [
         "Reset Flipped"
       ]

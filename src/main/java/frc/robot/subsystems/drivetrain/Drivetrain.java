@@ -120,17 +120,19 @@ public class Drivetrain extends SubsystemBase {
     SmartDashboard.putNumber("Set Drive Rotation", 0);
   }
 
-  public void drive(double x, double y, double rot, Supplier<Boolean> fine) {
-    boolean fineControl = fine.get().booleanValue();
+  public void drive(double x, double y, double rot) {
     double totalSpeed = Math.pow(Math.hypot(x, y), 3.0);
     double angle = Math.atan2(y, x);
     double xSpeed = totalSpeed * Math.cos(angle) * Constants.drivetrain.MAX_VELOCITY;
     double ySpeed = totalSpeed * Math.sin(angle) * Constants.drivetrain.MAX_VELOCITY;
     double rotSpeed = -rot * Constants.drivetrain.MAX_RADIANS;
 
-    xSpeed = (fineControl) ? xSpeed * 0.5 : xSpeed;
-    ySpeed = (fineControl) ? ySpeed * 0.5 : ySpeed;
-    rotSpeed = (fineControl) ? rotSpeed * 0.5 : rotSpeed;
+    if (rotSpeed != 0.0) {
+      rotPID.setSetpoint(-sensor.getRotation2d().getDegrees());
+    } else if (ySpeed != 0 || xSpeed != 0) {
+      double correction = rotPID.calculate(-sensor.getRotation2d().getDegrees());
+      rotSpeed = rotPID.atSetpoint() ? 0.0 : correction;
+    }
 
     boolean noInput = xSpeed == 0 && ySpeed == 0 && rotSpeed == 0;
 

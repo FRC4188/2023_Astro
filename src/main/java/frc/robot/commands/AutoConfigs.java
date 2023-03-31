@@ -40,6 +40,9 @@ public class AutoConfigs {
                   "Spit Low",
                   new SpitPosition(Constants.arm.configs.LOW_CUBE, Constants.arm.configs.LOW_CONE)),
               Map.entry(
+                  "Spit High",
+                  new SpitPosition(Constants.arm.configs.HIGH_CUBE, Constants.arm.configs.HIGH_CONE)),
+              Map.entry(
                   "Set High",
                   new ConditionalCommand(
                       new SetPosition(
@@ -47,7 +50,17 @@ public class AutoConfigs {
                           .withTimeout(1.3),
                       new SetPosition(
                               Constants.arm.configs.HIGH_CUBE, Constants.arm.configs.HIGH_CONE)
-                          .withTimeout(1.6),
+                          .withTimeout(1.8),
+                      Claw.getInstance()::getIsCube)),
+            Map.entry(
+                  "Set High Delay",
+                  new ConditionalCommand(
+                      new SetPosition(
+                              Constants.arm.configs.HIGH_CUBE, Constants.arm.configs.HIGH_CONE)
+                          .withTimeout(2.0),
+                      new SetPosition(
+                              Constants.arm.configs.HIGH_CUBE, Constants.arm.configs.HIGH_CONE)
+                          .withTimeout(2.5),
                       Claw.getInstance()::getIsCube)),
               Map.entry(
                   "Set Mid",
@@ -84,7 +97,7 @@ public class AutoConfigs {
 
   public static final class RMid15P {
     public static final PathConstraints[] CONSTRAINTS = {
-      new PathConstraints(3, 1), new PathConstraints(4, 2), new PathConstraints(4, 2)
+      new PathConstraints(3, 2), new PathConstraints(5, 3), new PathConstraints(4, 2)
     };
   }
 

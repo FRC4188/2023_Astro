@@ -87,12 +87,12 @@
         "y": 3.68
       },
       "prevControl": {
-        "x": 11.382444620843199,
-        "y": 5.434130227372314
+        "x": 11.382301306103754,
+        "y": 5.434255479522536
       },
       "nextControl": {
-        "x": 9.612271972807836,
-        "y": 3.4088482840854573
+        "x": 9.843933529610595,
+        "y": 3.6738948526844997
       },
       "holonomicAngle": 45.0,
       "isReversal": false,
@@ -108,12 +108,37 @@
     },
     {
       "anchorPoint": {
-        "x": 14.68,
-        "y": 4.22
+        "x": 11.126759621940298,
+        "y": 2.774844146179521
       },
       "prevControl": {
-        "x": 11.424917229348349,
-        "y": 5.652022937656986
+        "x": 9.902544015614348,
+        "y": 2.729502827426708
+      },
+      "nextControl": {
+        "x": 12.350975228266249,
+        "y": 2.8201854649323335
+      },
+      "holonomicAngle": 0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 12.405384810769622,
+        "y": 2.774844146179521
+      },
+      "prevControl": {
+        "x": 12.40085067889434,
+        "y": 2.8519243880593024
       },
       "nextControl": null,
       "holonomicAngle": 0,
@@ -123,11 +148,9 @@
       "isStopPoint": false,
       "stopEvent": {
         "names": [
-          "Stop Drivetrain",
-          "Outtake",
-          "Reset"
+          "Balance"
         ],
-        "executionBehavior": "sequential",
+        "executionBehavior": "parallel",
         "waitBehavior": "none",
         "waitTime": 0
       }
@@ -169,15 +192,9 @@
       ]
     },
     {
-      "position": 3.25,
+      "position": 3.527272727272724,
       "names": [
-        "Set Mid"
-      ]
-    },
-    {
-      "position": 3.2,
-      "names": [
-        "Set Flipped"
+        "Reset Flipped"
       ]
     }
   ]

@@ -152,7 +152,7 @@ public final class Constants {
 
       public static final double BL_kP = -0.009;
       public static final double BL_kI = 0.0;
-      public static final double BL_kD = 0.;
+      public static final double BL_kD = 0.0;
 
       public static final double BR_kP = -0.009;
       public static final double BR_kI = 0.0;
@@ -208,32 +208,31 @@ public final class Constants {
   public static final class arm {
     public static final class configs {
       // double[] = {Shoulder Angle, Telescope Length, Wrist Angle}
-      public static final double[][] HIGH_CONE = {{42.0, 1.3, 95.0}, {-42.0, 1.3, -95.0}};
-      public static final double[][] HIGH_CUBE = {{55.0, 1.25, 120}, {-55.0, 1.25, -20.0}};
+      public static final double[][] HIGH_CONE = {{44.0, 1.3, 87.0}, {-42.0, 1.22, -92.0}};
+      public static final double[][] HIGH_CUBE = {{55.0, 1.25, 120}, {-53.0, 1.22, -20.0}};
 
       public static final double[][] MID_CONE = {{42.0, 0.8, 100.0}, {-42.0, 0.8, -96.0}};
-      public static final double[][] MID_CUBE = {{55.0, 0.5, 120}, {-55.0, 0.5, -20.0}};
+      public static final double[][] MID_CUBE = {{55.0, 0.5, 120}, {-53.0, 0.5, -20.0}};
 
       public static final double[][] LOW_CONE = {{60.0, 0.1875, 100.0}, {-60.0, 0.1875, -100.0}};
       public static final double[][] LOW_CUBE = {{75.0, 0.1875, 100.0}, {-75.0, 0.1875, -20.0}};
 
-      public static final double[][] SS_CONE = {{0.0, 0.1875, 0.0}, {0.0, 0.1875, 0.0}};
-      public static final double[][] SS_CUBE = {{0.0, 0.1875, 0.0}, {0.0, 0.1875, 0.0}};
-      // Raymond here, this is the preset for untipped cones on double substation
-      // public static final double[] DS_CONE = {45.0, 1.2, 100.0};
-      public static final double[][] DS_CONE = {{14.0, 0.1875, 82.0}, {-14.0, 0.1875, -82.0}};
+      public static final double[][] SS_CONE = {{90.0, 0.1875, -30.0}, {-90.0, 0.1875, 30.0}};
+      public static final double[][] SS_CUBE = {{49.0, 0.1875, 100.0}, {-86.0, 0.1875, 112.0}};
 
+      public static final double[][] DS_CONE = {{14.0, 0.1875, 82.0}, {-14.0, 0.1875, -82.0}};
       public static final double[][] DS_CUBE = {{0, 0.1875, 0}, {0, 0.1875, 0}};
 
-      public static final double[][] FLOOR_CONE = {{81.0, 0.1875, 57.0}, {-79.0, 0.1875, -57.0}};
-      public static final double[][] FLOOR_CUBE = {{99.0, 0.5, 126.0}, {-113.0, 0.25, 35.0}};
-      public static final double[][] TIPPED_CONE = {{116.5, 0.1875, -5.0}, {-115, 0.1875, 5.0}};
+      public static final double[][] FLOOR_CONE = {{83.0, 0.1875, 57.0}, {-79.0, 0.1875, -57.0}};
+      public static final double[][] FLOOR_CUBE = {{104.0, 0.5, 126.0}, {-113.0, 0.25, 35.0}};
+      public static final double[][] TIPPED_CONE = {{117, 0.1875, 9.0}, {-115, 0.1875, 5.0}};
+      public static final double[][] YOSHI_CUBE = {{70, 1.4, -10}, {70, 0.5, 90}};
 
       public static final double[] RESET = {0, 0.1875, 110};
     }
 
     public static final class shoulder {
-      public static final double ZERO = 130.8125;
+      public static final double ZERO = 135.0;
       public static final double GEAR_RATIO = 132.741; // 132.741 to 1
       public static final double ROTATIONS_PER_DEGREE = GEAR_RATIO / 360;
 
@@ -263,10 +262,10 @@ public final class Constants {
       public static final double TICKS_PER_INCH = 2048; // 57.014 rotations per inch
       public static final double TICKS_PER_METER = 2048 / 0.025;
 
-      public static final double UPPER_LIMIT = Units.metersToInches(1.6) * 2048;
+      public static final double UPPER_LIMIT = Units.metersToInches(1.4) * 2048;
       public static final double LOWER_LIMIT = 7.5 * 2048;
 
-      public static final double kP = 60;
+      public static final double kP = 60.0;
       public static final double kI = 0.0;
       public static final double kD = 0.0;
       public static final double kF = 0.0;
@@ -275,8 +274,8 @@ public final class Constants {
       public static final double kG = 1.21;
       public static final double kV = 3.8186;
 
-      public static final double MAX_VEL = 30.0;
-      public static final double MAX_ACCEL = 25.0;
+      public static final double MAX_VEL = 40.0;
+      public static final double MAX_ACCEL = 35.0;
 
       public static final Constraints CONSTRAINTS = new Constraints(MAX_VEL, MAX_ACCEL);
       public static final double ALLOWED_ERROR = 0.05;
