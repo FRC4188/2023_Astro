@@ -41,7 +41,8 @@ public class AutoConfigs {
                   new SpitPosition(Constants.arm.configs.LOW_CUBE, Constants.arm.configs.LOW_CONE)),
               Map.entry(
                   "Spit High",
-                  new SpitPosition(Constants.arm.configs.HIGH_CUBE, Constants.arm.configs.HIGH_CONE)),
+                  new SpitPosition(
+                      Constants.arm.configs.HIGH_CUBE, Constants.arm.configs.HIGH_CONE)),
               Map.entry(
                   "Set High",
                   new ConditionalCommand(
@@ -52,7 +53,7 @@ public class AutoConfigs {
                               Constants.arm.configs.HIGH_CUBE, Constants.arm.configs.HIGH_CONE)
                           .withTimeout(1.8),
                       Claw.getInstance()::getIsCube)),
-            Map.entry(
+              Map.entry(
                   "Set High Delay",
                   new ConditionalCommand(
                       new SetPosition(

@@ -39,7 +39,6 @@ public class Telescope extends SubsystemBase {
   private Telescope() {
     init();
     TempManager.addMotor(motor);
-
   }
 
   @Override
@@ -55,7 +54,6 @@ public class Telescope extends SubsystemBase {
   }
 
   public void init() {
-
 
     motor.setInverted(true);
     motor.setBrake(true);

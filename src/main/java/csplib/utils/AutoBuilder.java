@@ -21,7 +21,8 @@ import java.util.List;
 public class AutoBuilder {
   private static Drivetrain drivetrain = Drivetrain.getInstance();
 
-  public static Command buildAuto(String pathName, HashMap<String, Command> eventMap, PathConstraints... constraints) {
+  public static Command buildAuto(
+      String pathName, HashMap<String, Command> eventMap, PathConstraints... constraints) {
     PathConstraints[] others = Arrays.copyOfRange(constraints, 1, constraints.length);
     List<PathPlannerTrajectory> paths = PathPlanner.loadPathGroup(pathName, constraints[0], others);
     SwerveAutoBuilder autoBuilder =

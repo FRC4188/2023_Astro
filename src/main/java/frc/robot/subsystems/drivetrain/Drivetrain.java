@@ -14,7 +14,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.drivetrain.rotPID;
 import frc.robot.subsystems.sensors.Sensors;
-import java.util.function.Supplier;
 
 public class Drivetrain extends SubsystemBase {
 
