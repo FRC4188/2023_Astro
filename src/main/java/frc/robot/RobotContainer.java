@@ -11,12 +11,9 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.AutoConfigs;
-import frc.robot.commands.arm.SetCube;
 import frc.robot.commands.arm.SetFlip;
 import frc.robot.commands.arm.SetFloor;
 import frc.robot.commands.arm.SetPosition;
-import frc.robot.commands.arm.shoulder.SetShoulderAngle;
-import frc.robot.commands.drive.Balance;
 import frc.robot.commands.groups.Reset;
 import frc.robot.subsystems.arm.Telescope;
 import frc.robot.subsystems.claw.Claw;
@@ -57,9 +54,15 @@ public class RobotContainer {
         new RunCommand(
             () ->
                 drivetrain.drive(
-                    pilot.rightBumper().getAsBoolean() ? pilot.getLeftY(Scale.LINEAR) * 0.5 : pilot.getLeftY(Scale.LINEAR),
-                    pilot.rightBumper().getAsBoolean() ? pilot.getLeftX(Scale.LINEAR) * 0.5 : pilot.getLeftX(Scale.LINEAR),
-                    pilot.rightBumper().getAsBoolean() ? pilot.getRightX(Scale.SQUARED) * 0.1 : pilot.getRightX(Scale.SQUARED)),
+                    pilot.rightBumper().getAsBoolean()
+                        ? pilot.getLeftY(Scale.LINEAR) * 0.5
+                        : pilot.getLeftY(Scale.LINEAR),
+                    pilot.rightBumper().getAsBoolean()
+                        ? pilot.getLeftX(Scale.LINEAR) * 0.5
+                        : pilot.getLeftX(Scale.LINEAR),
+                    pilot.rightBumper().getAsBoolean()
+                        ? pilot.getRightX(Scale.SQUARED) * 0.1
+                        : pilot.getRightX(Scale.SQUARED)),
             drivetrain));
   }
 
@@ -120,7 +123,7 @@ public class RobotContainer {
     // copilot.getBackButton().onTrue(new Reset());
     // copilot.getStartButton().onTrue(new Reset());
 
-    //Raymond here we'll see if i like this
+    // Raymond here we'll see if i like this
 
     copilot
         .getLeftBumperButton()
@@ -133,7 +136,6 @@ public class RobotContainer {
 
     copilot.getBackButton().onTrue(new SetFlip().andThen(new Reset()));
     copilot.getStartButton().onTrue(new Reset());
-    
   }
 
   private void smartdashboardButtons() {
@@ -163,12 +165,10 @@ public class RobotContainer {
     // SmartDashboard.putData(
     //     "Set Zero", new InstantCommand(() -> drivetrain.zeroPower(), drivetrain));
 
-
   }
 
   private void addChooser() {
-    autoChooser.setDefaultOption(
-        "Do Nothng", new SequentialCommandGroup());
+    autoChooser.setDefaultOption("Do Nothng", new SequentialCommandGroup());
     autoChooser.addOption(
         "High Perfect Auto",
         AutoBuilder.buildAuto(
