@@ -64,7 +64,14 @@ public class AutoConfigs {
                       Claw.getInstance()::getIsCube)),
               Map.entry(
                   "Set Mid",
-                  new SetPosition(Constants.arm.configs.MID_CUBE, Constants.arm.configs.MID_CONE)),
+                  new ConditionalCommand(
+                      new SetPosition(
+                              Constants.arm.configs.MID_CUBE, Constants.arm.configs.MID_CONE)
+                          .withTimeout(1.0),
+                      new SetPosition(
+                              Constants.arm.configs.MID_CUBE, Constants.arm.configs.MID_CONE)
+                          .withTimeout(1.3),
+                      Claw.getInstance()::getIsCube)),
               Map.entry(
                   "Set Low",
                   new SetPosition(Constants.arm.configs.LOW_CUBE, Constants.arm.configs.LOW_CONE)),
@@ -86,7 +93,7 @@ public class AutoConfigs {
               Map.entry("Intake", new Intake()),
               Map.entry("Outtake", new Outtake().withTimeout(0.1)),
               Map.entry("Balance", new Balance())));
-
+              
   public static final class RFlat2 {
     public static final PathConstraints[] CONSTRAINTS = {new PathConstraints(5, 3)};
   }
@@ -98,6 +105,17 @@ public class AutoConfigs {
   public static final class RMid15P {
     public static final PathConstraints[] CONSTRAINTS = {
       new PathConstraints(3, 2), new PathConstraints(5, 3), new PathConstraints(4, 2)
+    };
+  }
+
+  public static final class RMid2P {
+    public static final PathConstraints[] CONSTRAINTS = {
+      new PathConstraints(3, 2), 
+      new PathConstraints(6, 4), 
+      new PathConstraints(4, 3),
+      new PathConstraints(2, 1),
+      new PathConstraints(5,3)
+
     };
   }
 

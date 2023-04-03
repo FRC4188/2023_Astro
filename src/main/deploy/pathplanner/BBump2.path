@@ -22,8 +22,8 @@
           "Zero Telescope"
         ],
         "executionBehavior": "sequential",
-        "waitBehavior": "deadline",
-        "waitTime": 3.5
+        "waitBehavior": "none",
+        "waitTime": 0
       }
     },
     {
@@ -93,6 +93,12 @@
       "position": 1.27,
       "names": [
         "Reset Flipped"
+      ]
+    },
+    {
+      "position": 1.56,
+      "names": [
+        "Prep Shoulder"
       ]
     }
   ]

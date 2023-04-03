@@ -208,8 +208,8 @@ public final class Constants {
   public static final class arm {
     public static final class configs {
       // double[] = {Shoulder Angle, Telescope Length, Wrist Angle}
-      public static final double[][] HIGH_CONE = {{44.0, 1.3, 87.0}, {-42.0, 1.22, -92.0}};
-      public static final double[][] HIGH_CUBE = {{55.0, 1.25, 120}, {-53.0, 1.22, -20.0}};
+      public static final double[][] HIGH_CONE = {{44.0, 1.22, 87.0}, {-42.0, 1.22, -92.0}};
+      public static final double[][] HIGH_CUBE = {{55.0, 1.25, 120}, {-53.0, 1.15, -20.0}};
 
       public static final double[][] MID_CONE = {{42.0, 0.8, 100.0}, {-42.0, 0.8, -96.0}};
       public static final double[][] MID_CUBE = {{55.0, 0.5, 120}, {-53.0, 0.5, -20.0}};
@@ -223,16 +223,16 @@ public final class Constants {
       public static final double[][] DS_CONE = {{14.0, 0.1875, 82.0}, {-14.0, 0.1875, -82.0}};
       public static final double[][] DS_CUBE = {{0, 0.1875, 0}, {0, 0.1875, 0}};
 
-      public static final double[][] FLOOR_CONE = {{83.0, 0.1875, 57.0}, {-79.0, 0.1875, -57.0}};
-      public static final double[][] FLOOR_CUBE = {{104.0, 0.5, 126.0}, {-113.0, 0.25, 35.0}};
-      public static final double[][] TIPPED_CONE = {{117, 0.1875, 9.0}, {-115, 0.1875, 5.0}};
-      public static final double[][] YOSHI_CUBE = {{70, 1.4, -10}, {70, 0.5, 90}};
+      public static final double[][] FLOOR_CONE = {{79.0, 0.1875, 57.0}, {-79.0, 0.1875, -57.0}};
+      public static final double[][] FLOOR_CUBE = {{94.0, 0.5, 125.0}, {-113.0, 0.25, 35.0}};
+      public static final double[][] TIPPED_CONE = {{117, 0.1875, 9.0}, {-117, 0.1875, 5.0}};
+      public static final double[][] YOSHI_CUBE = {{90, 0.3, -10}, {90, 0.5, 90}};
 
       public static final double[] RESET = {0, 0.1875, 110};
     }
 
     public static final class shoulder {
-      public static final double ZERO = 135.0;
+      public static final double ZERO = 143.876953125+2.724609375;
       public static final double GEAR_RATIO = 132.741; // 132.741 to 1
       public static final double ROTATIONS_PER_DEGREE = GEAR_RATIO / 360;
 
@@ -249,6 +249,7 @@ public final class Constants {
 
       public static final double MAX_VEL = 1000.0;
       public static final double MAX_ACCEL = 720.0;
+
       public static final double ALLOWED_ERROR = 1.0;
 
       public static final Constraints CONSTRAINTS = new Constraints(MAX_VEL, MAX_ACCEL);

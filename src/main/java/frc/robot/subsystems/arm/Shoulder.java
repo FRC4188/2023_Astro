@@ -83,8 +83,8 @@ public class Shoulder extends SubsystemBase {
   }
 
   public void set(double percent) {
-    if (getAngle() > Constants.arm.shoulder.UPPER_LIMIT && percent > 0.0) percent = 0.0;
-    else if (getAngle() < Constants.arm.shoulder.LOWER_LIMIT && percent < 0.0) percent = 0.0;
+    // if (getAngle() > Constants.arm.shoulder.UPPER_LIMIT && percent > 0.0) percent = 0.0;
+    // else if (getAngle() < Constants.arm.shoulder.LOWER_LIMIT && percent < 0.0) percent = 0.0;
 
     leader.set(percent);
   }

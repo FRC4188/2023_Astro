@@ -22,8 +22,8 @@
           "Zero Telescope"
         ],
         "executionBehavior": "sequential",
-        "waitBehavior": "deadline",
-        "waitTime": 3.5
+        "waitBehavior": "none",
+        "waitTime": 0
       }
     },
     {
@@ -54,27 +54,27 @@
     {
       "anchorPoint": {
         "x": 1.89,
-        "y": 1.27
+        "y": 1.37
       },
       "prevControl": {
         "x": 4.229551526552565,
-        "y": 0.3630174959848016
+        "y": 0.4630174959848017
       },
       "nextControl": {
         "x": 1.8812496678965918,
-        "y": 1.2733922732763268
+        "y": 1.3733922732763268
       },
       "holonomicAngle": -180.0,
       "isReversal": false,
       "velOverride": null,
       "isLocked": false,
-      "isStopPoint": false,
+      "isStopPoint": true,
       "stopEvent": {
         "names": [
           "Stop Drivetrain",
-          "Set High Delay",
+          "Set High",
           "Outtake",
-          "Reset"
+          "Zero Telescope"
         ],
         "executionBehavior": "sequential",
         "waitBehavior": "none",
@@ -83,16 +83,16 @@
     },
     {
       "anchorPoint": {
-        "x": 1.9768814976226448,
-        "y": 2.3577040136536422
+        "x": 2.2489294101395223,
+        "y": 2.484659706161518
       },
       "prevControl": {
-        "x": 1.9768814976226448,
-        "y": 2.0669533595557343
+        "x": 2.2489294101395223,
+        "y": 1.7039459199263323
       },
       "nextControl": {
-        "x": 1.9768814976226448,
-        "y": 2.3939770686558925
+        "x": 2.2489294101395223,
+        "y": 2.5934788711682693
       },
       "holonomicAngle": 180.0,
       "isReversal": false,
@@ -108,12 +108,12 @@
     },
     {
       "anchorPoint": {
-        "x": 3.9628312589958514,
-        "y": 2.4121135961570173
+        "x": 4.289288754016105,
+        "y": 2.4755914424109555
       },
       "prevControl": {
-        "x": 2.983458773935092,
-        "y": 2.38490880490533
+        "x": 3.763329456483474,
+        "y": 2.4483866511592685
       },
       "nextControl": null,
       "holonomicAngle": 180.0,
@@ -145,6 +145,18 @@
       "position": 1.27,
       "names": [
         "Reset Flipped"
+      ]
+    },
+    {
+      "position": 2.1454545454545446,
+      "names": [
+        "Reset"
+      ]
+    },
+    {
+      "position": 1.56,
+      "names": [
+        "Prep Shoulder"
       ]
     }
   ]

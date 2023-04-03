@@ -23,7 +23,7 @@ public class Wrist extends SubsystemBase {
   }
 
   private CSP_SparkMax motor = new CSP_SparkMax(Constants.ids.WRIST);
-  private WPI_CANCoder encoder = new WPI_CANCoder(Constants.ids.WRIST_ENCODER);
+  //private WPI_CANCoder encoder = new WPI_CANCoder(Constants.ids.WRIST_ENCODER);
 
   private ProfiledPIDController pid =
       new ProfiledPIDController(
@@ -49,12 +49,12 @@ public class Wrist extends SubsystemBase {
   }
 
   private void init() {
-    encoder.configFactoryDefault();
-    encoder.clearStickyFaults();
-    encoder.configAbsoluteSensorRange(AbsoluteSensorRange.Signed_PlusMinus180);
-    encoder.setPosition(0.0);
-    encoder.configSensorDirection(true);
-    encoder.configMagnetOffset(Constants.arm.wrist.ZERO);
+    // encoder.configFactoryDefault();
+    // encoder.clearStickyFaults();
+    // encoder.configAbsoluteSensorRange(AbsoluteSensorRange.Signed_PlusMinus180);
+    // encoder.setPosition(0.0);
+    // encoder.configSensorDirection(true);
+    // encoder.configMagnetOffset(Constants.arm.wrist.ZERO);
 
     motor.setScalar(1 / Constants.arm.wrist.ROTATIONS_PER_DEGREE);
     motor.setBrake(true);
@@ -69,10 +69,10 @@ public class Wrist extends SubsystemBase {
   }
 
   public void set(double percent) {
-    if ((!(shoulder.getAngle() + getMotorAngle() >= -180) && percent < 0.0)
-        || getMotorAngle() > Constants.arm.wrist.UPPER_LIMIT && percent > 0.0) percent = 0.0;
-    else if ((!(180 >= shoulder.getAngle() + getMotorAngle()) && percent > 0.0)
-        || getMotorAngle() < Constants.arm.wrist.LOWER_LIMIT && percent < 0.0) percent = 0.0;
+    // if ((!(shoulder.getAngle() + getMotorAngle() >= -180) && percent < 0.0)
+    //     || getMotorAngle() > Constants.arm.wrist.UPPER_LIMIT && percent > 0.0) percent = 0.0;
+    // else if ((!(180 >= shoulder.getAngle() + getMotorAngle()) && percent > 0.0)
+    //     || getMotorAngle() < Constants.arm.wrist.LOWER_LIMIT && percent < 0.0) percent = 0.0;
 
     motor.set(percent);
   }
@@ -85,9 +85,9 @@ public class Wrist extends SubsystemBase {
     pid.setPID(kP, kI, kD);
   }
 
-  public double getAngle() {
-    return encoder.getAbsolutePosition();
-  }
+  // public double getAngle() {
+  //   return encoder.getAbsolutePosition();
+  // }
 
   public double getSetpoint() {
     return pid.getSetpoint().position;
