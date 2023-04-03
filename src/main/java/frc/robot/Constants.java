@@ -232,7 +232,7 @@ public final class Constants {
     }
 
     public static final class shoulder {
-      public static final double ZERO = 143.876953125+2.724609375;
+      public static final double ZERO = 143.876953125 + 2.724609375;
       public static final double GEAR_RATIO = 132.741; // 132.741 to 1
       public static final double ROTATIONS_PER_DEGREE = GEAR_RATIO / 360;
 

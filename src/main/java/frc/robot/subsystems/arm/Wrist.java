@@ -4,8 +4,6 @@
 
 package frc.robot.subsystems.arm;
 
-import com.ctre.phoenix.sensors.AbsoluteSensorRange;
-import com.ctre.phoenix.sensors.WPI_CANCoder;
 import csplib.motors.CSP_SparkMax;
 import csplib.utils.TempManager;
 import edu.wpi.first.math.controller.ArmFeedforward;
@@ -23,7 +21,7 @@ public class Wrist extends SubsystemBase {
   }
 
   private CSP_SparkMax motor = new CSP_SparkMax(Constants.ids.WRIST);
-  //private WPI_CANCoder encoder = new WPI_CANCoder(Constants.ids.WRIST_ENCODER);
+  // private WPI_CANCoder encoder = new WPI_CANCoder(Constants.ids.WRIST_ENCODER);
 
   private ProfiledPIDController pid =
       new ProfiledPIDController(
