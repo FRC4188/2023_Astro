@@ -94,7 +94,7 @@ public class AutoConfigs {
               Map.entry("Intake", new Intake()),
               Map.entry("Outtake", new Outtake().withTimeout(0.1)),
               Map.entry("Balance", new Balance())));
-              
+
   public static final class RFlat2 {
     public static final PathConstraints[] CONSTRAINTS = {new PathConstraints(5, 3)};
   }
@@ -111,12 +111,11 @@ public class AutoConfigs {
 
   public static final class RMid2P {
     public static final PathConstraints[] CONSTRAINTS = {
-      new PathConstraints(3, 2), 
-      new PathConstraints(6, 4), 
+      new PathConstraints(3, 2),
+      new PathConstraints(6, 4),
       new PathConstraints(4, 3),
       new PathConstraints(2, 1),
-      new PathConstraints(5,3)
-
+      new PathConstraints(5, 3)
     };
   }
 

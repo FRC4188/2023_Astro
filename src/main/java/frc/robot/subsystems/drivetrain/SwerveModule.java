@@ -25,7 +25,6 @@ public class SwerveModule {
   private PIDController anglePID;
   private Timer timer = new Timer();
 
-
   /**
    * Creates a SwerveModule object
    *
