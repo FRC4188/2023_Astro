@@ -15,7 +15,6 @@ import frc.robot.commands.arm.SetFlip;
 import frc.robot.commands.arm.SetFloor;
 import frc.robot.commands.arm.SetPosition;
 import frc.robot.commands.groups.Reset;
-import frc.robot.subsystems.arm.Telescope;
 import frc.robot.subsystems.claw.Claw;
 import frc.robot.subsystems.drivetrain.Drivetrain;
 import frc.robot.subsystems.sensors.Sensors;
@@ -32,7 +31,6 @@ public class RobotContainer {
   private CSP_Controller copilot = new CSP_Controller(Constants.controller.COPILOT_PORT);
 
   private Drivetrain drivetrain = Drivetrain.getInstance();
-  private Telescope telescope = Telescope.getInstance();
   private Claw claw = Claw.getInstance();
 
   private SendableChooser<Command> autoChooser = new SendableChooser<Command>();
@@ -74,7 +72,6 @@ public class RobotContainer {
             new InstantCommand(
                 () -> Sensors.getInstance().setPigeonAngle(new Rotation2d()),
                 Sensors.getInstance()));
-
     pilot
         .getLeftTButton()
         .whileTrue(new RunCommand(() -> claw.outtake(), claw))
@@ -115,6 +112,12 @@ public class RobotContainer {
     copilot
         .getDownButton()
         .onTrue(new SetPosition(Constants.arm.configs.LOW_CUBE, Constants.arm.configs.LOW_CONE));
+
+    copilot
+        .getRightTButton()
+        .onTrue(
+            new SetFloor(
+                Constants.arm.configs.BACK_TIPPED_CONE, Constants.arm.configs.BACK_TIPPED_CONE));
 
     // copilot.getRightBumperButton().debounce(0.05).onTrue(new SetCube());
 
