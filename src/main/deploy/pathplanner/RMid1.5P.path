@@ -1,0 +1,125 @@
+{
+  "waypoints": [
+    {
+      "anchorPoint": {
+        "x": 14.663382484659708,
+        "y": 2.1854070023929526
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 13.021801307218617,
+        "y": 2.1854070023929526
+      },
+      "holonomicAngle": 0.0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [
+          "Set High Delay",
+          "Outtake",
+          "Reset Flipped"
+        ],
+        "executionBehavior": "sequential",
+        "waitBehavior": "deadline",
+        "waitTime": 4.0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 11.652718919472928,
+        "y": 2.194475266143515
+      },
+      "prevControl": {
+        "x": 11.888918590117322,
+        "y": 2.194475266143515
+      },
+      "nextControl": {
+        "x": 11.335329688203238,
+        "y": 2.194475266143515
+      },
+      "holonomicAngle": 0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 9.18,
+        "y": 1.95
+      },
+      "prevControl": {
+        "x": 9.089317362494373,
+        "y": 2.067887428757315
+      },
+      "nextControl": {
+        "x": 9.197484290075424,
+        "y": 1.927270422901948
+      },
+      "holonomicAngle": 0.0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": true,
+      "stopEvent": {
+        "names": [],
+        "executionBehavior": "sequential",
+        "waitBehavior": "none",
+        "waitTime": 0.0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 12.278429118261748,
+        "y": 2.5753423436671445
+      },
+      "prevControl": {
+        "x": 9.149878124317654,
+        "y": 2.647888453671645
+      },
+      "nextControl": null,
+      "holonomicAngle": 0.0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [
+          "Balance"
+        ],
+        "executionBehavior": "sequential",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    }
+  ],
+  "markers": [
+    {
+      "position": 1.090909090909091,
+      "names": [
+        "Set Floor",
+        "Intake"
+      ]
+    },
+    {
+      "position": 2.5909090909090873,
+      "names": [
+        "Reset Flipped"
+      ]
+    },
+    {
+      "position": 0.16363636363636336,
+      "names": [
+        "Set Cube"
+      ]
+    }
+  ]
+}

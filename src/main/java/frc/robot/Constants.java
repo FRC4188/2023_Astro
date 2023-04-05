@@ -6,6 +6,8 @@ package frc.robot;
 
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.numbers.N1;
@@ -41,6 +43,13 @@ public final class Constants {
 
     public static double DOUBLE_Z = 0.0;
     public static double SINGLE_Z = 0.0;
+
+    public static double FIELD_WIDTH = Units.feetToMeters(26.2916);
+
+    public static Transform3d RED_RIGHT_WALL =
+        new Transform3d(
+            new Translation3d(FIELD_WIDTH, new Rotation3d(0, 0, Math.PI)),
+            new Rotation3d(0, 0, Math.PI));
   }
 
   public static final class robot {
@@ -95,7 +104,7 @@ public final class Constants {
   }
 
   public static class drivetrain {
-    public static final double DRIVE_GEARING = 6.55; // 6.55 : 1
+    public static final double DRIVE_GEARING = 5.50; // 5.50 : 1
     public static final double WHEEL_DIAMETER = Units.inchesToMeters(4);
     public static final double DRIVE_TICKS_PER_ROTATION =
         robot.FALCON_ENCODER_TICKS * DRIVE_GEARING;
@@ -111,10 +120,10 @@ public final class Constants {
     public static final double ANGLE_DEGREES_PER_TICK = 1.0 / ANGLE_TICKS_PER_DEGREE;
 
     public static final double MAX_VOLTS = 12.0;
-    public static final double MAX_VELOCITY = 5.0;
-    public static final double MAX_ACCEL = 12.0;
+    public static final double MAX_VELOCITY = 10.0; // ?
+    public static final double MAX_ACCEL = 7.0;
     public static final double MAX_CACCEL = 8.0;
-    public static final double MAX_RADIANS = 3.0 * Math.PI;
+    public static final double MAX_RADIANS = 5 * Math.PI;
     public static final double RAMP_RATE = 0.5;
 
     public static final Matrix<N3, N1> STATE_STD_DEVS =
@@ -131,10 +140,10 @@ public final class Constants {
     public static final Translation2d BR_LOCATION =
         new Translation2d(-(Constants.robot.A_WIDTH / 2), -(Constants.robot.A_LENGTH / 2));
 
-    public static final double FL_ZERO = -140.80078125;
-    public static final double BL_ZERO = -126.298828125;
-    public static final double BR_ZERO = 34.365234375;
-    public static final double FR_ZERO = -20.56640625;
+    public static final double FL_ZERO = -57.568359375;
+    public static final double BL_ZERO = 169.892578125;
+    public static final double BR_ZERO = 43.505859375;
+    public static final double FR_ZERO = -75.498046875;
 
     public static final class angle {
       public static final double FL_kP = -0.008;
@@ -143,7 +152,7 @@ public final class Constants {
 
       public static final double BL_kP = -0.009;
       public static final double BL_kI = 0.0;
-      public static final double BL_kD = 0.;
+      public static final double BL_kD = 0.0;
 
       public static final double BR_kP = -0.009;
       public static final double BR_kI = 0.0;
@@ -168,7 +177,7 @@ public final class Constants {
     }
 
     public static final class rotPID {
-      public static final double kP = 1.5;
+      public static final double kP = 2.5;
       public static final double kI = 0.0;
       public static final double kD = 0.0;
     }
@@ -177,6 +186,12 @@ public final class Constants {
       public static final double kP = -0.1;
       public static final double kI = 0.0;
       public static final double kD = -0.006;
+    }
+
+    public static final class balancePID {
+      public static final double kP = 0.0;
+      public static final double kI = 0.0;
+      public static final double kD = 0.0;
     }
   }
 
@@ -193,32 +208,33 @@ public final class Constants {
   public static final class arm {
     public static final class configs {
       // double[] = {Shoulder Angle, Telescope Length, Wrist Angle}
-      public static final double[] HIGH_CONE = {51.0, 1.15, 70.0};
-      public static final double[] HIGH_CUBE = {55.0, 1.25, 120};
+      public static final double[][] HIGH_CONE = {{44.0, 1.22, 87.0}, {-42.0, 1.22, -92.0}};
+      public static final double[][] HIGH_CUBE = {{55.0, 1.25, 120}, {-53.0, 1.15, -20.0}};
 
-      public static final double[] MID_CONE = {51.0, 0.8, 100.0};
-      public static final double[] MID_CUBE = {55.0, 0.5, 120};
+      public static final double[][] MID_CONE = {{42.0, 0.8, 100.0}, {-42.0, 0.8, -96.0}};
+      public static final double[][] MID_CUBE = {{55.0, 0.5, 120}, {-53.0, 0.5, -20.0}};
 
-      public static final double[] LOW_CONE = {45.0, 0.1875, 100.0};
-      public static final double[] LOW_CUBE = {75.0, 0.1875, 100.0};
+      public static final double[][] LOW_CONE = {{60.0, 0.1875, 100.0}, {-60.0, 0.1875, -100.0}};
+      public static final double[][] LOW_CUBE = {{75.0, 0.1875, 100.0}, {-75.0, 0.1875, -20.0}};
 
-      public static final double[] SS_CONE = {0.0, 0.1875, 0.0};
-      public static final double[] SS_CUBE = {0.0, 0.1875, 0.0};
-      // Raymond here, this is the preset for untipped cones on double substation
-      // public static final double[] DS_CONE = {45.0, 1.2, 100.0};
-      public static final double[] DS_CONE = {14.0, 0.1875, 83.0};
+      public static final double[][] SS_CONE = {{90.0, 0.1875, -30.0}, {-90.0, 0.1875, 30.0}};
+      public static final double[][] SS_CUBE = {{49.0, 0.1875, 100.0}, {-86.0, 0.1875, 112.0}};
 
-      public static final double[] DS_CUBE = {0, 0.1875, 0};
+      public static final double[][] DS_CONE = {{14.0, 0.1875, 82.0}, {-14.0, 0.1875, -82.0}};
+      public static final double[][] DS_CUBE = {{0, 0.1875, 0}, {0, 0.1875, 0}};
 
-      public static final double[] FLOOR_CONE = {85.0, 0.1875, 57.0};
-      public static final double[] FLOOR_CUBE = {104.0, 0.5, 126};
-      public static final double[] TIPPED_CONE = {122, 0.1875, -5.0};
+      public static final double[][] FLOOR_CONE = {{79.0, 0.1875, 57.0}, {-79.0, 0.1875, -57.0}};
+      public static final double[][] FLOOR_CUBE = {{94.0, 0.5, 125.0}, {-113.0, 0.25, 35.0}};
+      public static final double[][] TIPPED_CONE = {{117, 0.1875, 9.0}, {-117, 0.1875, 5.0}};
+      public static final double[][] BACK_TIPPED_CONE = {{86.0, 0.5, 125.0}, {-84.0, 0.5, -125.0}};
+
+      public static final double[][] YOSHI_CUBE = {{90, 0.3, -10}, {90, 0.5, 90}};
 
       public static final double[] RESET = {0, 0.1875, 110};
     }
 
     public static final class shoulder {
-      public static final double ZERO = 119.70703125;
+      public static final double ZERO = 143.876953125 + 2.724609375;
       public static final double GEAR_RATIO = 132.741; // 132.741 to 1
       public static final double ROTATIONS_PER_DEGREE = GEAR_RATIO / 360;
 
@@ -228,16 +244,15 @@ public final class Constants {
       public static final double UPPER_LIMIT = 117.0;
       public static final double LOWER_LIMIT = -117.0;
 
-      public static final double kP = 0.04;
+      public static final double kP = 0.02;
       public static final double kI = 0.0;
-      public static final double kD = 0.0;
+      public static final double kD = 0.00;
       public static final double kF = 0.0;
 
-      // raymond here, reducing these for shoulder PID testing
       public static final double MAX_VEL = 1000.0;
+      public static final double MAX_ACCEL = 720.0;
 
-      public static final double MAX_ACCEL = 220.0;
-      public static final double ALLOWED_ERROR = 1;
+      public static final double ALLOWED_ERROR = 1.0;
 
       public static final Constraints CONSTRAINTS = new Constraints(MAX_VEL, MAX_ACCEL);
 
@@ -247,15 +262,13 @@ public final class Constants {
     }
 
     public static final class telescope {
-      public static final double ZERO_CURRENT = 0.0;
-
       public static final double TICKS_PER_INCH = 2048; // 57.014 rotations per inch
       public static final double TICKS_PER_METER = 2048 / 0.025;
 
-      public static final double UPPER_LIMIT = Units.metersToInches(1.6) * 2048;
+      public static final double UPPER_LIMIT = Units.metersToInches(1.4) * 2048;
       public static final double LOWER_LIMIT = 7.5 * 2048;
 
-      public static final double kP = 60;
+      public static final double kP = 60.0;
       public static final double kI = 0.0;
       public static final double kD = 0.0;
       public static final double kF = 0.0;
@@ -264,8 +277,8 @@ public final class Constants {
       public static final double kG = 1.21;
       public static final double kV = 3.8186;
 
-      public static final double MAX_VEL = 30.0;
-      public static final double MAX_ACCEL = 25.0;
+      public static final double MAX_VEL = 40.0;
+      public static final double MAX_ACCEL = 35.0;
 
       public static final Constraints CONSTRAINTS = new Constraints(MAX_VEL, MAX_ACCEL);
       public static final double ALLOWED_ERROR = 0.05;
@@ -289,8 +302,8 @@ public final class Constants {
       public static final double kG = 0;
       public static final double kV = 0;
 
-      public static final double MAX_VEL = 170.0;
-      public static final double MAX_ACCEL = 120.0;
+      public static final double MAX_VEL = 1000.0;
+      public static final double MAX_ACCEL = 520.0;
       public static final Constraints CONSTRAINTS = new Constraints(MAX_VEL, MAX_ACCEL);
       public static final double ALLOWED_ERROR = 1;
     }

@@ -1,0 +1,110 @@
+{
+  "waypoints": [
+    {
+      "anchorPoint": {
+        "x": 1.89,
+        "y": 4.9240226550628545
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 3.6086588928190944,
+        "y": 4.824323475012831
+      },
+      "holonomicAngle": 180.0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [
+          "Set High",
+          "Outtake",
+          "Zero Telescope"
+        ],
+        "executionBehavior": "sequential",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 6.54,
+        "y": 4.48874599503585
+      },
+      "prevControl": {
+        "x": 6.630685534412412,
+        "y": 4.606631195346673
+      },
+      "nextControl": {
+        "x": 6.522515151379302,
+        "y": 4.466016847598932
+      },
+      "holonomicAngle": 180.0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": true,
+      "stopEvent": {
+        "names": [],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0.0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 1.95,
+        "y": 4.252971137521223
+      },
+      "prevControl": {
+        "x": 4.289669016725621,
+        "y": 5.014530293874856
+      },
+      "nextControl": null,
+      "holonomicAngle": 180.0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [
+          "Stop Drivetrain",
+          "Set High",
+          "Outtake",
+          "Reset"
+        ],
+        "executionBehavior": "sequential",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    }
+  ],
+  "markers": [
+    {
+      "position": 0.24630681818181827,
+      "names": [
+        "Set Flipped",
+        "Set Floor",
+        "Intake"
+      ]
+    },
+    {
+      "position": 1.2363636363636363,
+      "names": [
+        "Reset Flipped"
+      ]
+    },
+    {
+      "position": 0.053977272727272735,
+      "names": [
+        "Set Cube"
+      ]
+    },
+    {
+      "position": 1.5573863636363632,
+      "names": [
+        "Prep Shoulder"
+      ]
+    }
+  ]
+}

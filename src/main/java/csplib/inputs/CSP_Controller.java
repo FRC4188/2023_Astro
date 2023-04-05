@@ -13,7 +13,8 @@ public class CSP_Controller extends CommandXboxController {
   public enum Scale {
     LINEAR,
     SQUARED,
-    CUBED
+    CUBED,
+    QUARTIC
   }
 
   public CSP_Controller(int port) {
@@ -31,6 +32,7 @@ public class CSP_Controller extends CommandXboxController {
     if (Math.abs(input) > Constants.controller.DEADBAND) {
       if (scale == Scale.SQUARED) return Math.signum(input) * Math.pow(input, 2);
       else if (scale == Scale.CUBED) return Math.pow(input, 3);
+      else if (scale == Scale.QUARTIC) return Math.signum(input) * Math.pow(input, 4);
       else return input;
     } else {
       return 0;

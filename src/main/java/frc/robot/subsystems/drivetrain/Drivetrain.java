@@ -12,11 +12,14 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.drivetrain.rotPID;
 import frc.robot.subsystems.sensors.Sensors;
 
 public class Drivetrain extends SubsystemBase {
 
   private static Drivetrain instance;
+
+  private Sensors sensor = Sensors.getInstance();
 
   public static synchronized Drivetrain getInstance() {
     if (instance == null) instance = new Drivetrain();
@@ -87,8 +90,6 @@ public class Drivetrain extends SubsystemBase {
           },
           new Pose2d());
 
-  private double lastAngle = 0;
-
   private PIDController rotPID =
       new PIDController(
           Constants.drivetrain.correctionPID.kP, 0.0, Constants.drivetrain.correctionPID.kD);
@@ -104,10 +105,10 @@ public class Drivetrain extends SubsystemBase {
     updateOdometry();
     SmartDashboard.putString("Position", getPose2d().toString());
 
-    // SmartDashboard.putNumber("FL Angle", frontLeft.getModulePosition().angle.getDegrees());
-    // SmartDashboard.putNumber("BL Angle", backLeft.getModulePosition().angle.getDegrees());
-    // SmartDashboard.putNumber("BR Angle", backRight.getModulePosition().angle.getDegrees());
-    // SmartDashboard.putNumber("FR Angle", frontRight.getModulePosition().angle.getDegrees());
+    SmartDashboard.putNumber("FL Angle", frontLeft.getModulePosition().angle.getDegrees());
+    SmartDashboard.putNumber("BL Angle", backLeft.getModulePosition().angle.getDegrees());
+    SmartDashboard.putNumber("BR Angle", backRight.getModulePosition().angle.getDegrees());
+    SmartDashboard.putNumber("FR Angle", frontRight.getModulePosition().angle.getDegrees());
   }
 
   public void putDashboard() {
@@ -119,16 +120,20 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public void drive(double x, double y, double rot) {
-    double xSpeed = x * Constants.drivetrain.MAX_VELOCITY;
-    double ySpeed = y * Constants.drivetrain.MAX_VELOCITY;
+    double totalSpeed = Math.pow(Math.hypot(x, y), 3.0);
+    double angle = Math.atan2(y, x);
+    double xSpeed = totalSpeed * Math.cos(angle) * Constants.drivetrain.MAX_VELOCITY;
+    double ySpeed = totalSpeed * Math.sin(angle) * Constants.drivetrain.MAX_VELOCITY;
     double rotSpeed = -rot * Constants.drivetrain.MAX_RADIANS;
 
-    Rotation2d pigeonAngle = sensors.getRotation2d();
+    if (rotSpeed != 0.0) {
+      rotPID.setSetpoint(-sensor.getRotation2d().getDegrees());
+    } else if (ySpeed != 0 || xSpeed != 0) {
+      double correction = rotPID.calculate(-sensor.getRotation2d().getDegrees());
+      rotSpeed = rotPID.atSetpoint() ? 0.0 : correction;
+    }
 
     boolean noInput = xSpeed == 0 && ySpeed == 0 && rotSpeed == 0;
-
-    rotSpeed = (rotSpeed == 0) ? rotPID.calculate(lastAngle, pigeonAngle.getDegrees()) : rotSpeed;
-    lastAngle = pigeonAngle.getDegrees();
 
     SwerveModuleState[] states =
         noInput
@@ -143,6 +148,10 @@ public class Drivetrain extends SubsystemBase {
                     xSpeed, ySpeed, rotSpeed, sensors.getRotation2d()));
 
     setModuleStates(states);
+  }
+
+  public void setRotSetpoint(double setpoint) {
+    rotPID.setSetpoint(setpoint);
   }
 
   public void setRotPID(double kP, double kI, double kD) {

@@ -5,21 +5,18 @@
 package frc.robot.commands.arm;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import frc.robot.subsystems.arm.Shoulder;
+import frc.robot.subsystems.claw.Claw;
 
-// NOTE:  Consider using this command inline, rather than writing a subclass.  For more
-// information, see:
-// https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class SetFlip extends InstantCommand {
-  private Shoulder shoulder = Shoulder.getInstance();
-
-  public SetFlip() {
+public class SetCube extends InstantCommand {
+  private Claw claw = Claw.getInstance();
+  /** Creates a new SetCube. */
+  public SetCube() {
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    shoulder.setFlip(!shoulder.getIsFlipped());
+    claw.setIsCube(!claw.getIsCube());
   }
 }

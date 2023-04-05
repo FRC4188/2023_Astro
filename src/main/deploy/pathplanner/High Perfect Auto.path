@@ -17,12 +17,13 @@
       "isStopPoint": false,
       "stopEvent": {
         "names": [
-          "Spit High",
+          "Set High Delay",
+          "Outtake",
           "Reset"
         ],
         "executionBehavior": "sequential",
         "waitBehavior": "deadline",
-        "waitTime": 4.0
+        "waitTime": 5.0
       }
     },
     {
@@ -44,9 +45,7 @@
       "isLocked": false,
       "isStopPoint": true,
       "stopEvent": {
-        "names": [
-          "Wait"
-        ],
+        "names": [],
         "executionBehavior": "sequential",
         "waitBehavior": "none",
         "waitTime": 3.0
@@ -68,7 +67,9 @@
       "isLocked": false,
       "isStopPoint": false,
       "stopEvent": {
-        "names": [],
+        "names": [
+          "Balance"
+        ],
         "executionBehavior": "parallel",
         "waitBehavior": "none",
         "waitTime": 0

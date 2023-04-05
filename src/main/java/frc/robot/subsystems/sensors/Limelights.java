@@ -58,7 +58,9 @@ public class Limelights {
     if (LimelightHelpers.getTV(frontLLName)) {
       return (DriverStation.getAlliance() == Alliance.Blue)
           ? filterPose(LimelightHelpers.getBotPose3d_wpiBlue(frontLLName))
-          : filterPose(LimelightHelpers.getBotPose3d_wpiRed(frontLLName).relativeTo(new Pose3d()));
+          : filterPose(
+              LimelightHelpers.getBotPose3d_wpiRed(frontLLName)
+                  .transformBy(Constants.field.RED_RIGHT_WALL));
     } else if (LimelightHelpers.getTV(backLLName)) {
       return filterPose(LimelightHelpers.getBotPose3d_wpiBlue(backLLName));
     } else return new Pose3d();
