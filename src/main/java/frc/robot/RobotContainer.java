@@ -32,7 +32,6 @@ public class RobotContainer {
   private CSP_Controller copilot = new CSP_Controller(Constants.controller.COPILOT_PORT);
 
   private Drivetrain drivetrain = Drivetrain.getInstance();
-  private Telescope telescope = Telescope.getInstance();
   private Claw claw = Claw.getInstance();
 
   private SendableChooser<Command> autoChooser = new SendableChooser<Command>();
@@ -74,7 +73,6 @@ public class RobotContainer {
             new InstantCommand(
                 () -> Sensors.getInstance().setPigeonAngle(new Rotation2d()),
                 Sensors.getInstance()));
-
     pilot
         .getLeftTButton()
         .whileTrue(new RunCommand(() -> claw.outtake(), claw))
@@ -115,6 +113,10 @@ public class RobotContainer {
     copilot
         .getDownButton()
         .onTrue(new SetPosition(Constants.arm.configs.LOW_CUBE, Constants.arm.configs.LOW_CONE));
+
+    copilot
+        .getRightTButton()
+        .onTrue(new SetFloor(Constants.arm.configs.BACK_TIPPED_CONE, Constants.arm.configs.BACK_TIPPED_CONE));
 
     // copilot.getRightBumperButton().debounce(0.05).onTrue(new SetCube());
 

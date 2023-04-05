@@ -226,6 +226,8 @@ public final class Constants {
       public static final double[][] FLOOR_CONE = {{79.0, 0.1875, 57.0}, {-79.0, 0.1875, -57.0}};
       public static final double[][] FLOOR_CUBE = {{94.0, 0.5, 125.0}, {-113.0, 0.25, 35.0}};
       public static final double[][] TIPPED_CONE = {{117, 0.1875, 9.0}, {-117, 0.1875, 5.0}};
+      public static final double[][] BACK_TIPPED_CONE = {{86.0, 0.5, 125.0}, {-84.0, 0.5, -125.0}};
+
       public static final double[][] YOSHI_CUBE = {{90, 0.3, -10}, {90, 0.5, 90}};
 
       public static final double[] RESET = {0, 0.1875, 110};
