@@ -13,6 +13,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Constants;
 
 /** Add your docs here. */
@@ -22,6 +23,7 @@ public class SwerveModule {
   private WPI_CANCoder encoder;
   private double zero;
   private PIDController anglePID;
+  private Timer timer = new Timer();
 
   /**
    * Creates a SwerveModule object
@@ -82,7 +84,17 @@ public class SwerveModule {
     SwerveModuleState optimized =
         SwerveModuleState.optimize(desired, Rotation2d.fromDegrees(getAngle()));
     speed.setVelocity(optimized.speedMetersPerSecond);
-    angle.set(anglePID.calculate(getAngle(), optimized.angle.getDegrees()));
+
+    if (optimized.speedMetersPerSecond == 0.0) {
+      if (timer.get() > 0.5) {
+        angle.set(optimized.angle.getDegrees());
+      } else {
+        angle.set(0.0);
+      }
+    } else {
+      timer.reset();
+      angle.set(anglePID.calculate(getAngle(), optimized.angle.getDegrees()));
+    }
   }
 
   /**
