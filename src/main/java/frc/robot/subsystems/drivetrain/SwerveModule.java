@@ -86,13 +86,6 @@ public class SwerveModule {
     speed.setVelocity(optimized.speedMetersPerSecond);
     angle.set(anglePID.calculate(getAngle(), optimized.angle.getDegrees()));
 
-    if (optimized.speedMetersPerSecond == 0.0) {
-      if (timer.get() > 0.5) angle.set(optimized.angle.getDegrees());
-      else angle.set(0.0);
-    } else {
-      timer.reset();
-      angle.set(anglePID.calculate(getAngle(), optimized.angle.getDegrees()));
-    }
   }
 
   /**

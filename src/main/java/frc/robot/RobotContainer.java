@@ -114,9 +114,9 @@ public class RobotContainer {
         .getDownButton()
         .onTrue(new SetPosition(Constants.arm.configs.LOW_CUBE, Constants.arm.configs.LOW_CONE));
 
-    copilot
-        .getRightTButton()
-        .onTrue(new SetFloor(Constants.arm.configs.BACK_TIPPED_CONE, Constants.arm.configs.BACK_TIPPED_CONE));
+    // copilot
+    //     .getRightTButton()
+    //     .onTrue(new SetFloor(Constants.arm.configs.BACK_TIPPED_CONE, Constants.arm.configs.BACK_TIPPED_CONE));
 
     // copilot.getRightBumperButton().debounce(0.05).onTrue(new SetCube());
 
@@ -141,31 +141,6 @@ public class RobotContainer {
   }
 
   private void smartdashboardButtons() {
-    // SmartDashboard.putData(
-    //     "Set Drive Rot PID",
-    //     new InstantCommand(
-    //         () ->
-    //             drivetrain.setRotPID(
-    //                 SmartDashboard.getNumber("Rot P", 0),
-    //                 SmartDashboard.getNumber("Rot I", 0),
-    //                 SmartDashboard.getNumber("Rot D", 0))));
-
-    // SmartDashboard.putData(
-    //     "Set Telescope PID",
-    //     new InstantCommand(
-    //         () ->
-    //             telescope.setPID(
-    //                 SmartDashboard.getNumber("Telescope P", 0),
-    //                 SmartDashboard.getNumber("Telescope I", 0),
-    //                 SmartDashboard.getNumber("Telescope D", 0))));
-
-    // SmartDashboard.putData(
-    //     "Set Drive Rot",
-    //     new RunCommand(
-    //         () -> drivetrain.setRotation(SmartDashboard.getNumber("Drive Rot", 0)), drivetrain));
-
-    // SmartDashboard.putData(
-    //     "Set Zero", new InstantCommand(() -> drivetrain.zeroPower(), drivetrain));
 
   }
 
@@ -175,6 +150,12 @@ public class RobotContainer {
         "High Perfect Auto",
         AutoBuilder.buildAuto(
             "High Perfect Auto", AutoConfigs.EVENTS, AutoConfigs.PerfectAuto.CONSTRAINTS));
+
+    autoChooser.addOption(
+        "Balance",
+        AutoBuilder.buildAuto(
+            "Balance", AutoConfigs.EVENTS, AutoConfigs.PerfectAuto.CONSTRAINTS)
+    );
     autoChooser.addOption(
         "Red Bump 2.5",
         AutoBuilder.buildAuto("RBump2.5", AutoConfigs.EVENTS, AutoConfigs.RFlat2.CONSTRAINTS));
@@ -198,7 +179,7 @@ public class RobotContainer {
         AutoBuilder.buildAuto("RFlat2P", AutoConfigs.EVENTS, AutoConfigs.RFlat2.CONSTRAINTS));
     autoChooser.addOption(
         "Red Flat 3",
-        AutoBuilder.buildAuto("RFlat3", AutoConfigs.EVENTS, AutoConfigs.RFlat2.CONSTRAINTS));
+        AutoBuilder.buildAuto("RFlat3", AutoConfigs.EVENTS, AutoConfigs.RFlat3.CONSTRAINTS));
     autoChooser.addOption(
         "Red Mid 1.5P",
         AutoBuilder.buildAuto("RMid1.5P", AutoConfigs.EVENTS, AutoConfigs.RMid15P.CONSTRAINTS));
@@ -229,7 +210,7 @@ public class RobotContainer {
         AutoBuilder.buildAuto("BFlat2P", AutoConfigs.EVENTS, AutoConfigs.RFlat2.CONSTRAINTS));
     autoChooser.addOption(
         "Blue Flat 3",
-        AutoBuilder.buildAuto("BFlat3", AutoConfigs.EVENTS, AutoConfigs.RFlat2.CONSTRAINTS));
+        AutoBuilder.buildAuto("BFlat3", AutoConfigs.EVENTS, AutoConfigs.RFlat3.CONSTRAINTS));
     autoChooser.addOption(
         "Blue Mid 1.5P",
         AutoBuilder.buildAuto("BMid1.5P", AutoConfigs.EVENTS, AutoConfigs.RMid15P.CONSTRAINTS));

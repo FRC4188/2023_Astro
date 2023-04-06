@@ -17,7 +17,7 @@
       "isStopPoint": false,
       "stopEvent": {
         "names": [
-          "Set High Delay",
+          "Set High",
           "Outtake",
           "Reset Flipped"
         ],

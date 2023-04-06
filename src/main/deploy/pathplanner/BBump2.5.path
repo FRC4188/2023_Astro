@@ -22,8 +22,8 @@
           "Zero Telescope"
         ],
         "executionBehavior": "sequential",
-        "waitBehavior": "deadline",
-        "waitTime": 3.5
+        "waitBehavior": "none",
+        "waitTime": 0
       }
     },
     {
@@ -72,7 +72,7 @@
       "stopEvent": {
         "names": [
           "Stop Drivetrain",
-          "Set High Delay",
+          "Set High",
           "Outtake",
           "Zero Telescope"
         ],

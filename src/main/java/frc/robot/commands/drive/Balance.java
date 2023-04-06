@@ -26,14 +26,14 @@ public class Balance extends CommandBase {
   @Override
   public void execute() {
     if (sensors.getPitch() > 10) drivetrain.setVelocity(-0.25);
-    else if (sensors.getPitch() < 10) drivetrain.setVelocity(0.25);
+    else if (sensors.getPitch() < -10) drivetrain.setVelocity(0.25);
     else drivetrain.setVelocity(0.0);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    
+    drivetrain.drive(0, 0, 0);
   }
 
   // Returns true when the command should end.
