@@ -15,7 +15,6 @@ import frc.robot.commands.arm.SetFlip;
 import frc.robot.commands.arm.SetFloor;
 import frc.robot.commands.arm.SetPosition;
 import frc.robot.commands.groups.Reset;
-import frc.robot.subsystems.arm.Telescope;
 import frc.robot.subsystems.claw.Claw;
 import frc.robot.subsystems.drivetrain.Drivetrain;
 import frc.robot.subsystems.sensors.Sensors;
@@ -116,7 +115,8 @@ public class RobotContainer {
 
     // copilot
     //     .getRightTButton()
-    //     .onTrue(new SetFloor(Constants.arm.configs.BACK_TIPPED_CONE, Constants.arm.configs.BACK_TIPPED_CONE));
+    //     .onTrue(new SetFloor(Constants.arm.configs.BACK_TIPPED_CONE,
+    // Constants.arm.configs.BACK_TIPPED_CONE));
 
     // copilot.getRightBumperButton().debounce(0.05).onTrue(new SetCube());
 
@@ -140,9 +140,7 @@ public class RobotContainer {
     copilot.getStartButton().onTrue(new Reset());
   }
 
-  private void smartdashboardButtons() {
-
-  }
+  private void smartdashboardButtons() {}
 
   private void addChooser() {
     autoChooser.setDefaultOption("Do Nothng", new SequentialCommandGroup());
@@ -153,9 +151,7 @@ public class RobotContainer {
 
     autoChooser.addOption(
         "Balance",
-        AutoBuilder.buildAuto(
-            "Balance", AutoConfigs.EVENTS, AutoConfigs.PerfectAuto.CONSTRAINTS)
-    );
+        AutoBuilder.buildAuto("Balance", AutoConfigs.EVENTS, AutoConfigs.PerfectAuto.CONSTRAINTS));
     autoChooser.addOption(
         "Red Bump 2.5",
         AutoBuilder.buildAuto("RBump2.5", AutoConfigs.EVENTS, AutoConfigs.RFlat2.CONSTRAINTS));

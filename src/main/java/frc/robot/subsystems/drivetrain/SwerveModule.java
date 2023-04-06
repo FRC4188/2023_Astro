@@ -85,7 +85,6 @@ public class SwerveModule {
         SwerveModuleState.optimize(desired, Rotation2d.fromDegrees(getAngle()));
     speed.setVelocity(optimized.speedMetersPerSecond);
     angle.set(anglePID.calculate(getAngle(), optimized.angle.getDegrees()));
-
   }
 
   /**
