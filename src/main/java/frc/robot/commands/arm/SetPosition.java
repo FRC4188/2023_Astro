@@ -22,7 +22,7 @@ public class SetPosition extends SequentialCommandGroup {
   private Claw claw = Claw.getInstance();
 
   /** Creates a new SetPosition. */
-  SetPosition(double shoulderAngle, double telescopeLength, double wristAngle) {
+  public SetPosition(double shoulderAngle, double telescopeLength, double wristAngle) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(

@@ -24,7 +24,7 @@ public class Shoulder extends SubsystemBase {
 
   private CSP_SparkMax leader = new CSP_SparkMax(Constants.ids.SHOULDER_LEADER);
   private CSP_SparkMax follower = new CSP_SparkMax(Constants.ids.SHOULDER_FOLLOWER);
-  private WPI_CANCoder encoder = new WPI_CANCoder(Constants.ids.SHOULDER_ENCODER);
+  // private WPI_CANCoder encoder = new WPI_CANCoder(Constants.ids.SHOULDER_ENCODER);
 
   private ProfiledPIDController pid =
       new ProfiledPIDController(
@@ -48,23 +48,23 @@ public class Shoulder extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("Shoulder Encoder Angle", getAngle());
+    SmartDashboard.putNumber("Shoulder Motor Angle", getAngle());
     SmartDashboard.putNumber("Shoulder Setpoint", pid.getSetpoint().position);
     SmartDashboard.putBoolean("isFlipped", getIsFlipped());
   }
 
   public void init() {
-    encoder.configFactoryDefault();
-    encoder.clearStickyFaults();
-    encoder.configAbsoluteSensorRange(AbsoluteSensorRange.Signed_PlusMinus180);
-    encoder.setPosition(0.0);
-    encoder.configSensorDirection(false);
-    encoder.configMagnetOffset(-Constants.arm.shoulder.ZERO);
+    // encoder.configFactoryDefault();
+    // encoder.clearStickyFaults();
+    // encoder.configAbsoluteSensorRange(AbsoluteSensorRange.Signed_PlusMinus180);
+    // encoder.setPosition(0.0);
+    // encoder.configSensorDirection(false);
+    // encoder.configMagnetOffset(-Constants.arm.shoulder.ZERO);
 
     leader.setScalar(1 / Constants.arm.shoulder.ROTATIONS_PER_DEGREE);
     leader.setInverted(true);
     leader.setBrake(true);
-    leader.setEncoder(encoder.getAbsolutePosition());
+    leader.setEncoder(0.0);
 
     follower.setBrake(true);
     follower.follow(leader);
@@ -101,7 +101,8 @@ public class Shoulder extends SubsystemBase {
   }
 
   public double getAngle() {
-    return encoder.getAbsolutePosition();
+    // return encoder.getAbsolutePosition();
+    return leader.getPosition();
   }
 
   public boolean getIsFlipped() {
@@ -110,5 +111,10 @@ public class Shoulder extends SubsystemBase {
 
   public boolean atGoal(double angle) {
     return Math.abs(angle - getAngle()) < Constants.arm.shoulder.ALLOWED_ERROR;
+  }
+
+  public void adjustZero(double adjustment) {
+    double currentAngle = getAngle(); 
+    leader.setEncoder(currentAngle + adjustment);
   }
 }
