@@ -114,7 +114,7 @@ public class Shoulder extends SubsystemBase {
   }
 
   public void adjustZero(double adjustment) {
-    double currentAngle = getAngle(); 
+    double currentAngle = getAngle();
     leader.setEncoder(currentAngle + adjustment);
   }
 }

@@ -16,8 +16,6 @@ import frc.robot.commands.arm.SetFloor;
 import frc.robot.commands.arm.SetPosition;
 import frc.robot.commands.groups.Reset;
 import frc.robot.subsystems.arm.Shoulder;
-import frc.robot.subsystems.arm.Telescope;
-import frc.robot.subsystems.arm.Wrist;
 import frc.robot.subsystems.claw.Claw;
 import frc.robot.subsystems.drivetrain.Drivetrain;
 import frc.robot.subsystems.sensors.Sensors;
@@ -85,7 +83,6 @@ public class RobotContainer {
         .getRightTButton()
         .whileTrue(new RunCommand(() -> claw.intake(), claw))
         .onFalse(new InstantCommand(() -> claw.disable(), claw));
-    
 
     copilot
         .getAButton()
@@ -123,14 +120,16 @@ public class RobotContainer {
     //     .getRightTButton().onTrue(
     //         new InstantCommand(() -> {currentAngle = shoulder.getAngle();})
     //         .andThen(
-    //             new SetPosition(currentAngle + (shoulder.getIsFlipped() ? -1 : 1), Telescope.getInstance().getPosition(), Wrist.getInstance().getMotorAngle()))
+    //             new SetPosition(currentAngle + (shoulder.getIsFlipped() ? -1 : 1),
+    // Telescope.getInstance().getPosition(), Wrist.getInstance().getMotorAngle()))
     //         );
 
     // copilot
     //     .getLeftBumperButton().onTrue(
     //         new InstantCommand(() -> {currentAngle = shoulder.getAngle();})
     //         .andThen(
-    //             new SetPosition(currentAngle - (shoulder.getIsFlipped() ? -1 : 1), Telescope.getInstance().getPosition(), Wrist.getInstance().getMotorAngle()))
+    //             new SetPosition(currentAngle - (shoulder.getIsFlipped() ? -1 : 1),
+    // Telescope.getInstance().getPosition(), Wrist.getInstance().getMotorAngle()))
     //         );
     // copilot
     //     .getRightTButton()

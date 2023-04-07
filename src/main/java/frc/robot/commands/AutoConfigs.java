@@ -19,7 +19,6 @@ import frc.robot.commands.claw.Intake;
 import frc.robot.commands.claw.Outtake;
 import frc.robot.commands.drive.Balance;
 import frc.robot.commands.groups.Reset;
-import frc.robot.commands.groups.SpitPosition;
 import frc.robot.subsystems.claw.Claw;
 import frc.robot.subsystems.drivetrain.Drivetrain;
 import java.util.HashMap;
@@ -33,7 +32,6 @@ public class AutoConfigs {
   public static final HashMap<String, Command> EVENTS =
       new HashMap<>(
           Map.ofEntries(
-              
               Map.entry(
                   "Set High",
                   new ConditionalCommand(
@@ -69,10 +67,12 @@ public class AutoConfigs {
                   new ConditionalCommand(
                       new SetPosition(
                               Constants.arm.configs.LOW_CUBE, Constants.arm.configs.LOW_CONE)
-                          .withTimeout(1.4).andThen(new Outtake().withTimeout(0.2)),
+                          .withTimeout(1.4)
+                          .andThen(new Outtake().withTimeout(0.2)),
                       new SetPosition(
                               Constants.arm.configs.LOW_CUBE, Constants.arm.configs.LOW_CONE)
-                          .withTimeout(1.4).andThen(new Outtake().withTimeout(0.2)),
+                          .withTimeout(1.4)
+                          .andThen(new Outtake().withTimeout(0.2)),
                       Claw.getInstance()::getIsCube)),
               Map.entry(
                   "Set Floor",
@@ -93,9 +93,9 @@ public class AutoConfigs {
               Map.entry("Outtake", new Outtake().withTimeout(0.2)),
               Map.entry("Balance", new Balance()),
               Map.entry("Timed Balance", new Balance().withTimeout(3.0)),
-              Map.entry("Reset Balance", new SetFlip().andThen(new Reset()).withTimeout(1.5).andThen(new Balance()))
-              ));
-
+              Map.entry(
+                  "Reset Balance",
+                  new SetFlip().andThen(new Reset()).withTimeout(1.5).andThen(new Balance()))));
 
   public static final class RFlat2 {
     public static final PathConstraints[] CONSTRAINTS = {new PathConstraints(5, 3)};
