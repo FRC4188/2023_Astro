@@ -2,12 +2,12 @@
   "waypoints": [
     {
       "anchorPoint": {
-        "x": 1.89,
+        "x": 1.91,
         "y": 4.9240226550628545
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.6086588928190944,
+        "x": 3.6286588928190944,
         "y": 4.824323475012831
       },
       "holonomicAngle": 180.0,
@@ -17,7 +17,7 @@
       "isStopPoint": false,
       "stopEvent": {
         "names": [
-          "Set High",
+          "Set Mid",
           "Outtake",
           "Zero Telescope"
         ],
@@ -72,7 +72,7 @@
       "stopEvent": {
         "names": [
           "Stop Drivetrain",
-          "Set High",
+          "Set Mid",
           "Outtake",
           "Zero Telescope"
         ],
@@ -83,16 +83,16 @@
     },
     {
       "anchorPoint": {
-        "x": 6.69,
-        "y": 3.68
+        "x": 6.74654667844297,
+        "y": 3.6960428637838407
       },
       "prevControl": {
-        "x": 5.156967472294869,
-        "y": 5.434255479522511
+        "x": 5.389531195688363,
+        "y": 5.602954592546257
       },
       "nextControl": {
-        "x": 6.926974652140139,
-        "y": 3.4088289227319395
+        "x": 6.9553493571789495,
+        "y": 3.4026281738715274
       },
       "holonomicAngle": 135.0,
       "isReversal": false,
@@ -108,12 +108,12 @@
     },
     {
       "anchorPoint": {
-        "x": 1.52,
+        "x": 1.58,
         "y": 4.4
       },
       "prevControl": {
-        "x": 4.774991443223055,
-        "y": 5.832230512980951
+        "x": 5.273657841300145,
+        "y": 5.752133280071222
       },
       "nextControl": null,
       "holonomicAngle": 180.0,
@@ -124,6 +124,7 @@
       "stopEvent": {
         "names": [
           "Stop Drivetrain",
+          "Set Mid",
           "Outtake",
           "Reset"
         ],
@@ -141,7 +142,7 @@
       ]
     },
     {
-      "position": 0.25,
+      "position": 0.17,
       "names": [
         "Set Flipped",
         "Set Floor",

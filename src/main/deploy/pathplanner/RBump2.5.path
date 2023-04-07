@@ -17,7 +17,7 @@
       "isStopPoint": false,
       "stopEvent": {
         "names": [
-          "Set High",
+          "Set Mid",
           "Outtake",
           "Zero Telescope"
         ],
@@ -29,15 +29,15 @@
     {
       "anchorPoint": {
         "x": 9.690000000000001,
-        "y": 0.9500000000000001
+        "y": 1.05
       },
       "prevControl": {
         "x": 9.599317362494375,
-        "y": 1.0678874287573152
+        "y": 1.1678874287573153
       },
       "nextControl": {
         "x": 9.707484290075426,
-        "y": 0.927270422901948
+        "y": 1.027270422901948
       },
       "holonomicAngle": 0.0,
       "isReversal": false,
@@ -72,7 +72,7 @@
       "stopEvent": {
         "names": [
           "Stop Drivetrain",
-          "Set High",
+          "Set Mid",
           "Outtake",
           "Zero Telescope"
         ],
@@ -84,15 +84,15 @@
     {
       "anchorPoint": {
         "x": 9.469999999999999,
-        "y": 2.16
+        "y": 2.2600000000000002
       },
       "prevControl": {
         "x": 11.084658918034364,
-        "y": -0.45231551839480577
+        "y": -0.3523155183948057
       },
       "nextControl": {
         "x": 9.452713178247423,
-        "y": 2.1879679084069057
+        "y": 2.287967908406906
       },
       "holonomicAngle": -47.9,
       "isReversal": false,
@@ -108,12 +108,12 @@
     },
     {
       "anchorPoint": {
-        "x": 9.684905685600846,
-        "y": 1.9224273536266376
+        "x": 9.697652557698278,
+        "y": 2.02
       },
       "prevControl": {
-        "x": 9.59422304809522,
-        "y": 2.0221782548828267
+        "x": 9.606969920192652,
+        "y": 2.119750901256189
       },
       "nextControl": null,
       "holonomicAngle": -47.9,

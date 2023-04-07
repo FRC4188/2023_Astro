@@ -33,16 +33,7 @@ public class AutoConfigs {
   public static final HashMap<String, Command> EVENTS =
       new HashMap<>(
           Map.ofEntries(
-              Map.entry(
-                  "Spit Mid",
-                  new SpitPosition(Constants.arm.configs.MID_CUBE, Constants.arm.configs.MID_CONE)),
-              Map.entry(
-                  "Spit Low",
-                  new SpitPosition(Constants.arm.configs.LOW_CUBE, Constants.arm.configs.LOW_CONE)),
-              Map.entry(
-                  "Spit High",
-                  new SpitPosition(
-                      Constants.arm.configs.HIGH_CUBE, Constants.arm.configs.HIGH_CONE)),
+              
               Map.entry(
                   "Set High",
                   new ConditionalCommand(
@@ -68,14 +59,21 @@ public class AutoConfigs {
                   new ConditionalCommand(
                       new SetPosition(
                               Constants.arm.configs.MID_CUBE, Constants.arm.configs.MID_CONE)
-                          .withTimeout(1.0),
+                          .withTimeout(1.5),
                       new SetPosition(
                               Constants.arm.configs.MID_CUBE, Constants.arm.configs.MID_CONE)
-                          .withTimeout(1.3),
+                          .withTimeout(1.5),
                       Claw.getInstance()::getIsCube)),
               Map.entry(
-                  "Set Low",
-                  new SetPosition(Constants.arm.configs.LOW_CUBE, Constants.arm.configs.LOW_CONE)),
+                  "Spit Low",
+                  new ConditionalCommand(
+                      new SetPosition(
+                              Constants.arm.configs.LOW_CUBE, Constants.arm.configs.LOW_CONE)
+                          .withTimeout(1.4).andThen(new Outtake().withTimeout(0.2)),
+                      new SetPosition(
+                              Constants.arm.configs.LOW_CUBE, Constants.arm.configs.LOW_CONE)
+                          .withTimeout(1.4).andThen(new Outtake().withTimeout(0.2)),
+                      Claw.getInstance()::getIsCube)),
               Map.entry(
                   "Set Floor",
                   new SetPosition(
@@ -92,8 +90,12 @@ public class AutoConfigs {
               Map.entry("Reset", new Reset()),
               Map.entry("Print", new PrintCommand("IT DOESNT END")),
               Map.entry("Intake", new Intake()),
-              Map.entry("Outtake", new Outtake().withTimeout(0.1)),
-              Map.entry("Balance", new Balance())));
+              Map.entry("Outtake", new Outtake().withTimeout(0.2)),
+              Map.entry("Balance", new Balance()),
+              Map.entry("Timed Balance", new Balance().withTimeout(3.0)),
+              Map.entry("Reset Balance", new SetFlip().andThen(new Reset()).withTimeout(1.5).andThen(new Balance()))
+              ));
+
 
   public static final class RFlat2 {
     public static final PathConstraints[] CONSTRAINTS = {new PathConstraints(5, 3)};
@@ -105,7 +107,7 @@ public class AutoConfigs {
 
   public static final class RMid15P {
     public static final PathConstraints[] CONSTRAINTS = {
-      new PathConstraints(3, 2), new PathConstraints(5, 3), new PathConstraints(4, 2)
+      new PathConstraints(3, 2), new PathConstraints(5, 3), new PathConstraints(3.5, 2)
     };
   }
 

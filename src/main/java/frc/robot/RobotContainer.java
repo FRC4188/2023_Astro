@@ -85,6 +85,7 @@ public class RobotContainer {
         .getRightTButton()
         .whileTrue(new RunCommand(() -> claw.intake(), claw))
         .onFalse(new InstantCommand(() -> claw.disable(), claw));
+    
 
     copilot
         .getAButton()
@@ -118,19 +119,19 @@ public class RobotContainer {
         .getDownButton()
         .onTrue(new SetPosition(Constants.arm.configs.LOW_CUBE, Constants.arm.configs.LOW_CONE));
 
-    copilot
-        .getRightTButton().onTrue(
-            new InstantCommand(() -> {currentAngle = shoulder.getAngle();})
-            .andThen(
-                new SetPosition(currentAngle + 1, Telescope.getInstance().getPosition(), Wrist.getInstance().getMotorAngle()))
-            );
+    // copilot
+    //     .getRightTButton().onTrue(
+    //         new InstantCommand(() -> {currentAngle = shoulder.getAngle();})
+    //         .andThen(
+    //             new SetPosition(currentAngle + (shoulder.getIsFlipped() ? -1 : 1), Telescope.getInstance().getPosition(), Wrist.getInstance().getMotorAngle()))
+    //         );
 
-    copilot
-        .getLeftBumperButton().onTrue(
-            new InstantCommand(() -> {currentAngle = shoulder.getAngle();})
-            .andThen(
-                new SetPosition(currentAngle - 1, Telescope.getInstance().getPosition(), Wrist.getInstance().getMotorAngle()))
-            );
+    // copilot
+    //     .getLeftBumperButton().onTrue(
+    //         new InstantCommand(() -> {currentAngle = shoulder.getAngle();})
+    //         .andThen(
+    //             new SetPosition(currentAngle - (shoulder.getIsFlipped() ? -1 : 1), Telescope.getInstance().getPosition(), Wrist.getInstance().getMotorAngle()))
+    //         );
     // copilot
     //     .getRightTButton()
     //     .onTrue(new SetFloor(Constants.arm.configs.BACK_TIPPED_CONE,

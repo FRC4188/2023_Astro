@@ -208,25 +208,25 @@ public final class Constants {
   public static final class arm {
     public static final class configs {
       // double[] = {Shoulder Angle, Telescope Length, Wrist Angle}
-      public static final double[][] HIGH_CONE = {{44.0, 1.22, 87.0}, {-42.0, 1.22, -92.0}};
-      public static final double[][] HIGH_CUBE = {{55.0, 1.25, 120}, {-53.0, 1.15, -20.0}};
+      public static final double[][] HIGH_CONE = {{44.0, 1.22, 87.0}, {-40.0, 1.22, -92.0}};
+      public static final double[][] HIGH_CUBE = {{55.0, 1.25, 120}, {-51.0, 1.15, -20.0}};
 
-      public static final double[][] MID_CONE = {{42.0, 0.76, 100.0}, {-42.0, 0.76, -100.0}};
-      public static final double[][] MID_CUBE = {{55.0, 0.5, 120}, {-53.0, 0.5, -20.0}};
+      public static final double[][] MID_CONE = {{42.0, 0.76, 100.0}, {-40.0, 0.76, -100.0}};
+      public static final double[][] MID_CUBE = {{55.0, 0.5, 120}, {-51.0, 0.5, -20.0}};
 
-      public static final double[][] LOW_CONE = {{60.0, 0.1875, 100.0}, {-60.0, 0.1875, -100.0}};
-      public static final double[][] LOW_CUBE = {{75.0, 0.1875, 100.0}, {-75.0, 0.1875, -20.0}};
+      public static final double[][] LOW_CONE = {{60.0, 0.1875, 100.0}, {-58.0, 0.1875, -100.0}};
+      public static final double[][] LOW_CUBE = {{75.0, 0.1875, 100.0}, {-73.0, 0.1875, -20.0}};
 
-      public static final double[][] SS_CONE = {{90.0, 0.1875, -30.0}, {-90.0, 0.1875, 30.0}};
-      public static final double[][] SS_CUBE = {{49.0, 0.1875, 100.0}, {-86.0, 0.1875, 112.0}};
+      public static final double[][] SS_CONE = {{90.0, 0.1875, -30.0}, {-88.0, 0.1875, 30.0}};
+      public static final double[][] SS_CUBE = {{49.0, 0.1875, 100.0}, {-84.0, 0.1875, 112.0}};
 
-      public static final double[][] DS_CONE = {{14.0, 0.1875, 82.0}, {-14.0, 0.1875, -82.0}};
+      public static final double[][] DS_CONE = {{14.0, 0.1875, 82.0}, {-12.0, 0.1875, -82.0}};
       public static final double[][] DS_CUBE = {{0, 0.1875, 0}, {0, 0.1875, 0}};
 
-      public static final double[][] FLOOR_CONE = {{82.0, 0.1875, 57.0}, {-79.0, 0.1875, -57.0}};
-      public static final double[][] FLOOR_CUBE = {{101.0, 0.45, 125.0}, {-113.0, 0.25, 35.0}};
-      public static final double[][] TIPPED_CONE = {{117, 0.1875, 3.0}, {-117, 0.1875, 5.0}};
-      public static final double[][] BACK_TIPPED_CONE = {{86.0, 0.5, 125.0}, {-87.0, 0.5, -125.0}};
+      public static final double[][] FLOOR_CONE = {{83.0, 0.1875, 57.0}, {-77.0, 0.1875, -57.0}};
+      public static final double[][] FLOOR_CUBE = {{104.0, 0.45, 125.0}, {-111.0, 0.25, 35.0}};
+      public static final double[][] TIPPED_CONE = {{117, 0.1875, 7.0}, {-115, 0.1875, 5.0}};
+      public static final double[][] BACK_TIPPED_CONE = {{86.0, 0.5, 125.0}, {-85.0, 0.5, -125.0}};
 
       public static final double[][] YOSHI_CUBE = {{90, 0.3, -10}, {90, 0.5, 90}};
 
@@ -234,7 +234,7 @@ public final class Constants {
     }
 
     public static final class shoulder {
-      public static final double ZERO = -69.78515625 + 2.5;
+      public static final double ZERO = 62.75390625;
       public static final double GEAR_RATIO = 132.741; // 132.741 to 1
       public static final double ROTATIONS_PER_DEGREE = GEAR_RATIO / 360;
 
@@ -252,7 +252,7 @@ public final class Constants {
       public static final double MAX_VEL = 1000.0;
       public static final double MAX_ACCEL = 720.0;
 
-      public static final double ALLOWED_ERROR = 1.0;
+      public static final double ALLOWED_ERROR = 0.75;
 
       public static final Constraints CONSTRAINTS = new Constraints(MAX_VEL, MAX_ACCEL);
 

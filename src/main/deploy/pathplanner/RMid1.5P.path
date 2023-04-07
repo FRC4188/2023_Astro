@@ -17,13 +17,13 @@
       "isStopPoint": false,
       "stopEvent": {
         "names": [
-          "Set High",
+          "Set Mid",
           "Outtake",
           "Reset Flipped"
         ],
         "executionBehavior": "sequential",
         "waitBehavior": "deadline",
-        "waitTime": 4.0
+        "waitTime": 3.0
       }
     },
     {
@@ -93,7 +93,10 @@
       "isStopPoint": false,
       "stopEvent": {
         "names": [
-          "Balance"
+          "Timed Balance",
+          "Stop Drivetrain",
+          "Spit Low",
+          "Reset Balance"
         ],
         "executionBehavior": "sequential",
         "waitBehavior": "none",
