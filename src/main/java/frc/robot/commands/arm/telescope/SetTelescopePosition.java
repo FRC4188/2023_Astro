@@ -12,6 +12,7 @@ public class SetTelescopePosition extends CommandBase {
   private Telescope telescope = Telescope.getInstance();
 
   private double position;
+
   /** Creates a new SetTelescopePosition. */
   public SetTelescopePosition(double position) {
     // Use addRequirements() here to declare subsystem dependencies.

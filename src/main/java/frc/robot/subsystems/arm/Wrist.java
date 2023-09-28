@@ -33,6 +33,7 @@ public class Wrist extends SubsystemBase {
       new ArmFeedforward(Constants.arm.wrist.kS, Constants.arm.wrist.kG, Constants.arm.wrist.kV);
 
   private Shoulder shoulder = Shoulder.getInstance();
+
   /** Creates a new Wrist. */
   private Wrist() {
     init();

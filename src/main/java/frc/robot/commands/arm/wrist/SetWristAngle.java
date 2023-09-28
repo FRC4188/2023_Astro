@@ -11,6 +11,7 @@ public class SetWristAngle extends CommandBase {
   private Wrist wrist = Wrist.getInstance();
 
   private double angle;
+
   /** Creates a new SetWristAngle. */
   public SetWristAngle(double angle) {
     // Use addRequirements() here to declare subsystem dependencies.
