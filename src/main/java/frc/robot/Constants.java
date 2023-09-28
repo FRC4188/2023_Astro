@@ -185,7 +185,7 @@ public final class Constants {
     public static final class correctionPID {
       public static final double kP = -0.1;
       public static final double kI = 0.0;
-      public static final double kD = -0.006;
+      public static final double kD = -0.01;
     }
 
     public static final class balancePID {
@@ -196,8 +196,8 @@ public final class Constants {
   }
 
   public static final class sensors {
-    public static final Translation3d FRONT_POSITION = new Translation3d(0, 0, 0);
-    public static final Translation3d BACK_POSITION = new Translation3d(0, 0, 0);
+    public static final Translation3d LEFT_POSITION = new Translation3d(0, 0, 0);
+    public static final Translation3d RIGHT_POSITION = new Translation3d(0, 0, 0);
   }
 
   public static final class claw {
@@ -224,7 +224,7 @@ public final class Constants {
       public static final double[][] DS_CUBE = {{0, 0.1875, 0}, {0, 0.1875, 0}};
 
       public static final double[][] FLOOR_CONE = {{83.0, 0.1875, 57.0}, {-77.0, 0.1875, -57.0}};
-      public static final double[][] FLOOR_CUBE = {{104.0, 0.45, 125.0}, {-111.0, 0.25, 35.0}};
+      public static final double[][] FLOOR_CUBE = {{103.0, 0.45, 125.0}, {-113.0, 0.25, 35.0}};
       public static final double[][] TIPPED_CONE = {{117, 0.1875, 7.0}, {-115, 0.1875, 5.0}};
       public static final double[][] BACK_TIPPED_CONE = {{86.0, 0.5, 125.0}, {-85.0, 0.5, -125.0}};
 
@@ -234,7 +234,7 @@ public final class Constants {
     }
 
     public static final class shoulder {
-      public static final double ZERO = 62.75390625;
+      public static final double ZERO = 63.75390625;
       public static final double GEAR_RATIO = 132.741; // 132.741 to 1
       public static final double ROTATIONS_PER_DEGREE = GEAR_RATIO / 360;
 

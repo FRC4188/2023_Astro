@@ -6,7 +6,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.subsystems.drivetrain.Drivetrain;
 
 public class Sensors extends SubsystemBase {
 
@@ -17,7 +16,6 @@ public class Sensors extends SubsystemBase {
     return instance;
   }
 
-  private Pigeon pigeon = new Pigeon(Constants.ids.PIGEON);
   private Limelights limelights = new Limelights("limelight-front", "limelight-back");
 
   /** Creates a new Sensors. */
@@ -27,7 +25,6 @@ public class Sensors extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Pigeon Angle", getRotation2d().getDegrees());
     SmartDashboard.putString("Estimated Pose", getPose3d().toString());
   }
 
@@ -43,20 +40,4 @@ public class Sensors extends SubsystemBase {
     return limelights.getLatency();
   }
 
-  public Rotation2d getRotation2d() {
-    return pigeon.getRotation2d();
-  }
-
-  public double getPitch() {
-    return pigeon.getPitch();
-  }
-
-  public void resetPigeon() {
-    setPigeonAngle(new Rotation2d());
-  }
-
-  public void setPigeonAngle(Rotation2d angle) {
-    pigeon.setYaw(angle.getDegrees());
-    Drivetrain.getInstance().setRotSetpoint(angle.getDegrees());
-  }
 }

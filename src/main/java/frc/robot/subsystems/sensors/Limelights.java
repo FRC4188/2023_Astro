@@ -13,16 +13,13 @@ import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Constants;
 
 /** Add your docs here. */
-public class Limelights {
+public class LimelightOne {
   private String frontLLName;
-  private String backLLName;
 
   private MedianFilter filter = new MedianFilter(2);
 
-  public Limelights(String frontLLName, String backLLName) {
-    this.frontLLName = frontLLName;
-    this.backLLName = backLLName;
-
+  public LimelightOne(String name) {
+    this.name = name;
     init();
   }
 
@@ -36,14 +33,7 @@ public class Limelights {
         0,
         0);
 
-    LimelightHelpers.setCameraPose_RobotSpace(
-        backLLName,
-        Constants.sensors.BACK_POSITION.getX(),
-        Constants.sensors.BACK_POSITION.getY(),
-        Constants.sensors.BACK_POSITION.getZ(),
-        0,
-        0,
-        180);
+
   }
 
   private Pose3d filterPose(Pose3d pose) {
