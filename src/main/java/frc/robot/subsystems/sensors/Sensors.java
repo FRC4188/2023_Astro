@@ -2,10 +2,8 @@ package frc.robot.subsystems.sensors;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 
 public class Sensors extends SubsystemBase {
 
@@ -39,5 +37,4 @@ public class Sensors extends SubsystemBase {
   public double getLatency() {
     return limelights.getLatency();
   }
-
 }

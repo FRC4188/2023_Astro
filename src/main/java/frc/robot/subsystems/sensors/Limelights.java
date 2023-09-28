@@ -32,8 +32,6 @@ public class LimelightOne {
         0,
         0,
         0);
-
-
   }
 
   private Pose3d filterPose(Pose3d pose) {
