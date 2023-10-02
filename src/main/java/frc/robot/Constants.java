@@ -6,6 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -196,8 +197,13 @@ public final class Constants {
   }
 
   public static final class sensors {
+    public static final String LEFT_NAME = "limelight-left";
+    public static final String RIGHT_NAME = "limelight-right";
+
     public static final Translation3d LEFT_POSITION = new Translation3d(0, 0, 0);
     public static final Translation3d RIGHT_POSITION = new Translation3d(0, 0, 0);
+
+    public static final Pose3d EMPTY_POSE = new Pose3d();
   }
 
   public static final class claw {
