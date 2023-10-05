@@ -4,7 +4,6 @@
 
 package frc.robot.subsystems.sensors;
 
-import org.opencv.core.RotatedRect;
 
 import csplib.utils.LimelightHelpers;
 import edu.wpi.first.math.geometry.Pose3d;
@@ -31,14 +30,13 @@ public class Limelight {
 
   private void init() {
     LimelightHelpers.setCameraPose_RobotSpace(
-        name, 
-        position.getX(), 
-        position.getY(), 
+        name,
+        position.getX(),
+        position.getY(),
         position.getZ(),
         rotation.getX(),
         rotation.getY(),
-        rotation.getZ()
-      );
+        rotation.getZ());
   }
 
   // private Pose3d filterPose(Pose3d pose) {
