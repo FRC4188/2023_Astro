@@ -35,30 +35,34 @@ public class Sensors extends SubsystemBase {
   }
 
   public Pose3d getPose3d() {
-    Pose3d poseLeft = limelightLeft.getPose3d();
-    Pose3d poseRight = limelightRight.getPose3d();
-    Pose3d poseEmpty = new Pose3d(); 
-
-    if(!poseLeft.equals(poseEmpty) && !poseRight.equals(poseEmpty)) {
+    if(limelightRight.getTV() && limelightLeft.getTV()) {
+      Pose3d poseLeft = limelightLeft.getPose3d();
+      Pose3d poseRight = limelightRight.getPose3d();
 
       // averages the poses of both limelights
       return new Pose3d(
         poseLeft.getTranslation().plus(poseRight.getTranslation()).div(2),
         poseLeft.getRotation().plus(poseRight.getRotation()).div(2)
-        
       );
-    } else if(poseLeft.equals(poseEmpty)) {
-      return poseRight;
-    } else if(poseRight.equals(poseEmpty)) {
-      return poseLeft;
-    } else return poseEmpty;
+    } else if(limelightRight.getTV()) {
+      return limelightRight.getPose3d();
+    } else if(limelightLeft.getTV()) {
+      return limelightLeft.getPose3d();
+    } else return new Pose3d();
   }
  
   public Pose2d getPose2d() {
     return getPose3d().toPose2d();
   }
 
-  // public double getLatency() {
-  //   return something;
-  // }
+  public double getLatency() {
+    if(limelightRight.getTV() && limelightLeft.getTV()) {
+      // averages the latencies
+      return (limelightRight.getLatency() + limelightLeft.getLatency())/2;
+    } else if(limelightRight.getTV()) {
+      return limelightRight.getLatency();
+    } else if(limelightLeft.getTV()) {
+      return limelightLeft.getLatency();
+    } else return 0.0;
+  }
 }
