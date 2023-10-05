@@ -2,8 +2,6 @@ package frc.robot.subsystems.sensors;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -17,8 +15,10 @@ public class Sensors extends SubsystemBase {
     return instance;
   }
 
-  private Limelight limelightLeft = new Limelight(Constants.sensors.LEFT_NAME, Constants.sensors.LEFT_POSITION);
-  private Limelight limelightRight = new Limelight(Constants.sensors.RIGHT_NAME, Constants.sensors.RIGHT_POSITION);
+  private Limelight limelightLeft =
+      new Limelight(Constants.sensors.LEFT_NAME, Constants.sensors.LEFT_POSITION);
+  private Limelight limelightRight =
+      new Limelight(Constants.sensors.RIGHT_NAME, Constants.sensors.RIGHT_POSITION);
 
   /** Creates a new Sensors. */
   private Sensors() {}
@@ -26,10 +26,10 @@ public class Sensors extends SubsystemBase {
   private void init() {}
 
   @Override
-  public void periodic() {  
+  public void periodic() {
     SmartDashboard.putString("Estimated Pose", getPose2d().toString());
 
-    // testing 
+    // testing
     // SmartDashboard.putString("Left Estimated Pose", limelightLeft.getPose3d().toString());
     // SmartDashboard.putString("Right Estimated Pose", limelightRight.getPose3d().toString());
   }
@@ -50,7 +50,7 @@ public class Sensors extends SubsystemBase {
       return limelightLeft.getPose3d();
     } else return new Pose3d();
   }
- 
+
   public Pose2d getPose2d() {
     return getPose3d().toPose2d();
   }
