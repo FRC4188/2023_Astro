@@ -16,9 +16,9 @@ public class Sensors extends SubsystemBase {
   }
 
   private Limelight limelightLeft =
-      new Limelight(Constants.sensors.LEFT_NAME, Constants.sensors.LEFT_POSITION);
+      new Limelight(Constants.sensors.LEFT_NAME, Constants.sensors.LEFT_POSITION, Constants.sensors.LEFT_ROTATION);
   private Limelight limelightRight =
-      new Limelight(Constants.sensors.RIGHT_NAME, Constants.sensors.RIGHT_POSITION);
+      new Limelight(Constants.sensors.RIGHT_NAME, Constants.sensors.RIGHT_POSITION, Constants.sensors.RIGHT_ROTATION);
 
   /** Creates a new Sensors. */
   private Sensors() {}

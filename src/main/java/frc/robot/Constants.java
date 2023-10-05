@@ -204,7 +204,7 @@ public final class Constants {
     public static final Translation3d RIGHT_POSITION = new Translation3d(0, 0, 0);
 
     public static Rotation3d LEFT_ROTATION = new Rotation3d(0, 0, 0);
-    public static Rotation3d RIGHT_Rotation = new Rotation3d(0, 0, 0);
+    public static Rotation3d RIGHT_ROTATION = new Rotation3d(0, 0, 0);
   }
 
   public static final class claw {

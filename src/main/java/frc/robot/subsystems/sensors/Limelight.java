@@ -4,8 +4,11 @@
 
 package frc.robot.subsystems.sensors;
 
+import org.opencv.core.RotatedRect;
+
 import csplib.utils.LimelightHelpers;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -15,18 +18,27 @@ import edu.wpi.first.wpilibj.Timer;
 public class Limelight {
   private String name;
   private Translation3d position = new Translation3d();
+  private Rotation3d rotation = new Rotation3d();
 
   // private MedianFilter filter = new MedianFilter(2);
 
-  public Limelight(String name, Translation3d position) {
+  public Limelight(String name, Translation3d position, Rotation3d rotation) {
     this.name = name;
     this.position = position;
+    this.rotation = rotation;
     init();
   }
 
   private void init() {
     LimelightHelpers.setCameraPose_RobotSpace(
-        name, position.getX(), position.getY(), position.getZ(), 0, 0, 0);
+        name, 
+        position.getX(), 
+        position.getY(), 
+        position.getZ(),
+        rotation.getX(),
+        rotation.getY(),
+        rotation.getZ()
+      );
   }
 
   // private Pose3d filterPose(Pose3d pose) {
