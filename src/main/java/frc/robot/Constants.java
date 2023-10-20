@@ -196,8 +196,14 @@ public final class Constants {
   }
 
   public static final class sensors {
-    public static final Translation3d FRONT_POSITION = new Translation3d(0, 0, 0);
-    public static final Translation3d BACK_POSITION = new Translation3d(0, 0, 0);
+    public static final String LEFT_NAME = "limelight-left";
+    public static final String RIGHT_NAME = "limelight-right";
+
+    public static final Translation3d LEFT_POSITION = new Translation3d(0, 0, 0);
+    public static final Translation3d RIGHT_POSITION = new Translation3d(0, 0, 0);
+
+    public static Rotation3d LEFT_ROTATION = new Rotation3d(0, 0, 0);
+    public static Rotation3d RIGHT_ROTATION = new Rotation3d(0, 0, 0);
   }
 
   public static final class claw {
@@ -208,6 +214,7 @@ public final class Constants {
   public static final class arm {
     public static final class configs {
       // double[] = {Shoulder Angle, Telescope Length, Wrist Angle}
+      // positive wrist angle = energy chain side
       public static final double[][] HIGH_CONE = {{44.0, 1.22, 87.0}, {-40.0, 1.22, -92.0}};
       public static final double[][] HIGH_CUBE = {{55.0, 1.25, 120}, {-51.0, 1.15, -20.0}};
 
@@ -223,7 +230,7 @@ public final class Constants {
       public static final double[][] DS_CONE = {{14.0, 0.1875, 82.0}, {-12.0, 0.1875, -82.0}};
       public static final double[][] DS_CUBE = {{0, 0.1875, 0}, {0, 0.1875, 0}};
 
-      public static final double[][] FLOOR_CONE = {{83.0, 0.1875, 57.0}, {-77.0, 0.1875, -57.0}};
+      public static final double[][] FLOOR_CONE = {{83.0, 0.1875, 57.0}, {-73.0, 0.1875, -57.0}};
       public static final double[][] FLOOR_CUBE = {{104.0, 0.45, 125.0}, {-111.0, 0.25, 35.0}};
       public static final double[][] TIPPED_CONE = {{117, 0.1875, 7.0}, {-115, 0.1875, 5.0}};
       public static final double[][] BACK_TIPPED_CONE = {{86.0, 0.5, 125.0}, {-85.0, 0.5, -125.0}};

@@ -57,10 +57,10 @@ public class AutoConfigs {
                   new ConditionalCommand(
                       new SetPosition(
                               Constants.arm.configs.MID_CUBE, Constants.arm.configs.MID_CONE)
-                          .withTimeout(1.5),
+                          .withTimeout(1.3),
                       new SetPosition(
                               Constants.arm.configs.MID_CUBE, Constants.arm.configs.MID_CONE)
-                          .withTimeout(1.5),
+                          .withTimeout(1.8),
                       Claw.getInstance()::getIsCube)),
               Map.entry(
                   "Spit Low",
@@ -105,11 +105,17 @@ public class AutoConfigs {
     public static final PathConstraints[] CONSTRAINTS = {new PathConstraints(7, 3.5)};
   }
 
+  public static final class BFlat3 {
+    public static final PathConstraints[] CONSTRAINTS = {new PathConstraints(7, 3.5)};
+  }
+
   public static final class RMid15P {
     public static final PathConstraints[] CONSTRAINTS = {
-      new PathConstraints(3, 2), new PathConstraints(5, 3), new PathConstraints(3.5, 2)
+      new PathConstraints(1, 2), new PathConstraints(4, 3), new PathConstraints(1.5, 2)
     };
   }
+
+
 
   public static final class RMid2P {
     public static final PathConstraints[] CONSTRAINTS = {
