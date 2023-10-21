@@ -173,21 +173,11 @@ public class RobotContainer {
     autoChooser.addOption(
         "Red Bump 2.5",
         AutoBuilder.buildAuto("RBump2.5", AutoConfigs.EVENTS, AutoConfigs.RFlat2.CONSTRAINTS));
-    // autoChooser.addOption(
-    //     "Red Bump 2.5P",
-    //     AutoBuilder.buildAuto("RBump2.5P", AutoConfigs.EVENTS, AutoConfigs.RFlat2.CONSTRAINTS));
-    // autoChooser.addOption(
-    //     "Red Bump 2",
-    //     AutoBuilder.buildAuto("RBump2", AutoConfigs.EVENTS, AutoConfigs.RFlat2.CONSTRAINTS));
+
     autoChooser.addOption(
         "Red Bump 2P",
         AutoBuilder.buildAuto("RBump2P", AutoConfigs.EVENTS, AutoConfigs.RFlat2.CONSTRAINTS));
-    // autoChooser.addOption(
-    //     "Red Flat 2.5P",
-    //     AutoBuilder.buildAuto("RFlat2.5P", AutoConfigs.EVENTS, AutoConfigs.RFlat2.CONSTRAINTS));
-    // autoChooser.addOption(
-    //     "Red Flat 2",
-    //     AutoBuilder.buildAuto("RFlat2", AutoConfigs.EVENTS, AutoConfigs.RFlat2.CONSTRAINTS));
+
     autoChooser.addOption(
         "Red Flat 2P",
         AutoBuilder.buildAuto("RFlat2P", AutoConfigs.EVENTS, AutoConfigs.RFlat2.CONSTRAINTS));
@@ -197,40 +187,29 @@ public class RobotContainer {
     autoChooser.addOption(
         "Red Mid 1.5P",
         AutoBuilder.buildAuto("RMid1.5P", AutoConfigs.EVENTS, AutoConfigs.RMid15P.CONSTRAINTS));
-    // autoChooser.addOption(
-    //     "Red Mid 2P",
-    //     AutoBuilder.buildAuto("RMid2P", AutoConfigs.EVENTS, AutoConfigs.RMid2P.CONSTRAINTS));
 
-    autoChooser.addOption(
-        "Blue Bump 2.5",
-        AutoBuilder.buildAuto("BBump2.5", AutoConfigs.EVENTS, AutoConfigs.RFlat2.CONSTRAINTS));
-    // autoChooser.addOption(
-    //     "Blue Bump 2.5P",
-    //     AutoBuilder.buildAuto("BBump2.5P", AutoConfigs.EVENTS, AutoConfigs.RFlat2.CONSTRAINTS));
-    // autoChooser.addOption(
-    //     "Blue Bump 2",
-    //     AutoBuilder.buildAuto("BBump2", AutoConfigs.EVENTS, AutoConfigs.RFlat2.CONSTRAINTS));
+
+
+
     autoChooser.addOption(
         "Blue Bump 2P",
         AutoBuilder.buildAuto("BBump2P", AutoConfigs.EVENTS, AutoConfigs.RFlat2.CONSTRAINTS));
-    // autoChooser.addOption(
-    //     "Blue Flat 2.5P",
-    //     AutoBuilder.buildAuto("BFlat2.5P", AutoConfigs.EVENTS, AutoConfigs.RFlat2.CONSTRAINTS));
-    // autoChooser.addOption(
-    //     "Blue Flat 2",
-    //     AutoBuilder.buildAuto("BFlat2", AutoConfigs.EVENTS, AutoConfigs.RFlat2.CONSTRAINTS));
+
     autoChooser.addOption(
         "Blue Flat 2P",
         AutoBuilder.buildAuto("BFlat2P", AutoConfigs.EVENTS, AutoConfigs.RFlat2.CONSTRAINTS));
+
     autoChooser.addOption(
         "Blue Flat 3",
         AutoBuilder.buildAuto("BFlat3", AutoConfigs.EVENTS, AutoConfigs.RFlat3.CONSTRAINTS));
     autoChooser.addOption(
         "Blue Mid 1.5P",
         AutoBuilder.buildAuto("BMid1.5P", AutoConfigs.EVENTS, AutoConfigs.RMid15P.CONSTRAINTS));
-    // autoChooser.addOption(
-    //     "Blue Mid 2P",
-    //     AutoBuilder.buildAuto("BMid2P", AutoConfigs.EVENTS, AutoConfigs.RMid2P.CONSTRAINTS));
+
+        autoChooser.addOption(
+            "Blue Bump 2.5",
+            AutoBuilder.buildAuto("BBump2.5", AutoConfigs.EVENTS, AutoConfigs.RFlat2.CONSTRAINTS));
+
 
     SmartDashboard.putData("Auto Chooser", autoChooser);
   }
