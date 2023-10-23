@@ -188,9 +188,6 @@ public class RobotContainer {
         "Red Mid 1.5P",
         AutoBuilder.buildAuto("RMid1.5P", AutoConfigs.EVENTS, AutoConfigs.RMid15P.CONSTRAINTS));
 
-
-
-
     autoChooser.addOption(
         "Blue Bump 2P",
         AutoBuilder.buildAuto("BBump2P", AutoConfigs.EVENTS, AutoConfigs.RFlat2.CONSTRAINTS));
@@ -206,10 +203,9 @@ public class RobotContainer {
         "Blue Mid 1.5P",
         AutoBuilder.buildAuto("BMid1.5P", AutoConfigs.EVENTS, AutoConfigs.RMid15P.CONSTRAINTS));
 
-        autoChooser.addOption(
-            "Blue Bump 2.5",
-            AutoBuilder.buildAuto("BBump2.5", AutoConfigs.EVENTS, AutoConfigs.RFlat2.CONSTRAINTS));
-
+    autoChooser.addOption(
+        "Blue Bump 2.5",
+        AutoBuilder.buildAuto("BBump2.5", AutoConfigs.EVENTS, AutoConfigs.RFlat2.CONSTRAINTS));
 
     SmartDashboard.putData("Auto Chooser", autoChooser);
   }

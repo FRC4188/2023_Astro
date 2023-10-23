@@ -3,7 +3,6 @@ package frc.robot.subsystems.sensors;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -19,7 +18,7 @@ public class Sensors extends SubsystemBase {
   }
 
   private Pigeon pigeon = new Pigeon(Constants.ids.PIGEON);
-  
+
   private Limelight limelightLeft =
       new Limelight(
           Constants.sensors.LEFT_NAME,
@@ -30,8 +29,6 @@ public class Sensors extends SubsystemBase {
           Constants.sensors.RIGHT_NAME,
           Constants.sensors.RIGHT_POSITION,
           Constants.sensors.RIGHT_ROTATION);
-
-
 
   /** Creates a new Sensors. */
   private Sensors() {}
@@ -45,7 +42,6 @@ public class Sensors extends SubsystemBase {
     SmartDashboard.putString("Limelight Pose2d", getPose2d().toString());
     SmartDashboard.putString("Left Pose", limelightLeft.getPose3d().toString());
     SmartDashboard.putString("Right Pose", limelightRight.getPose3d().toString());
-
   }
 
   public Pose3d getPose3d() {

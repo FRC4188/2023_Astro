@@ -12,6 +12,7 @@ public class SetShoulderAngle extends CommandBase {
   private Shoulder shoulder = Shoulder.getInstance();
 
   private double angle;
+
   /** Creates a new SetShoulderAngle. */
   public SetShoulderAngle(double angle) {
     // Use addRequirements() here to declare subsystem dependencies.

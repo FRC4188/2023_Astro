@@ -13,6 +13,7 @@ import frc.robot.subsystems.claw.Claw;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class Outtake extends SequentialCommandGroup {
   private Claw claw = Claw.getInstance();
+
   /** Creates a new Outtake. */
   public Outtake() {
     // Add your commands in the addCommands() call, e.g.
