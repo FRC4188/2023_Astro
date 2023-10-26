@@ -241,7 +241,7 @@ public class RobotContainer {
         "Red Bump 2.5",
         AutoBuilder.buildAuto("RBump2.5", AutoConfigs.EVENTS, AutoConfigs.RFlat2.CONSTRAINTS));
 
-    SmartDashboard.putData("Auto Chooser", autoChooser) ;
+    SmartDashboard.putData("Auto Chooser", autoChooser);
   }
 
   /**
