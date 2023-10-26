@@ -4,7 +4,6 @@ import csplib.inputs.CSP_Controller;
 import csplib.inputs.CSP_Controller.Scale;
 import csplib.utils.AutoBuilder;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -69,21 +68,17 @@ public class RobotContainer {
                         : pilot.getRightX(Scale.SQUARED)),
             drivetrain));
 
-        if (pilot.getRightT(Scale.LINEAR) > 0.1) {
-            copilot.setRumble(RumbleType.kBothRumble, 0.0);
-            pilot.setRumble(RumbleType.kBothRumble, 0.0);
-        }
+    if (pilot.getRightT(Scale.LINEAR) > 0.1) {
+      copilot.setRumble(RumbleType.kBothRumble, 0.0);
+      pilot.setRumble(RumbleType.kBothRumble, 0.0);
+    } else {
+      copilot.setRumble(RumbleType.kBothRumble, 1.0);
+      pilot.setRumble(RumbleType.kBothRumble, 1.0);
+    }
 
-        else {
-            copilot.setRumble(RumbleType.kBothRumble, 1.0);
-            pilot.setRumble(RumbleType.kBothRumble, 1.0);
-        }
-
-
-
-        // else {
-        //     pilot.setRumble(RumbleType.kBothRumble, 0.0);
-        // }
+    // else {
+    //     pilot.setRumble(RumbleType.kBothRumble, 0.0);
+    // }
   }
 
   /** Use this method to define your button->command mappings. */
@@ -141,7 +136,6 @@ public class RobotContainer {
     // } else {
     //     pilot.setRumble(RumbleType.kBothRumble, 0.0);
     // }
-        
 
     // copilot
     //     .getRightTButton().onTrue(
@@ -196,7 +190,8 @@ public class RobotContainer {
 
     // autoChooser.addOption(
     //     "Balance",
-    //     AutoBuilder.buildAuto("Balance", AutoConfigs.EVENTS, AutoConfigs.PerfectAuto.CONSTRAINTS));
+    //     AutoBuilder.buildAuto("Balance", AutoConfigs.EVENTS,
+    // AutoConfigs.PerfectAuto.CONSTRAINTS));
     // autoChooser.addOption(
     //     "Red Bump 2.5",
     //     AutoBuilder.buildAuto("RBump2.5", AutoConfigs.EVENTS, AutoConfigs.RFlat2.CONSTRAINTS));
@@ -215,9 +210,6 @@ public class RobotContainer {
     //     "Red Mid 1.5P",
     //     AutoBuilder.buildAuto("RMid1.5P", AutoConfigs.EVENTS, AutoConfigs.RMid15P.CONSTRAINTS));
 
-
-
-
     // autoChooser.addOption(
     //     "Blue Bump 2P",
     //     AutoBuilder.buildAuto("BBump2P", AutoConfigs.EVENTS, AutoConfigs.RFlat2.CONSTRAINTS));
@@ -233,10 +225,9 @@ public class RobotContainer {
         "Mid 1.5P",
         AutoBuilder.buildAuto("BMid1.5P", AutoConfigs.EVENTS, AutoConfigs.RMid15P.CONSTRAINTS));
 
-        autoChooser.addOption(
-            "Bump 2.5",
-            AutoBuilder.buildAuto("BBump2.5", AutoConfigs.EVENTS, AutoConfigs.RFlat2.CONSTRAINTS));
-
+    autoChooser.addOption(
+        "Bump 2.5",
+        AutoBuilder.buildAuto("BBump2.5", AutoConfigs.EVENTS, AutoConfigs.RFlat2.CONSTRAINTS));
 
     SmartDashboard.putData("Auto Chooser", autoChooser);
   }

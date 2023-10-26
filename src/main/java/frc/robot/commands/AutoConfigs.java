@@ -81,7 +81,9 @@ public class AutoConfigs {
                   new SetPosition(
                       Constants.arm.configs.FLOOR_CUBE, Constants.arm.configs.FLOOR_CONE)),
               Map.entry("Prep Shoulder", new SetShoulderAngle(50)), // just in the middle somwhere
-              Map.entry("Prep For 3 Piece", new ParallelCommandGroup(new SetShoulderAngle(42), new SetWristAngle(100))),
+              Map.entry(
+                  "Prep For 3 Piece",
+                  new ParallelCommandGroup(new SetShoulderAngle(42), new SetWristAngle(100))),
               Map.entry("Set Cube", new SetCube()),
               Map.entry(
                   "Stop Drivetrain",

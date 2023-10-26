@@ -73,11 +73,8 @@ public class Claw extends SubsystemBase {
   public boolean detectIntake() {
     if (Math.abs(motor.getStatorCurrent()) > 35) {
       return true;
-    }
-
-    else {
+    } else {
       return false;
     }
   }
-
 }

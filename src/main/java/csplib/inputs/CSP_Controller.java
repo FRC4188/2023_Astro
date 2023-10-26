@@ -4,9 +4,7 @@
 
 package csplib.inputs;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
@@ -22,8 +20,6 @@ public class CSP_Controller extends CommandXboxController {
     CUBED,
     QUARTIC
   }
-
-  
 
   public CSP_Controller(int port) {
     super(port);
@@ -142,7 +138,4 @@ public class CSP_Controller extends CommandXboxController {
   public void setRumble(RumbleType type, double value) {
     getHID().setRumble(type, value);
   }
-
 }
-
-
