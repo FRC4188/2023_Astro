@@ -2,13 +2,13 @@
   "waypoints": [
     {
       "anchorPoint": {
-        "x": 14.57119387847906,
-        "y": 2.1727370130917154
+        "x": 14.66,
+        "y": 2.1854070023929526
       },
       "prevControl": null,
       "nextControl": {
-        "x": 12.929612701037968,
-        "y": 2.1727370130917154
+        "x": 13.01842,
+        "y": 2.1854070023929526
       },
       "holonomicAngle": 0.0,
       "isReversal": false,
@@ -23,23 +23,23 @@
         ],
         "executionBehavior": "sequential",
         "waitBehavior": "deadline",
-        "waitTime": 3.75
+        "waitTime": 3.5
       }
     },
     {
       "anchorPoint": {
-        "x": 11.652718919472928,
+        "x": 11.65,
         "y": 2.194475266143515
       },
       "prevControl": {
-        "x": 11.888918590117322,
+        "x": 11.8862,
         "y": 2.194475266143515
       },
       "nextControl": {
-        "x": 11.335329688203238,
+        "x": 11.332611,
         "y": 2.194475266143515
       },
-      "holonomicAngle": 0,
+      "holonomicAngle": 0.0,
       "isReversal": false,
       "velOverride": null,
       "isLocked": false,
@@ -53,16 +53,16 @@
     },
     {
       "anchorPoint": {
-        "x": 9.882656113386407,
-        "y": 1.6238350308369651
+        "x": 9.44,
+        "y": 1.9
       },
       "prevControl": {
-        "x": 9.79197347588078,
-        "y": 1.7417224595942804
+        "x": 9.34932,
+        "y": 2.017885200310823
       },
       "nextControl": {
-        "x": 9.900140403461831,
-        "y": 1.601105453738913
+        "x": 9.457485,
+        "y": 1.8772708525630823
       },
       "holonomicAngle": 0.0,
       "isReversal": false,
@@ -78,12 +78,12 @@
     },
     {
       "anchorPoint": {
-        "x": 12.638601482623795,
-        "y": 2.767380827201026
+        "x": 12.47372,
+        "y": 2.530313029549477
       },
       "prevControl": {
-        "x": 9.5100504886797,
-        "y": 2.8399269372055267
+        "x": 9.34517,
+        "y": 2.6029487038887735
       },
       "nextControl": null,
       "holonomicAngle": 0.0,
@@ -93,10 +93,7 @@
       "isStopPoint": false,
       "stopEvent": {
         "names": [
-          "Timed Balance",
-          "Stop Drivetrain",
-          "Spit Low",
-          "Reset Balance"
+          "Balance"
         ],
         "executionBehavior": "sequential",
         "waitBehavior": "none",
@@ -104,12 +101,9 @@
       }
     }
   ],
-  "maxVelocity": 2.0,
-  "maxAcceleration": null,
-  "isReversed": null,
   "markers": [
     {
-      "position": 1.09,
+      "position": 1.090909090909091,
       "names": [
         "Set Floor",
         "Intake"
