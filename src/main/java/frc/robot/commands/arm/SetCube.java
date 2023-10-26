@@ -9,6 +9,7 @@ import frc.robot.subsystems.claw.Claw;
 
 public class SetCube extends InstantCommand {
   private Claw claw = Claw.getInstance();
+
   /** Creates a new SetCube. */
   public SetCube() {
     // Use addRequirements() here to declare subsystem dependencies.

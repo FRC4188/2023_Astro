@@ -9,6 +9,7 @@ import frc.robot.subsystems.arm.Telescope;
 
 public class ZeroTelescope extends CommandBase {
   private Telescope telescope = Telescope.getInstance();
+
   /** Creates a new ZeroTelescope. */
   public ZeroTelescope() {
     // Use addRequirements() here to declare subsystem dependencies.

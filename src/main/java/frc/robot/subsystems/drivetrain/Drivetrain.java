@@ -5,7 +5,6 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -161,10 +160,11 @@ public class Drivetrain extends SubsystemBase {
 
   public void updateOdometry() {
     Pose2d pose = sensors.getPose2d();
-    if (!pose.equals(new Pose2d()) && pose.getTranslation().getDistance(getPose2d().getTranslation()) < 1.0) {
+    if (!pose.equals(new Pose2d())
+        && pose.getTranslation().getDistance(getPose2d().getTranslation()) < 1.0) {
       // odometry.addVisionMeasurement(pose, sensors.getLatency());
     }
- 
+
     odometry.update(
         sensors.getRotation2d(),
         new SwerveModulePosition[] {

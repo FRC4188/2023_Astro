@@ -118,8 +118,6 @@ public class AutoConfigs {
     };
   }
 
-
-
   public static final class RMid2P {
     public static final PathConstraints[] CONSTRAINTS = {
       new PathConstraints(3, 2),

@@ -16,6 +16,7 @@ public class HoldWrist extends CommandBase {
   private DoubleSupplier set;
   private double wristSet;
   private double prevSet;
+
   /** Creates a new HoldWrist. */
   public HoldWrist(DoubleSupplier set) {
     // Use addRequirements() here to declare subsystem dependencies.
