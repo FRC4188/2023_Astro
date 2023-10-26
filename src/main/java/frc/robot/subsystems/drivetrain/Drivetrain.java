@@ -113,11 +113,7 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public void putDashboard() {
-    SmartDashboard.putNumber("Rot kP", 0);
-    SmartDashboard.putNumber("Rot kI", 0);
-    SmartDashboard.putNumber("Rot kD", 0);
 
-    SmartDashboard.putNumber("Set Drive Rotation", 0);
   }
 
   public void drive(double x, double y, double rot) {

@@ -23,7 +23,7 @@
         ],
         "executionBehavior": "sequential",
         "waitBehavior": "deadline",
-        "waitTime": 4.0
+        "waitTime": 3.5
       }
     },
     {
@@ -78,12 +78,12 @@
     },
     {
       "anchorPoint": {
-        "x": 4.370903127771168,
-        "y": 2.5753423436671445
+        "x": 4.066285957211204,
+        "y": 2.530313029549477
       },
       "prevControl": {
-        "x": 7.499452043578405,
-        "y": 2.647978018006441
+        "x": 7.194834873018441,
+        "y": 2.6029487038887735
       },
       "nextControl": null,
       "holonomicAngle": 180.0,

@@ -33,6 +33,8 @@ public class Claw extends SubsystemBase {
   @Override
   public void periodic() {
     SmartDashboard.putBoolean("isCube", getIsCube());
+    SmartDashboard.putNumber("Intake AMPS", motor.getStatorCurrent());
+    SmartDashboard.putBoolean("intaked", detectIntake());
   }
 
   public void disable() {
@@ -67,4 +69,15 @@ public class Claw extends SubsystemBase {
   public boolean getIsCube() {
     return isCube;
   }
+
+  public boolean detectIntake() {
+    if (Math.abs(motor.getStatorCurrent()) > 35) {
+      return true;
+    }
+
+    else {
+      return false;
+    }
+  }
+
 }

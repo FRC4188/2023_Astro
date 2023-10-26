@@ -8,6 +8,7 @@ import com.pathplanner.lib.PathConstraints;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import frc.robot.Constants;
 import frc.robot.commands.arm.SetCube;
@@ -15,6 +16,7 @@ import frc.robot.commands.arm.SetFlip;
 import frc.robot.commands.arm.SetPosition;
 import frc.robot.commands.arm.shoulder.SetShoulderAngle;
 import frc.robot.commands.arm.telescope.ZeroTelescope;
+import frc.robot.commands.arm.wrist.SetWristAngle;
 import frc.robot.commands.claw.Intake;
 import frc.robot.commands.claw.Outtake;
 import frc.robot.commands.drive.Balance;
@@ -60,7 +62,7 @@ public class AutoConfigs {
                           .withTimeout(1.3),
                       new SetPosition(
                               Constants.arm.configs.MID_CUBE, Constants.arm.configs.MID_CONE)
-                          .withTimeout(1.8),
+                          .withTimeout(1.6),
                       Claw.getInstance()::getIsCube)),
               Map.entry(
                   "Spit Low",
@@ -79,6 +81,7 @@ public class AutoConfigs {
                   new SetPosition(
                       Constants.arm.configs.FLOOR_CUBE, Constants.arm.configs.FLOOR_CONE)),
               Map.entry("Prep Shoulder", new SetShoulderAngle(50)), // just in the middle somwhere
+              Map.entry("Prep For 3 Piece", new ParallelCommandGroup(new SetShoulderAngle(42), new SetWristAngle(100))),
               Map.entry("Set Cube", new SetCube()),
               Map.entry(
                   "Stop Drivetrain",
@@ -111,7 +114,7 @@ public class AutoConfigs {
 
   public static final class RMid15P {
     public static final PathConstraints[] CONSTRAINTS = {
-      new PathConstraints(1, 2), new PathConstraints(4, 3), new PathConstraints(1.5, 2)
+      new PathConstraints(3, 2), new PathConstraints(4, 3), new PathConstraints(2.5, 2)
     };
   }
 

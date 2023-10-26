@@ -4,6 +4,8 @@ import csplib.inputs.CSP_Controller;
 import csplib.inputs.CSP_Controller.Scale;
 import csplib.utils.AutoBuilder;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -51,6 +53,7 @@ public class RobotContainer {
   }
 
   private void setDefaultCommands() {
+
     drivetrain.setDefaultCommand(
         new RunCommand(
             () ->
@@ -65,10 +68,27 @@ public class RobotContainer {
                         ? pilot.getRightX(Scale.SQUARED) * 0.1
                         : pilot.getRightX(Scale.SQUARED)),
             drivetrain));
+
+        if (pilot.getRightT(Scale.LINEAR) > 0.1) {
+            copilot.setRumble(RumbleType.kBothRumble, 0.0);
+            pilot.setRumble(RumbleType.kBothRumble, 0.0);
+        }
+
+        else {
+            copilot.setRumble(RumbleType.kBothRumble, 1.0);
+            pilot.setRumble(RumbleType.kBothRumble, 1.0);
+        }
+
+
+
+        // else {
+        //     pilot.setRumble(RumbleType.kBothRumble, 0.0);
+        // }
   }
 
   /** Use this method to define your button->command mappings. */
   private void configureButtonBindings() {
+
     pilot
         .getAButton()
         .onTrue(
@@ -116,6 +136,13 @@ public class RobotContainer {
         .getDownButton()
         .onTrue(new SetPosition(Constants.arm.configs.LOW_CUBE, Constants.arm.configs.LOW_CONE));
 
+    // if(pilot.getAButton() == )  {
+    //     pilot.setRumble(RumbleType.kBothRumble, 1.0);
+    // } else {
+    //     pilot.setRumble(RumbleType.kBothRumble, 0.0);
+    // }
+        
+
     // copilot
     //     .getRightTButton().onTrue(
     //         new InstantCommand(() -> {currentAngle = shoulder.getAngle();})
@@ -162,52 +189,52 @@ public class RobotContainer {
 
   private void addChooser() {
     autoChooser.setDefaultOption("Do Nothng", new SequentialCommandGroup());
-    autoChooser.addOption(
-        "High Perfect Auto",
-        AutoBuilder.buildAuto(
-            "High Perfect Auto", AutoConfigs.EVENTS, AutoConfigs.PerfectAuto.CONSTRAINTS));
+    // autoChooser.addOption(
+    //     "High Perfect Auto",
+    //     AutoBuilder.buildAuto(
+    //         "High Perfect Auto", AutoConfigs.EVENTS, AutoConfigs.PerfectAuto.CONSTRAINTS));
 
-    autoChooser.addOption(
-        "Balance",
-        AutoBuilder.buildAuto("Balance", AutoConfigs.EVENTS, AutoConfigs.PerfectAuto.CONSTRAINTS));
-    autoChooser.addOption(
-        "Red Bump 2.5",
-        AutoBuilder.buildAuto("RBump2.5", AutoConfigs.EVENTS, AutoConfigs.RFlat2.CONSTRAINTS));
+    // autoChooser.addOption(
+    //     "Balance",
+    //     AutoBuilder.buildAuto("Balance", AutoConfigs.EVENTS, AutoConfigs.PerfectAuto.CONSTRAINTS));
+    // autoChooser.addOption(
+    //     "Red Bump 2.5",
+    //     AutoBuilder.buildAuto("RBump2.5", AutoConfigs.EVENTS, AutoConfigs.RFlat2.CONSTRAINTS));
 
-    autoChooser.addOption(
-        "Red Bump 2P",
-        AutoBuilder.buildAuto("RBump2P", AutoConfigs.EVENTS, AutoConfigs.RFlat2.CONSTRAINTS));
+    // autoChooser.addOption(
+    //     "Red Bump 2P",
+    //     AutoBuilder.buildAuto("RBump2P", AutoConfigs.EVENTS, AutoConfigs.RFlat2.CONSTRAINTS));
 
-    autoChooser.addOption(
-        "Red Flat 2P",
-        AutoBuilder.buildAuto("RFlat2P", AutoConfigs.EVENTS, AutoConfigs.RFlat2.CONSTRAINTS));
-    autoChooser.addOption(
-        "Red Flat 3",
-        AutoBuilder.buildAuto("RFlat3", AutoConfigs.EVENTS, AutoConfigs.RFlat3.CONSTRAINTS));
-    autoChooser.addOption(
-        "Red Mid 1.5P",
-        AutoBuilder.buildAuto("RMid1.5P", AutoConfigs.EVENTS, AutoConfigs.RMid15P.CONSTRAINTS));
-
-
+    // autoChooser.addOption(
+    //     "Red Flat 2P",
+    //     AutoBuilder.buildAuto("RFlat2P", AutoConfigs.EVENTS, AutoConfigs.RFlat2.CONSTRAINTS));
+    // autoChooser.addOption(
+    //     "Red Flat 3",
+    //     AutoBuilder.buildAuto("RFlat3", AutoConfigs.EVENTS, AutoConfigs.RFlat3.CONSTRAINTS));
+    // autoChooser.addOption(
+    //     "Red Mid 1.5P",
+    //     AutoBuilder.buildAuto("RMid1.5P", AutoConfigs.EVENTS, AutoConfigs.RMid15P.CONSTRAINTS));
 
 
-    autoChooser.addOption(
-        "Blue Bump 2P",
-        AutoBuilder.buildAuto("BBump2P", AutoConfigs.EVENTS, AutoConfigs.RFlat2.CONSTRAINTS));
+
+
+    // autoChooser.addOption(
+    //     "Blue Bump 2P",
+    //     AutoBuilder.buildAuto("BBump2P", AutoConfigs.EVENTS, AutoConfigs.RFlat2.CONSTRAINTS));
+
+    // autoChooser.addOption(
+    //     "Blue Flat 2P",
+    //     AutoBuilder.buildAuto("BFlat2P", AutoConfigs.EVENTS, AutoConfigs.RFlat2.CONSTRAINTS));
 
     autoChooser.addOption(
-        "Blue Flat 2P",
-        AutoBuilder.buildAuto("BFlat2P", AutoConfigs.EVENTS, AutoConfigs.RFlat2.CONSTRAINTS));
-
-    autoChooser.addOption(
-        "Blue Flat 3",
+        "Flat 3",
         AutoBuilder.buildAuto("BFlat3", AutoConfigs.EVENTS, AutoConfigs.RFlat3.CONSTRAINTS));
     autoChooser.addOption(
-        "Blue Mid 1.5P",
+        "Mid 1.5P",
         AutoBuilder.buildAuto("BMid1.5P", AutoConfigs.EVENTS, AutoConfigs.RMid15P.CONSTRAINTS));
 
         autoChooser.addOption(
-            "Blue Bump 2.5",
+            "Bump 2.5",
             AutoBuilder.buildAuto("BBump2.5", AutoConfigs.EVENTS, AutoConfigs.RFlat2.CONSTRAINTS));
 
 
