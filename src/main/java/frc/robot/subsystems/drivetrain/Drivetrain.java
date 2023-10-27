@@ -111,9 +111,7 @@ public class Drivetrain extends SubsystemBase {
     SmartDashboard.putNumber("FR Angle", frontRight.getModulePosition().angle.getDegrees());
   }
 
-  public void putDashboard() {
-
-  }
+  public void putDashboard() {}
 
   public void drive(double x, double y, double rot) {
     double totalSpeed = Math.pow(Math.hypot(x, y), 3.0);
