@@ -5,12 +5,11 @@
 package frc.robot;
 
 import com.pathplanner.lib.server.PathPlannerServer;
-
 import csplib.inputs.CSP_Controller;
 import csplib.utils.TempManager;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.claw.Claw;
@@ -29,7 +28,7 @@ public class Robot extends TimedRobot {
 
   private CSP_Controller pilot = new CSP_Controller(Constants.controller.PILOT_PORT);
   private CSP_Controller copilot = new CSP_Controller(Constants.controller.COPILOT_PORT);
-  
+
   private Claw claw = Claw.getInstance();
 
   /**
@@ -60,9 +59,6 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
-
-
-  
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
@@ -108,7 +104,6 @@ public class Robot extends TimedRobot {
       pilot.setRumble(RumbleType.kBothRumble, 0.0);
       copilot.setRumble(RumbleType.kBothRumble, 0.0);
     }
-
   }
 
   @Override

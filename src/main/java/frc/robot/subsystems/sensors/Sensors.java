@@ -1,20 +1,15 @@
 package frc.robot.subsystems.sensors;
 
-import csplib.inputs.CSP_Controller;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.GenericHID.RumbleType;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.subsystems.claw.Claw;
 import frc.robot.subsystems.drivetrain.Drivetrain;
 
 public class Sensors extends SubsystemBase {
 
   private static Sensors instance = null;
-
 
   public static synchronized Sensors getInstance() {
     if (instance == null) instance = new Sensors();
@@ -46,7 +41,6 @@ public class Sensors extends SubsystemBase {
     // SmartDashboard.putString("Limelight Pose2d", getPose2d().toString());
     // SmartDashboard.putString("Left Pose", limelightLeft.getPose3d().toString());
     // SmartDashboard.putString("Right Pose", limelightRight.getPose3d().toString());
-
 
   }
 
