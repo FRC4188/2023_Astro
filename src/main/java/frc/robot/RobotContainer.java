@@ -4,6 +4,7 @@ import csplib.inputs.CSP_Controller;
 import csplib.inputs.CSP_Controller.Scale;
 import csplib.utils.AutoBuilder;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -33,8 +34,10 @@ public class RobotContainer {
   private CSP_Controller pilot = new CSP_Controller(Constants.controller.PILOT_PORT);
   private CSP_Controller copilot = new CSP_Controller(Constants.controller.COPILOT_PORT);
 
-  private Drivetrain drivetrain = Drivetrain.getInstance();
   private Claw claw = Claw.getInstance();
+
+  private Drivetrain drivetrain = Drivetrain.getInstance();
+
   private Shoulder shoulder = Shoulder.getInstance();
 
   private SendableChooser<Command> autoChooser = new SendableChooser<Command>();
@@ -68,22 +71,6 @@ public class RobotContainer {
                         ? pilot.getRightX(Scale.SQUARED) * 0.1
                         : pilot.getRightX(Scale.SQUARED)),
             drivetrain));
-
-        if (pilot.getRightT(Scale.LINEAR) > 0.1) {
-            copilot.setRumble(RumbleType.kBothRumble, 0.0);
-            pilot.setRumble(RumbleType.kBothRumble, 0.0);
-        }
-
-        else {
-            copilot.setRumble(RumbleType.kBothRumble, 1.0);
-            pilot.setRumble(RumbleType.kBothRumble, 1.0);
-        }
-
-
-
-        // else {
-        //     pilot.setRumble(RumbleType.kBothRumble, 0.0);
-        // }
   }
 
   /** Use this method to define your button->command mappings. */
