@@ -14,8 +14,6 @@ import frc.robot.commands.AutoConfigs;
 import frc.robot.commands.arm.SetFlip;
 import frc.robot.commands.arm.SetFloor;
 import frc.robot.commands.arm.SetPosition;
-import frc.robot.commands.claw.Intake;
-import frc.robot.commands.claw.Outtake;
 import frc.robot.commands.groups.Reset;
 import frc.robot.subsystems.arm.Shoulder;
 import frc.robot.subsystems.claw.Claw;

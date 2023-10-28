@@ -46,7 +46,6 @@ public class AutoReset extends ParallelCommandGroup {
                 new SetTelescopePosition(telescopeLength))),
         new ConditionalCommand(
             new SetWristAngle(-wristAngle), new SetWristAngle(wristAngle), shoulder::getIsFlipped),
-        new InstantCommand(() -> claw.disable(), claw)
-        );
+        new InstantCommand(() -> claw.disable(), claw));
   }
 }
