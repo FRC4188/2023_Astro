@@ -22,7 +22,7 @@ import frc.robot.subsystems.claw.Claw;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class Reset extends ParallelCommandGroup {
+public class AutoReset extends ParallelCommandGroup {
   private Claw claw = Claw.getInstance();
   private Shoulder shoulder = Shoulder.getInstance();
   private double shoulderAngle = Constants.arm.configs.RESET[0];
@@ -30,7 +30,7 @@ public class Reset extends ParallelCommandGroup {
   private double wristAngle = Constants.arm.configs.RESET[2];
 
   /** Creates a new Reset. */
-  public Reset() {
+  public AutoReset() {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
@@ -45,8 +45,8 @@ public class Reset extends ParallelCommandGroup {
                     .andThen(new InstantCommand(() -> shoulder.disable())),
                 new SetTelescopePosition(telescopeLength))),
         new ConditionalCommand(
-            new SetWristAngle(-wristAngle), new SetWristAngle(wristAngle), shoulder::getIsFlipped)
-        //new InstantCommand(() -> claw.disable(), claw)
+            new SetWristAngle(-wristAngle), new SetWristAngle(wristAngle), shoulder::getIsFlipped),
+        new InstantCommand(() -> claw.disable(), claw)
         );
   }
 }

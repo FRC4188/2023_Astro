@@ -20,6 +20,7 @@ import frc.robot.commands.arm.wrist.SetWristAngle;
 import frc.robot.commands.claw.Intake;
 import frc.robot.commands.claw.Outtake;
 import frc.robot.commands.drive.Balance;
+import frc.robot.commands.groups.AutoReset;
 import frc.robot.commands.groups.Reset;
 import frc.robot.subsystems.claw.Claw;
 import frc.robot.subsystems.drivetrain.Drivetrain;
@@ -90,9 +91,9 @@ public class AutoConfigs {
                   new InstantCommand(
                       () -> Drivetrain.getInstance().zeroPower(), Drivetrain.getInstance())),
               Map.entry("Zero Telescope", new ZeroTelescope()),
-              Map.entry("Reset Flipped", new SetFlip().andThen(new Reset())),
+              Map.entry("Reset Flipped", new SetFlip().andThen(new AutoReset())),
               Map.entry("Set Flipped", new SetFlip()),
-              Map.entry("Reset", new Reset()),
+              Map.entry("Reset", new AutoReset()),
               Map.entry("Print", new PrintCommand("IT DOESNT END")),
               Map.entry("Intake", new Intake()),
               Map.entry("Outtake", new Outtake().withTimeout(0.2)),

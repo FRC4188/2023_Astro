@@ -17,6 +17,8 @@ import frc.robot.commands.AutoConfigs;
 import frc.robot.commands.arm.SetFlip;
 import frc.robot.commands.arm.SetFloor;
 import frc.robot.commands.arm.SetPosition;
+import frc.robot.commands.claw.Intake;
+import frc.robot.commands.claw.Outtake;
 import frc.robot.commands.groups.Reset;
 import frc.robot.subsystems.arm.Shoulder;
 import frc.robot.subsystems.claw.Claw;
@@ -123,41 +125,6 @@ public class RobotContainer {
         .getDownButton()
         .onTrue(new SetPosition(Constants.arm.configs.LOW_CUBE, Constants.arm.configs.LOW_CONE));
 
-    // if(pilot.getAButton() == )  {
-    //     pilot.setRumble(RumbleType.kBothRumble, 1.0);
-    // } else {
-    //     pilot.setRumble(RumbleType.kBothRumble, 0.0);
-    // }
-
-    // copilot
-    //     .getRightTButton().onTrue(
-    //         new InstantCommand(() -> {currentAngle = shoulder.getAngle();})
-    //         .andThen(
-    //             new SetPosition(currentAngle + (shoulder.getIsFlipped() ? -1 : 1),
-    // Telescope.getInstance().getPosition(), Wrist.getInstance().getMotorAngle()))
-    //         );
-
-    // copilot
-    //     .getLeftBumperButton().onTrue(
-    //         new InstantCommand(() -> {currentAngle = shoulder.getAngle();})
-    //         .andThen(
-    //             new SetPosition(currentAngle - (shoulder.getIsFlipped() ? -1 : 1),
-    // Telescope.getInstance().getPosition(), Wrist.getInstance().getMotorAngle()))
-    //         );
-    // copilot
-    //     .getRightTButton()
-    //     .onTrue(new SetFloor(Constants.arm.configs.BACK_TIPPED_CONE,
-    // Constants.arm.configs.BACK_TIPPED_CONE));
-
-    // copilot.getRightBumperButton().debounce(0.05).onTrue(new SetCube());
-
-    // copilot.getLeftBumperButton().debounce(0.05).onTrue(new SetFlip().andThen(new Reset()));
-
-    // copilot.getBackButton().onTrue(new Reset());
-    // copilot.getStartButton().onTrue(new Reset());
-
-    // Raymond here we'll see if i like this
-
     copilot
         .getLeftBumperButton()
         .debounce(0.05)
@@ -223,11 +190,11 @@ public class RobotContainer {
 
     autoChooser.addOption(
         "Red Flat 3",
-        AutoBuilder.buildAuto("RFlat3", AutoConfigs.EVENTS, AutoConfigs.RFlat2.CONSTRAINTS));
+        AutoBuilder.buildAuto("RFlat3", AutoConfigs.EVENTS, AutoConfigs.RFlat3.CONSTRAINTS));
 
     autoChooser.addOption(
         "Red Mid 1.5P",
-        AutoBuilder.buildAuto("RMid1.5P", AutoConfigs.EVENTS, AutoConfigs.RFlat2.CONSTRAINTS));
+        AutoBuilder.buildAuto("RMid1.5P", AutoConfigs.EVENTS, AutoConfigs.RMid15P.CONSTRAINTS));
 
     autoChooser.addOption(
         "Red Bump 2.5",
