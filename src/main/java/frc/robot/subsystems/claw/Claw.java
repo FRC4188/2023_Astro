@@ -1,95 +1,133 @@
 package frc.robot.subsystems.claw;
 
-import csplib.motors.CSP_Talon;
-import csplib.utils.TempManager;
-import edu.wpi.first.wpilibj.AnalogInput;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
+import frc.robot.constants.Constants;
+import frc.robot.constants.HardwareConstants;
+import frc.robot.utils.MathUtils;
+import frc.robot.utils.SuperstructureStates;
+import frc.robot.utils.logging.LogUtils;
+import org.littletonrobotics.junction.Logger;
 
 public class Claw extends SubsystemBase {
-  private static Claw instance;
+    protected static final String logKey = "Claw";
 
-  // private CSP_Controller pilot = new CSP_Controller(Constants.controller.PILOT_PORT);
-  // private CSP_Controller copilot = new CSP_Controller(Constants.controller.COPILOT_PORT);
+    private final ClawIO clawIO;
+    private final ClawIOInputsAutoLogged inputs;
 
-  // private Notifier dashboard = new Notifier(() -> updateDashboard());
+    private SuperstructureStates.ClawState desiredState = SuperstructureStates.ClawState.STANDBY;
+    private SuperstructureStates.ClawState currentState = desiredState;
+    private SuperstructureStates.ClawGamePiece gamePiece = SuperstructureStates.ClawGamePiece.CONE;
+    private boolean transitioning = false;
 
-  public static synchronized Claw getInstance() {
-    if (instance == null) instance = new Claw();
-    return instance;
-  }
+    public Claw(final Constants.RobotMode mode, final HardwareConstants.ClawConstants clawConstants) {
+        this.clawIO = switch (mode) {
+            case REAL -> new ClawIOReal(clawConstants);
+            case SIM -> new ClawIOSim(clawConstants);
+            case REPLAY -> new ClawIO() {
+            };
+        };
 
-  private CSP_Talon motor = new CSP_Talon(Constants.ids.CLAW);
-  private AnalogInput sensor = new AnalogInput(Constants.ids.ULTRASONIC_SENSOR);
+        this.inputs = new ClawIOInputsAutoLogged();
 
-  private boolean isCube;
+        this.clawIO.config();
+        this.clawIO.initialize();
 
-  private Claw() {
-    init();
-    TempManager.addMotor(motor);
-  }
-
-  private void updateDashboard() {}
-
-  private void init() {
-    motor.setBrake(true);
-    motor.setInverted(false);
-  }
-
-  @Override
-  public void periodic() {
-    SmartDashboard.putBoolean("isCube", getIsCube());
-    SmartDashboard.putNumber("Intake AMPS", motor.getStatorCurrent());
-    SmartDashboard.putBoolean("intaked", detectIntake());
-  }
-
-  public void disable() {
-    motor.disable();
-  }
-
-  public void set(double percent) {
-    motor.set(percent);
-  }
-
-  private void setInverted() {
-    if (isCube) motor.setInverted(true);
-    else motor.setInverted(false);
-  }
-
-  public void setIsCube(boolean isCube) {
-    this.isCube = isCube;
-  }
-
-  public void intake() {
-    setInverted();
-
-    motor.set(1.0);
-  }
-
-  public void outtake() {
-    setInverted();
-
-    motor.set(-1.0);
-  }
-
-  public boolean getIsCube() {
-    return isCube;
-  }
-
-  public boolean detectIntake() {
-    if (Math.abs(motor.getStatorCurrent()) > 35) {
-      return true;
-    } else {
-      return false;
+        setDesiredState(desiredState);
     }
-  }
 
-  // public void vibration(CSP_Controller driver, CSP_Controller operator) {
-  //   // if (detectIntake()) {
-  //     operator.setRumble(RumbleType.kBothRumble, 1.0);
-  //     driver.setRumble(RumbleType.kBothRumble, 1.0);
-  //   //}
-  // }
+    @Override
+    public void periodic() {
+        final double clawIOPeriodicStart = Logger.getRealTimestamp();
+        clawIO.periodic();
 
+        Logger.recordOutput(
+                logKey + "/PeriodicIOPeriodMs",
+                LogUtils.microsecondsToMilliseconds(Logger.getRealTimestamp() - clawIOPeriodicStart)
+        );
+
+        clawIO.updateInputs(inputs);
+        Logger.processInputs(logKey, inputs);
+
+        Logger.recordOutput(logKey + "/CurrentState", currentState.toString());
+        Logger.recordOutput(logKey + "/DesiredState", desiredState.toString());
+        Logger.recordOutput(logKey + "/AtDesiredState", isAtDesiredState());
+        Logger.recordOutput(logKey + "/IsTransitioning", transitioning);
+    }
+
+    /**
+     * Sets the desired {@link frc.robot.utils.SuperstructureStates.ClawState}.
+     *
+     * @param desiredState the new desired {@link frc.robot.utils.SuperstructureStates.ClawState}
+     * @implNote This will put the system into a transitioning state if the new desiredState is != to the currentState
+     * @see ClawIO#setDesiredState(SuperstructureStates.ClawState, SuperstructureStates.ClawGamePiece)
+     */
+    public void setDesiredState(final SuperstructureStates.ClawState desiredState) {
+        this.desiredState = desiredState;
+        if (desiredState != currentState) {
+            this.transitioning = true;
+        }
+
+        clawIO.setDesiredState(desiredState, gamePiece);
+    }
+
+    public void setGamePiece(final SuperstructureStates.ClawGamePiece gamePiece) {
+        this.gamePiece = gamePiece;
+    }
+
+    public SuperstructureStates.ClawGamePiece getGamePiece() {
+        return gamePiece;
+    }
+
+    public SuperstructureStates.ClawState getDesiredState() {
+        return desiredState;
+    }
+
+    public SuperstructureStates.ClawState getCurrentState() {
+        return currentState;
+    }
+
+    public SuperstructureStates.ClawState getCurrentStateWithNullAsTransition() {
+        return transitioning ? null : currentState;
+    }
+
+    /**
+     * Get if the system is at its desired {@link frc.robot.utils.SuperstructureStates.ClawState}.
+     *
+     * <p>This <b>should</b> be called periodically to update the currentState of the system
+     * which will ensure that anything reading from currentState directly without interacting with this method
+     * will receive the correct currentState, however, this isn't required if the only interaction with the
+     * currentState is through this method (which will update the currentState before returning a result)</p>
+     *
+     * @return true if the system is at the desired {@link frc.robot.utils.SuperstructureStates.ClawState},
+     * false if not
+     */
+    public boolean isAtDesiredState() {
+        if (currentState == desiredState && !transitioning) {
+            return true;
+        } else {
+            final boolean isAtDesired = isAtDesiredStateInternal();
+            if (isAtDesired) {
+                this.currentState = desiredState;
+                this.transitioning = false;
+            }
+
+            return isAtDesired;
+        }
+    }
+
+    private boolean isAtDesiredStateInternal() {
+        return MathUtils.withinTolerance(
+                inputs.rollerMotorDutyCycle,
+                desiredState.rollerDutyCycle(),
+                0.2
+        );
+    }
+
+    public boolean isAtState(final SuperstructureStates.ClawState clawState) {
+        return !transitioning && currentState == clawState;
+    }
+
+    public boolean isGamePieceInIntake() {
+        return inputs.rollerMotorCurrentAmps >= 25;
+    }
 }

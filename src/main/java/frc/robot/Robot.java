@@ -4,16 +4,27 @@
 
 package frc.robot;
 
-import com.pathplanner.lib.server.PathPlannerServer;
-import csplib.inputs.CSP_Controller;
-import csplib.utils.TempManager;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.GenericHID.RumbleType;
-import edu.wpi.first.wpilibj.TimedRobot;
+import com.ctre.phoenix6.SignalLogger;
+import com.ctre.phoenix6.signals.NeutralModeValue;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.subsystems.claw.Claw;
-import frc.robot.subsystems.sensors.Sensors;
+import frc.robot.commands.autonomous.TrajectoryManager;
+import frc.robot.constants.Constants;
+import frc.robot.utils.SuperstructureStates;
+import frc.robot.utils.auto.MarkerCommand;
+import frc.robot.utils.closeables.ToClose;
+import frc.robot.utils.subsystems.VirtualSubsystem;
+import frc.robot.utils.teleop.ButtonBindings;
+import frc.robot.wrappers.vision.PhotonVision;
+import org.littletonrobotics.junction.LogFileUtil;
+import org.littletonrobotics.junction.LoggedRobot;
+import org.littletonrobotics.junction.Logger;
+import org.littletonrobotics.junction.networktables.NT4Publisher;
+import org.littletonrobotics.junction.wpilog.WPILOGReader;
+import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -21,106 +32,206 @@ import frc.robot.subsystems.sensors.Sensors;
  * the package after creating this project, you must also update the build.gradle file in the
  * project.
  */
-public class Robot extends TimedRobot {
-  private Command m_autonomousCommand;
+public class Robot extends LoggedRobot {
+    private Command autonomousCommand;
+    private RobotContainer robotContainer;
 
-  private RobotContainer m_robotContainer;
+    /**
+     * This function is run when the robot is first started up and should be used for any
+     * initialization code.
+     */
+    @Override
+    public void robotInit() {
+        if ((RobotBase.isReal() && Constants.CURRENT_MODE != Constants.RobotMode.REAL)
+                || (RobotBase.isSimulation() && Constants.CURRENT_MODE == Constants.RobotMode.REAL)
+        ) {
+            DriverStation.reportWarning(String.format(
+                    "Potentially incorrect CURRENT_MODE \"%s\" specified, robot is running \"%s\"",
+                    Constants.CURRENT_MODE,
+                    RobotBase.getRuntimeType().toString()
+            ), true);
 
-  private CSP_Controller pilot = new CSP_Controller(Constants.controller.PILOT_PORT);
-  private CSP_Controller copilot = new CSP_Controller(Constants.controller.COPILOT_PORT);
+            throw new RuntimeException("Incorrect CURRENT_MODE specified!");
+        }
 
-  private Claw claw = Claw.getInstance();
+        // we never use LiveWindow, and apparently this causes loop overruns so disable it
+        LiveWindow.disableAllTelemetry();
+        LiveWindow.setEnabled(false);
 
-  /**
-   * This function is run when the robot is first started up and should be used for any
-   * initialization code.
-   */
-  @Override
-  public void robotInit() {
-    // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
-    // autonomous chooser on the dashboard.
-    m_robotContainer = new RobotContainer();
-    PathPlannerServer.startServer(5811);
-    addPeriodic(() -> TempManager.monitor(), 2.0);
-    Sensors.getInstance().setPigeonAngle(new Rotation2d(Math.PI));
-  }
+        //TODO Change to their new thing
+        //schedule PathPlanner server to start
+//        if (Constants.PathPlanner.IS_USING_PATH_PLANNER_SERVER) {
+//            PathPlannerServer.startServer(Constants.PathPlanner.SERVER_PORT);
+//        }
 
-  /**
-   * This function is called every 20 ms, no matter the mode. Use this for items like diagnostics
-   * that you want ran during disabled, autonomous, teleoperated and test.
-   *
-   * <p>This runs after the mode specific periodic functions, but before LiveWindow and
-   * SmartDashboard integrated updating.
-   */
-  @Override
-  public void robotPeriodic() {
-    // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
-    // commands, running already-scheduled commands, removing finished or interrupted commands,
-    // and running subsystem periodic() methods.  This must be called from the robot's periodic
-    // block in order for anything in the Command-based framework to work.
-    CommandScheduler.getInstance().run();
-  }
+        // register shutdown hook
+        ToClose.hook();
 
-  /** This function is called once each time the robot enters Disabled mode. */
-  @Override
-  public void disabledInit() {}
+        // disable joystick not found warnings when in sim
+        DriverStation.silenceJoystickConnectionWarning(Constants.CURRENT_MODE == Constants.RobotMode.SIM);
 
-  @Override
-  public void disabledPeriodic() {}
+        // record git metadata
+        Logger.recordMetadata("ProjectName", BuildConstants.MAVEN_NAME);
+        Logger.recordMetadata("BuildDate", BuildConstants.BUILD_DATE);
+        Logger.recordMetadata("GitSHA", BuildConstants.GIT_SHA);
+        Logger.recordMetadata("GitDate", BuildConstants.GIT_DATE);
+        Logger.recordMetadata("GitBranch", BuildConstants.GIT_BRANCH);
+        // no need to inspect this here because BuildConstants is a dynamically changing file upon compilation
+        //noinspection RedundantSuppression
+        switch (BuildConstants.DIRTY) {
+            //noinspection DataFlowIssue
+            case 0 -> Logger.recordMetadata("GitDirty", "All changes committed");
+            //noinspection DataFlowIssue
+            case 1 -> Logger.recordMetadata("GitDirty", "Uncommitted changes");
+            //noinspection DataFlowIssue
+            default -> Logger.recordMetadata("GitDirty", "Unknown");
+        }
 
-  /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
-  @Override
-  public void autonomousInit() {
-    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+        switch (Constants.CURRENT_MODE) {
+            case REAL -> {
+                // TODO: I don't think SignalLogger.setPath will create the non-existent directories if they don't exist
+                //  verify this, and then it might be worth it to make the directory ourselves
+                SignalLogger.setPath("/U/hoot");
+                Logger.addDataReceiver(new WPILOGWriter("/U/akit"));
+                Logger.addDataReceiver(new NT4Publisher());
+            }
+            case SIM -> {
+                // log to working directory when running sim
+                // setPath doesn't seem to work in sim (path is ignored and hoot files are always sent to /logs)
+//                SignalLogger.setPath("/logs");
+                Logger.addDataReceiver(new WPILOGWriter(""));
+                Logger.addDataReceiver(new NT4Publisher());
+            }
+            case REPLAY -> {
+                setUseTiming(false);
+                final String logPath = LogFileUtil.findReplayLog();
+                Logger.setReplaySource(new WPILOGReader(logPath));
+                Logger.addDataReceiver(new WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim")));
+            }
+        }
 
-    // schedule the autonomous command (example)
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.schedule();
+        robotContainer = new RobotContainer();
+
+        MarkerCommand.setupPathPlannerNamedCommands(
+                new TrajectoryManager.FollowerContext(
+                        robotContainer.swerve,
+                        robotContainer.arm,
+                        robotContainer.claw
+                )
+        );
+
+//        SignalLogger.enableAutoLogging(true);
+        SignalLogger.start();
+        ToClose.add(SignalLogger::stop);
+
+        Logger.start();
     }
-  }
 
-  /** This function is called periodically during autonomous. */
-  @Override
-  public void autonomousPeriodic() {}
-
-  @Override
-  public void teleopInit() {
-    // This makes sure that the autonomous stops running when
-    // teleop starts running. If you want the autonomous to
-    // continue until interrupted by another command, remove
-    // this line or comment it out.
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.cancel();
+    /**
+     * This function is called every 20 ms, no matter the mode. Use this for items like diagnostics
+     * that you want ran during disabled, autonomous, teleoperated and test.
+     *
+     * <p>This runs after the mode specific periodic functions, but before LiveWindow and
+     * SmartDashboard integrated updating.
+     */
+    @Override
+    public void robotPeriodic() {
+        // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
+        // commands, running already-scheduled commands, removing finished or interrupted commands,
+        // and running subsystem periodic() methods.  This must be called from the robot's periodic
+        // block in order for anything in the Command-based framework to work.
+        CommandScheduler.getInstance().run();
+        VirtualSubsystem.run();
     }
-  }
 
-  /** This function is called periodically during operator control. */
-  @Override
-  public void teleopPeriodic() {
-    if (claw.detectIntake()) {
-      pilot.setRumble(RumbleType.kBothRumble, 1.0);
-      copilot.setRumble(RumbleType.kBothRumble, 1.0);
-    } else {
-      pilot.setRumble(RumbleType.kBothRumble, 0.0);
-      copilot.setRumble(RumbleType.kBothRumble, 0.0);
+    /**
+     * This function is called once each time the robot enters Disabled mode.
+     */
+    @Override
+    public void disabledInit() {
+        robotContainer.swerve.setNeutralMode(NeutralModeValue.Brake);
+
+        CommandScheduler.getInstance().removeDefaultCommand(robotContainer.swerve);
+        CommandScheduler.getInstance().removeDefaultCommand(robotContainer.arm);
+        CommandScheduler.getInstance().removeDefaultCommand(robotContainer.claw);
+
+        ButtonBindings.clear();
     }
-  }
 
-  @Override
-  public void testInit() {
-    // Cancels all running commands at the start of test mode.
-    CommandScheduler.getInstance().cancelAll();
-  }
+    @Override
+    public void disabledPeriodic() {
+    }
 
-  /** This function is called periodically during test mode. */
-  @Override
-  public void testPeriodic() {}
+    /**
+     * This autonomous runs the autonomous command selected by your {@link RobotContainer} class.
+     */
+    @Override
+    public void autonomousInit() {
+        autonomousCommand = robotContainer.getAutonomousCommand();
 
-  /** This function is called once when the robot is first started up. */
-  @Override
-  public void simulationInit() {}
+        final PhotonVision photonVision = robotContainer.photonVision;
+        photonVision.refreshAlliance();
 
-  /** This function is called periodically whilst in simulation. */
-  @Override
-  public void simulationPeriodic() {}
+        // schedule the autonomous command (example)
+        if (autonomousCommand != null) {
+            autonomousCommand.schedule();
+        }
+    }
+
+    /**
+     * This function is called periodically during autonomous.
+     */
+    @Override
+    public void autonomousPeriodic() {
+    }
+
+    @Override
+    public void autonomousExit() {
+        robotContainer.arm.setDesiredState(SuperstructureStates.ArmState.STANDBY);
+        robotContainer.claw.setDesiredState(SuperstructureStates.ClawState.STANDBY);
+    }
+
+    @Override
+    public void teleopInit() {
+        // This makes sure that the autonomous stops running when
+        // teleop starts running. If you want the autonomous to
+        // continue until interrupted by another command, remove
+        // this line or comment it out.
+        if (autonomousCommand != null) {
+            autonomousCommand.cancel();
+        }
+
+        ButtonBindings.bindAll(robotContainer);
+        robotContainer.arm.setDesiredState(SuperstructureStates.ArmState.STANDBY);
+        robotContainer.claw.setDesiredState(SuperstructureStates.ClawState.STANDBY);
+
+        final PhotonVision photonVision = robotContainer.photonVision;
+        photonVision.refreshAlliance();
+
+        robotContainer.swerve.setNeutralMode(NeutralModeValue.Coast);
+
+        CommandScheduler.getInstance().setDefaultCommand(robotContainer.swerve, robotContainer.swerveDriveTeleop);
+        CommandScheduler.getInstance().setDefaultCommand(robotContainer.arm, robotContainer.armClawTeleop);
+        CommandScheduler.getInstance().setDefaultCommand(robotContainer.claw, robotContainer.armClawTeleop);
+    }
+
+    /**
+     * This function is called periodically during operator control.
+     */
+    @Override
+    public void teleopPeriodic() {
+    }
+
+    @Override
+    public void testInit() {
+        // Cancels all running commands at the start of test mode.
+        CommandScheduler.getInstance().cancelAll();
+    }
+
+    /**
+     * This function is called periodically during test mode.
+     */
+    @Override
+    public void testPeriodic() {
+    }
 }
